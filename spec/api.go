@@ -5,10 +5,10 @@ type APIRelationship string
 
 // Various values for API relationship
 const (
-	APIRelationshipChild   APIRelationship = "child"
-	APIRelationshipMembebr APIRelationship = "member"
-	APIRelationshipAlias   APIRelationship = "alias"
-	APIRelationshipRoot    APIRelationship = "root"
+	APIRelationshipChild  APIRelationship = "child"
+	APIRelationshipMember APIRelationship = "member"
+	APIRelationshipAlias  APIRelationship = "alias"
+	APIRelationshipRoot   APIRelationship = "root"
 )
 
 // An API represents a specifcation API.

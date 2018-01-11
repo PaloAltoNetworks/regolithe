@@ -35,6 +35,29 @@ func NewRelationship(mode APIRelationship) *Relationship {
 	}
 }
 
+// Set sets the names that are allows to do the given action.
+func (r *Relationship) Set(action string, names ...string) {
+
+	var prop map[string]struct{}
+
+	switch action {
+	case "create":
+		prop = r.AllowsCreate
+	case "delete":
+		prop = r.AllowsDelete
+	case "get":
+		prop = r.AllowsGet
+	case "update":
+		prop = r.AllowsUpdate
+	default:
+		panic(fmt.Sprintf("action '%s' is not valid. Must be 'create', 'delete', 'get' or 'update'", action))
+	}
+
+	for _, n := range names {
+		prop[n] = struct{}{}
+	}
+}
+
 // Get returns the sorted list of rest name for the given action.
 func (r *Relationship) Get(action string) (names []string) {
 
