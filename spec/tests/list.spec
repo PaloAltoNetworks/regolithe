@@ -185,7 +185,7 @@
             "channel": null,
             "creation_only": false,
             "default_order": false,
-            "default_value": null,
+            "default_value": "default",
             "deprecated": false,
             "description": "A read only attribute",
             "exposed": true,
