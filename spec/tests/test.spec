@@ -7,7 +7,7 @@
             "channel": null,
             "creation_only": null,
             "default_order": null,
-            "default_value": null,
+            "default_value": "default value",
             "deprecated": null,
             "description": "This is a string",
             "exposed": true,
