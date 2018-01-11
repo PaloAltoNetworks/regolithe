@@ -115,7 +115,7 @@
             "channel": null,
             "creation_only": null,
             "default_order": null,
-            "default_value": null,
+            "default_value": "ValueA",
             "deprecated": null,
             "description": "This is an enum",
             "exposed": true,
