@@ -158,13 +158,13 @@ func (s *Specification) AttributeInitializers() map[string]interface{} {
 	for _, attr := range s.Attributes {
 
 		if attr.Initializer != "" {
-			out[attr.Name] = attr.Initializer
+			out[attr.ConvertedName] = attr.Initializer
 			continue
 		}
 
 		if attr.DefaultValue != nil {
 			if attr.Type == AttributeTypeString || attr.Type == AttributeTypeEnum {
-				out[attr.Name] = `"` + attr.DefaultValue.(string) + `"`
+				out[attr.ConvertedName] = `"` + attr.DefaultValue.(string) + `"`
 				continue
 			}
 			out[attr.Name] = attr.DefaultValue
