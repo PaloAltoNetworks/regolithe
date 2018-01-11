@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 )
 
 type model struct {
@@ -113,6 +115,22 @@ func (s *Specification) Attribute(name string) *Attribute {
 	return s.attributeMap[name]
 }
 
+// OriginalSortedAttributes returns the list of attribute sorted by names.
+func (s *Specification) OriginalSortedAttributes() []*Attribute {
+
+	var attrs []*Attribute
+
+	for _, attr := range s.Attributes {
+		attrs = append(attrs, attr)
+	}
+
+	sort.Slice(attrs, func(i int, j int) bool {
+		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
+	})
+
+	return attrs
+}
+
 // API returns the API with the given rest name.
 func (s *Specification) API(restName string) *API {
 	return s.apiMap[restName]
@@ -197,7 +215,7 @@ func (s *Specification) AttributeInitializers() map[string]interface{} {
 				out[attr.ConvertedName] = `"` + attr.DefaultValue.(string) + `"`
 				continue
 			}
-			out[attr.Name] = attr.DefaultValue
+			out[attr.ConvertedName] = attr.DefaultValue
 		}
 	}
 
@@ -219,7 +237,7 @@ func (s *Specification) buildAttributesInfo() error {
 
 		s.attributeMap[attr.Name] = attr
 
-		if attr.Orderable {
+		if attr.DefaultOrder {
 			s.orderingAttributes = append(s.orderingAttributes, attr)
 		}
 

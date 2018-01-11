@@ -145,12 +145,12 @@ func TestSpecification_OrderingAttributes(t *testing.T) {
 		s := &Specification{
 			Attributes: []*Attribute{
 				&Attribute{
-					Orderable: true,
-					Name:      "a1",
+					DefaultOrder: true,
+					Name:         "a1",
 				},
 				&Attribute{
-					Orderable: true,
-					Name:      "a2",
+					DefaultOrder: true,
+					Name:         "a2",
 				},
 				&Attribute{
 					Name: "a3",
