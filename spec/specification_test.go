@@ -20,6 +20,159 @@ func TestSpecification_NewSpecification(t *testing.T) {
 	})
 }
 
+func TestSpecification_Getters(t *testing.T) {
+
+	Convey("Given I have a new API", t, func() {
+
+		s := &Specification{
+			model: &model{
+				EntityName:   "Test",
+				ResourceName: "tests",
+				RestName:     "test",
+				AllowsCreate: true,
+				AllowsDelete: true,
+				AllowsGet:    true,
+				AllowsUpdate: true,
+			},
+			Attributes: []*Attribute{
+				&Attribute{
+					Identifier: false,
+					Name:       "not-id",
+				},
+				&Attribute{
+					Identifier: true,
+					Name:       "id",
+				},
+			},
+		}
+
+		s.buildAttributesInfo() // nolint: errcheck
+
+		Convey("Then s should implement the RelationshipHolder interface", func() {
+			So(s, ShouldImplement, (*RelationshipHolder)(nil))
+		})
+
+		Convey("Then the getters should work", func() {
+			So(s.GetRestName(), ShouldEqual, "test")
+			So(s.GetEntityName(), ShouldEqual, "Test")
+			So(s.GetAllowsGet(), ShouldBeTrue)
+			So(s.GetAllowsUpdate(), ShouldBeTrue)
+			So(s.GetAllowsCreate(), ShouldBeTrue)
+			So(s.GetAllowsDelete(), ShouldBeTrue)
+			So(s.Identifier().Name, ShouldEqual, "id")
+		})
+	})
+}
+
+func TestSpecification_TypeProviders(t *testing.T) {
+
+	Convey("Given I have a new API", t, func() {
+
+		s := &Specification{
+			model: &model{},
+			Attributes: []*Attribute{
+				&Attribute{
+					Name:          "not-id",
+					ConvertedName: "not-id",
+					TypeProvider:  "toto",
+				},
+				&Attribute{
+					ConvertedName: "id",
+					TypeProvider:  "titi",
+				},
+				&Attribute{
+					ConvertedName: "id2",
+					TypeProvider:  "titi",
+				},
+				&Attribute{},
+			},
+		}
+
+		s.buildAttributesInfo() // nolint: errcheck
+
+		Convey("When I call TypeProviders", func() {
+
+			providers := s.TypeProviders()
+
+			Convey("Then the providers should be correct", func() {
+				So(providers, ShouldResemble, []string{"toto", "titi"})
+			})
+		})
+	})
+}
+
+func TestSpecification_AttributeInitializers(t *testing.T) {
+
+	Convey("Given I have a new API", t, func() {
+
+		s := &Specification{
+			Attributes: []*Attribute{
+				&Attribute{
+					Identifier:    false,
+					Name:          "not-id",
+					ConvertedName: "not-id",
+					DefaultValue:  "default1",
+					Type:          AttributeTypeString,
+				},
+				&Attribute{
+					Identifier:    true,
+					Name:          "id",
+					ConvertedName: "id",
+					Initializer:   "init",
+				},
+			},
+		}
+
+		s.buildAttributesInfo() // nolint: errcheck
+
+		Convey("When I call AttributeInitializers", func() {
+
+			inits := s.AttributeInitializers()
+
+			Convey("Then the initializers should be correct", func() {
+				So(inits["id"], ShouldEqual, "init")
+				So(inits["not-id"], ShouldEqual, `"default1"`)
+				So(len(inits), ShouldEqual, 2)
+			})
+		})
+	})
+}
+
+func TestSpecification_OrderingAttributes(t *testing.T) {
+
+	Convey("Given I have a new API", t, func() {
+
+		s := &Specification{
+			Attributes: []*Attribute{
+				&Attribute{
+					Orderable: true,
+					Name:      "a1",
+				},
+				&Attribute{
+					Orderable: true,
+					Name:      "a2",
+				},
+				&Attribute{
+					Name: "a3",
+				},
+			},
+		}
+
+		s.buildAttributesInfo() // nolint: errcheck
+
+		Convey("When I call OrderingAttributes", func() {
+
+			o := s.OrderingAttributes()
+
+			Convey("Then the orderingAttributes should be correct", func() {
+				So(len(o), ShouldEqual, 2)
+				So(o[0].Name, ShouldEqual, "a1")
+				So(o[1].Name, ShouldEqual, "a2")
+			})
+		})
+	})
+}
+
 func TestSpecification_AttributeMap(t *testing.T) {
 
 	Convey("Given I load the task specification file", t, func() {
@@ -44,6 +197,7 @@ func TestSpecification_BuildAttributeNames(t *testing.T) {
 	Convey("Given I create a specification with the same attribute twice.", t, func() {
 
 		spec := &Specification{
+			model: &model{},
 			Attributes: []*Attribute{
 				&Attribute{
 					Name: "a",

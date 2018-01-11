@@ -31,3 +31,33 @@ type API struct {
 func (a *API) Specification() *Specification {
 	return a.linkedSpecification
 }
+
+// GetRestName returns the rest name.
+func (a *API) GetRestName() string {
+	return a.RestName
+}
+
+// GetEntityName returns the rest name.
+func (a *API) GetEntityName() string {
+	return a.linkedSpecification.EntityName
+}
+
+// GetAllowsGet returns if get is allowed.
+func (a *API) GetAllowsGet() bool {
+	return a.AllowsGet
+}
+
+// GetAllowsUpdate returns if update is allowed.
+func (a *API) GetAllowsUpdate() bool {
+	return a.AllowsUpdate
+}
+
+// GetAllowsCreate returns if create is allowed.
+func (a *API) GetAllowsCreate() bool {
+	return a.AllowsCreate
+}
+
+// GetAllowsDelete returns if delete is allowed.
+func (a *API) GetAllowsDelete() bool {
+	return a.AllowsDelete
+}

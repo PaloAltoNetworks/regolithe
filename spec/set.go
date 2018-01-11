@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path"
+	"sort"
 	"strings"
 )
 
@@ -156,10 +157,61 @@ func (s *SpecificationSet) Specifications() (specs []*Specification) {
 		specs = append(specs, s)
 	}
 
+	sort.Slice(specs, func(i int, j int) bool {
+		return strings.Compare(specs[i].RestName, specs[j].RestName) == -1
+	})
 	return
 }
 
 // Len returns the number of specifications in the set.
 func (s *SpecificationSet) Len() int {
 	return len(s.specs)
+}
+
+// Relationships returns the relationship of the specifications.
+func (s *SpecificationSet) Relationships() map[string]*Relationship {
+
+	relationships := map[string]*Relationship{}
+
+	for _, spec := range s.Specifications() {
+		addRelation(relationships, spec, "root", "")
+
+		for _, api := range spec.APIs {
+			addRelation(relationships, api, spec.RestName, api.Relationship)
+		}
+	}
+
+	return relationships
+}
+
+func addRelation(relationships map[string]*Relationship, object RelationshipHolder, parentRestName string, childRelationshipMode APIRelationship) {
+
+	r, ok := relationships[object.GetEntityName()]
+	if !ok {
+		r = NewRelationship(childRelationshipMode)
+		relationships[object.GetEntityName()] = r
+	}
+
+	if object.GetRestName() == parentRestName {
+		return
+	}
+
+	if parentRestName != "" {
+		if object.GetAllowsGet() {
+			r.AllowsGet[parentRestName] = struct{}{}
+		}
+		if object.GetAllowsUpdate() {
+			r.AllowsUpdate[parentRestName] = struct{}{}
+		}
+		if object.GetAllowsCreate() {
+			r.AllowsCreate[parentRestName] = struct{}{}
+		}
+		if object.GetAllowsDelete() {
+			r.AllowsDelete[parentRestName] = struct{}{}
+		}
+	}
+
+	if childRelationshipMode != "" && r.Mode == "" {
+		r.Mode = childRelationshipMode
+	}
 }

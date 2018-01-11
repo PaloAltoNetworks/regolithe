@@ -78,6 +78,36 @@ func LoadSpecification(path string) (*Specification, error) {
 	return spec, nil
 }
 
+// GetRestName returns the rest name.
+func (s *Specification) GetRestName() string {
+	return s.RestName
+}
+
+// GetEntityName returns the rest name.
+func (s *Specification) GetEntityName() string {
+	return s.EntityName
+}
+
+// GetAllowsGet returns if get is allowed.
+func (s *Specification) GetAllowsGet() bool {
+	return s.AllowsGet
+}
+
+// GetAllowsUpdate returns if update is allowed.
+func (s *Specification) GetAllowsUpdate() bool {
+	return s.AllowsUpdate
+}
+
+// GetAllowsCreate returns if create is allowed.
+func (s *Specification) GetAllowsCreate() bool {
+	return s.AllowsCreate
+}
+
+// GetAllowsDelete returns if delete is allowed.
+func (s *Specification) GetAllowsDelete() bool {
+	return s.AllowsDelete
+}
+
 // Attribute returns the Attributes with the given name.
 func (s *Specification) Attribute(name string) *Attribute {
 	return s.attributeMap[name]

@@ -13,7 +13,7 @@ func Pluralize(word string) string {
 	}
 
 	if len(word) >= 2 {
-		secondLastChar := word[len(word)-2:]
+		secondLastChar := word[len(word)-2 : len(word)-1]
 
 		if lastChar == "y" &&
 			secondLastChar != "a" &&
