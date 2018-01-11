@@ -849,7 +849,7 @@
         "aliases": [],
         "create": null,
         "delete": true,
-        "description": null,
+        "description": "This is a test object",
         "entity_name": "Test",
         "extends": [],
         "get": true,
