@@ -1,6 +1,7 @@
 package spec
 
 import (
+	"strings"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -10,7 +11,22 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 
 	Convey("Given I load a spec folder", t, func() {
 
-		set, err := NewSpecificationSet("../test/specs")
+		set, err := NewSpecificationSet(
+			"./tests",
+			func(n string) string {
+				return strings.ToUpper(n)
+			},
+			func(typ AttributeType, subtype string) (string, string) {
+				if typ == AttributeTypeString {
+					return "String", ""
+				}
+				if typ == AttributeTypeTime {
+					return "time.Time", "time"
+				}
+				return string(typ), ""
+			},
+			"elemental",
+		)
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -40,6 +56,17 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		Convey("Then the type mapping should be correctly loaded", func() {
 			m, _ := set.ExternalTypes.Mapping("elemental", "string_map")
 			So(m.Type, ShouldEqual, "map[string]string")
+		})
+
+		Convey("Then the type conversion should have worked", func() {
+			So(set.Specification("list").Attribute("name").ConvertedName, ShouldEqual, "NAME")
+			So(set.Specification("list").Attribute("name").NeededImport, ShouldEqual, "")
+
+			So(set.Specification("list").Attribute("name").ConvertedType, ShouldEqual, "String")
+			So(set.Specification("list").Attribute("name").NeededImport, ShouldEqual, "")
+
+			So(set.Specification("list").Attribute("date").ConvertedType, ShouldEqual, "time.Time")
+			So(set.Specification("list").Attribute("date").NeededImport, ShouldEqual, "time")
 		})
 	})
 }

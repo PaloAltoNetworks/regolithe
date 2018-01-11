@@ -16,7 +16,12 @@ type SpecificationSet struct {
 }
 
 // NewSpecificationSet loads and parses all specification in a folder.
-func NewSpecificationSet(dirname string) (*SpecificationSet, error) {
+func NewSpecificationSet(
+	dirname string,
+	nameConvertFunc AttributeNameConverterFunc,
+	typeConvertFunc AttributeTypeConverterFunc,
+	typeMappingName string,
+) (*SpecificationSet, error) {
 
 	var loadedMonolitheINI bool
 
@@ -103,6 +108,32 @@ func NewSpecificationSet(dirname string) (*SpecificationSet, error) {
 			}
 
 			api.linkedSpecification = linked
+		}
+
+		if set.ExternalTypes != nil {
+
+			for _, attr := range spec.Attributes {
+
+				if nameConvertFunc != nil {
+					attr.ConvertedName = nameConvertFunc(attr.Name)
+				}
+				if typeConvertFunc != nil {
+					attr.ConvertedType, attr.NeededImport = typeConvertFunc(attr.Type, attr.SubType)
+				}
+
+				if attr.Type != AttributeTypeExt {
+					continue
+				}
+
+				m, err := set.ExternalTypes.Mapping(typeMappingName, attr.SubType)
+				if err != nil {
+					return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
+				}
+
+				attr.ConvertedType = m.Type
+				attr.Initializer = m.Initializer
+				attr.NeededImport = m.Import
+			}
 		}
 	}
 

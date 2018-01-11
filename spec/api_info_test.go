@@ -10,7 +10,7 @@ func TestInfo_LoadAPIInfo(t *testing.T) {
 
 	Convey("Given I load an api info", t, func() {
 
-		info, err := LoadAPIInfo("../test/specs/api.info")
+		info, err := LoadAPIInfo("./tests/api.info")
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -25,7 +25,7 @@ func TestInfo_LoadAPIInfo(t *testing.T) {
 
 	Convey("Given I a file that does not exist", t, func() {
 
-		_, err := LoadAPIInfo("../test/specs/not-api.info")
+		_, err := LoadAPIInfo("./tests/not-api.info")
 
 		Convey("Then err should not be nil", func() {
 			So(err, ShouldNotBeNil)

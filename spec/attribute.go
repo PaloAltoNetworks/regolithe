@@ -39,6 +39,12 @@ const (
 	AttributeTypeExt    AttributeType = "external"
 )
 
+// AttributeNameConverterFunc is the type of a attribute name conveter.
+type AttributeNameConverterFunc func(name string) string
+
+// AttributeTypeConverterFunc is the type of a attribute type conveter.
+type AttributeTypeConverterFunc func(typ AttributeType, subtype string) (converted string, provider string)
+
 // An Attribute represents a monolithe specification attribute.
 type Attribute struct {
 	AllowedChars   string               `json:"allowed_chars"`
@@ -75,6 +81,8 @@ type Attribute struct {
 	Unique         bool                 `json:"unique"`
 	UniqueScope    AttributeUniqueScope `json:"unique_scope"`
 
-	LocalName string `json:"_"`
-	LocalType string `json:"_"`
+	ConvertedName string `json:"_"`
+	ConvertedType string `json:"_"`
+	NeededImport  string `json:"_"`
+	Initializer   string `json:"_"`
 }

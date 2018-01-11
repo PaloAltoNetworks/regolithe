@@ -10,7 +10,7 @@ func TestConfog_LoadConfig(t *testing.T) {
 
 	Convey("Given I load a monolithe.ini", t, func() {
 
-		cfg, err := LoadConfig("../test/specs/monolithe.ini")
+		cfg, err := LoadConfig("./tests/monolithe.ini")
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)

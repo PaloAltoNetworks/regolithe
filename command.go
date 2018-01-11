@@ -9,7 +9,14 @@ import (
 )
 
 // NewCommand generates a new CLI for regolith
-func NewCommand(name string, description string, generatorFunc func(*spec.SpecificationSet) error) *cobra.Command {
+func NewCommand(
+	name string,
+	description string,
+	nameConvertFunc spec.AttributeNameConverterFunc,
+	typeConvertFunc spec.AttributeTypeConverterFunc,
+	typeMappingName string,
+	generatorFunc func(*spec.SpecificationSet) error,
+) *cobra.Command {
 
 	cobra.OnInitialize(func() {
 		viper.SetEnvPrefix(name)
@@ -29,7 +36,12 @@ func NewCommand(name string, description string, generatorFunc func(*spec.Specif
 			return viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			specSet, err := spec.NewSpecificationSet(viper.GetString("dir"))
+			specSet, err := spec.NewSpecificationSet(
+				viper.GetString("dir"),
+				nameConvertFunc,
+				typeConvertFunc,
+				typeMappingName,
+			)
 			if err != nil {
 				return err
 			}

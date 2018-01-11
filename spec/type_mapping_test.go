@@ -10,7 +10,7 @@ func TestTypeMapping_LoadTypeMapping(t *testing.T) {
 
 	Convey("Given I load a type mapping", t, func() {
 
-		tm, err := LoadTypeMapping("../test/specs/type_mapping.ini")
+		tm, err := LoadTypeMapping("./tests/type_mapping.ini")
 
 		Convey("Then err should bbe nil", func() {
 			So(err, ShouldBeNil)
@@ -26,7 +26,7 @@ func TestTypeMapping_Mapping(t *testing.T) {
 
 	Convey("Given I load a type mapping", t, func() {
 
-		tm, err := LoadTypeMapping("../test/specs/type_mapping.ini")
+		tm, err := LoadTypeMapping("./tests/type_mapping.ini")
 
 		Convey("Then err should bbe nil", func() {
 			So(err, ShouldBeNil)

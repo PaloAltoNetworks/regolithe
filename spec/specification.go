@@ -21,6 +21,8 @@ type model struct {
 	Package      string   `json:"package"`
 	ResourceName string   `json:"resource_name"`
 	RestName     string   `json:"rest_name"`
+
+	EntityNamePlural string `json:"_"`
 }
 
 // A Specification represents the a Monolithe Specification.
@@ -68,6 +70,8 @@ func LoadSpecification(path string) (*Specification, error) {
 	if err = spec.BuildAPINames(); err != nil {
 		return nil, err
 	}
+
+	spec.EntityNamePlural = Pluralize(spec.EntityName)
 
 	return spec, nil
 }

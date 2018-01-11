@@ -24,7 +24,7 @@ func TestSpecification_AttributeMap(t *testing.T) {
 
 	Convey("Given I load the task specification file", t, func() {
 
-		spec, err := LoadSpecification("../test/specs/task.spec")
+		spec, err := LoadSpecification("./tests/task.spec")
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -69,7 +69,7 @@ func TestSpecification_APIMap(t *testing.T) {
 
 	Convey("Given I load the root specification file", t, func() {
 
-		spec, err := LoadSpecification("../test/specs/root.spec")
+		spec, err := LoadSpecification("./tests/root.spec")
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -113,7 +113,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 	Convey("Given I load the root specification file", t, func() {
 
-		spec, err := LoadSpecification("../test/specs/root.spec")
+		spec, err := LoadSpecification("./tests/root.spec")
 		apis := spec.APIs
 
 		Convey("Then err should be nil", func() {
@@ -169,7 +169,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 	Convey("Given I load the task specification file", t, func() {
 
-		spec, err := LoadSpecification("../test/specs/task.spec")
+		spec, err := LoadSpecification("./tests/task.spec")
 		attrs := spec.Attributes
 
 		Convey("Then err should be nil", func() {
@@ -302,7 +302,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 		Convey("When I apply the base specification", func() {
 
-			base, err := LoadSpecification("../test/specs/@base.spec")
+			base, err := LoadSpecification("./tests/@base.spec")
 			spec.ApplyBaseSpecifications(base)
 
 			Convey("Then err should be nil", func() {
