@@ -56,7 +56,7 @@ func TestSpecification_BuildAttributeNames(t *testing.T) {
 
 		Convey("When I call BuildAttributeNames", func() {
 
-			err := spec.BuildAttributeNames()
+			err := spec.buildAttributesInfo()
 
 			Convey("Then err Should Not be nil", func() {
 				So(err, ShouldNotBeNil)
@@ -100,7 +100,7 @@ func TestSpecification_BuildAPINames(t *testing.T) {
 
 		Convey("When I call BuildAPINames", func() {
 
-			err := spec.BuildAPINames()
+			err := spec.buildAPIsInfo()
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)

@@ -33,13 +33,13 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		})
 
 		Convey("Then the specification set should have 3 entries", func() {
-			So(set.Len(), ShouldEqual, 4)
+			So(set.Len(), ShouldEqual, 5)
 		})
 
 		Convey("Then the specification set should be correct", func() {
 			So(len(set.Specification("task").Attributes), ShouldEqual, 6)
 			So(len(set.Specification("root").Attributes), ShouldEqual, 0)
-			So(len(set.Specification("list").Attributes), ShouldEqual, 10)
+			So(len(set.Specification("list").Attributes), ShouldEqual, 6)
 			So(len(set.Specification("user").Attributes), ShouldEqual, 6)
 		})
 
@@ -60,13 +60,13 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 
 		Convey("Then the type conversion should have worked", func() {
 			So(set.Specification("list").Attribute("name").ConvertedName, ShouldEqual, "NAME")
-			So(set.Specification("list").Attribute("name").NeededImport, ShouldEqual, "")
+			So(set.Specification("list").Attribute("name").TypeProvider, ShouldEqual, "")
 
 			So(set.Specification("list").Attribute("name").ConvertedType, ShouldEqual, "String")
-			So(set.Specification("list").Attribute("name").NeededImport, ShouldEqual, "")
+			So(set.Specification("list").Attribute("name").TypeProvider, ShouldEqual, "")
 
 			So(set.Specification("list").Attribute("date").ConvertedType, ShouldEqual, "time.Time")
-			So(set.Specification("list").Attribute("date").NeededImport, ShouldEqual, "time")
+			So(set.Specification("list").Attribute("date").TypeProvider, ShouldEqual, "time")
 		})
 	})
 }

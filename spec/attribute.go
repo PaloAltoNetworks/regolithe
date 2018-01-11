@@ -83,6 +83,6 @@ type Attribute struct {
 
 	ConvertedName string `json:"_"`
 	ConvertedType string `json:"_"`
-	NeededImport  string `json:"_"`
+	TypeProvider  string `json:"_"`
 	Initializer   string `json:"_"`
 }

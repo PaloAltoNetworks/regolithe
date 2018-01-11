@@ -11,6 +11,7 @@ import (
 type SpecificationSet struct {
 	Configuration *Config
 	ExternalTypes *TypeMapping
+	APIInfo       *APIInfo
 
 	specs map[string]*Specification
 }
@@ -48,7 +49,6 @@ func NewSpecificationSet(
 			}
 
 			loadedMonolitheINI = true
-			continue
 
 		case "type_mapping.ini":
 
@@ -57,7 +57,11 @@ func NewSpecificationSet(
 				return nil, err
 			}
 
-			continue
+		case "api.info":
+			set.APIInfo, err = LoadAPIInfo(path.Join(dirname, info.Name()))
+			if err != nil {
+				return nil, err
+			}
 
 		default:
 
@@ -118,7 +122,7 @@ func NewSpecificationSet(
 					attr.ConvertedName = nameConvertFunc(attr.Name)
 				}
 				if typeConvertFunc != nil {
-					attr.ConvertedType, attr.NeededImport = typeConvertFunc(attr.Type, attr.SubType)
+					attr.ConvertedType, attr.TypeProvider = typeConvertFunc(attr.Type, attr.SubType)
 				}
 
 				if attr.Type != AttributeTypeExt {
@@ -132,7 +136,7 @@ func NewSpecificationSet(
 
 				attr.ConvertedType = m.Type
 				attr.Initializer = m.Initializer
-				attr.NeededImport = m.Import
+				attr.TypeProvider = m.Import
 			}
 		}
 	}
@@ -143,6 +147,16 @@ func NewSpecificationSet(
 // Specification returns the Specification with the given name.
 func (s *SpecificationSet) Specification(name string) *Specification {
 	return s.specs[name]
+}
+
+// Specifications returns all Specifications.
+func (s *SpecificationSet) Specifications() (specs []*Specification) {
+
+	for _, s := range s.specs {
+		specs = append(specs, s)
+	}
+
+	return
 }
 
 // Len returns the number of specifications in the set.
