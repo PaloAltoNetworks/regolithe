@@ -153,7 +153,7 @@
             "exposed": true,
             "filterable": true,
             "foreign_key": null,
-            "format": null,
+            "format": "free",
             "getter": null,
             "identifier": null,
             "index": null,
@@ -171,7 +171,7 @@
             "stored": true,
             "subtype": null,
             "transient": null,
-            "type": "boolean",
+            "type": "string",
             "unique": null,
             "uniqueScope": null
         },
