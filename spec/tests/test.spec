@@ -114,7 +114,7 @@
             "default_order": null,
             "default_value": null,
             "deprecated": null,
-            "description": null,
+            "description": "This is cool",
             "exposed": true,
             "filterable": true,
             "foreign_key": null,
