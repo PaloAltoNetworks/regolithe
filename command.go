@@ -2,21 +2,20 @@ package regolithe
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 
-	"gopkg.in/src-d/go-git.v4/plumbing/transport"
-	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
-
 	"github.com/Sirupsen/logrus"
-
-	"gopkg.in/src-d/go-git.v4/plumbing"
-
 	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"gopkg.in/src-d/go-git.v4/plumbing"
+	"gopkg.in/src-d/go-git.v4/plumbing/transport"
+	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
+
 	git "gopkg.in/src-d/go-git.v4"
 )
 
@@ -24,6 +23,7 @@ import (
 func NewCommand(
 	name string,
 	description string,
+	version string,
 	nameConvertFunc spec.AttributeNameConverterFunc,
 	typeConvertFunc spec.AttributeTypeConverterFunc,
 	typeMappingName string,
@@ -39,6 +39,14 @@ func NewCommand(
 	var rootCmd = &cobra.Command{
 		Use:   name,
 		Short: description,
+	}
+
+	var versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Prints the version and exit.",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println(version)
+		},
 	}
 
 	var cmdFolderGen = &cobra.Command{
@@ -154,6 +162,7 @@ func NewCommand(
 	githubGen.Flags().StringP("token", "t", "", "The api token to use.")
 
 	rootCmd.AddCommand(
+		versionCmd,
 		cmdFolderGen,
 		githubGen,
 	)
