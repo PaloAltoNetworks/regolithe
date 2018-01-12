@@ -30,6 +30,7 @@ func TestRelationshio_GetSet(t *testing.T) {
 		r.Set("get", "a", "b", "c")
 		r.Set("update", "a", "b", "d")
 		r.Set("delete", "toto")
+		r.Set("create")
 
 		Convey("When I call Get on 'get'", func() {
 

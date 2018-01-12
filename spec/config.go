@@ -49,16 +49,15 @@ func LoadConfig(path string) (*Config, error) {
 	c.ProductName = productNameKey.String()
 
 	copyrightKey, err := monolitheSection.GetKey("copyright")
-	if err != nil {
-		return nil, err
+	if err == nil {
+		c.Copyright = copyrightKey.String()
 	}
-	c.Copyright = copyrightKey.String()
 
-	outputKey, err := transformerSection.GetKey("output")
+	versionKey, err := transformerSection.GetKey("version")
 	if err != nil {
 		return nil, err
 	}
-	c.Output = outputKey.String()
+	c.Version = versionKey.String()
 
 	nameKey, err := transformerSection.GetKey("name")
 	if err != nil {
@@ -66,35 +65,30 @@ func LoadConfig(path string) (*Config, error) {
 	}
 	c.Name = nameKey.String()
 
-	urlKey, err := transformerSection.GetKey("url")
-	if err != nil {
-		return nil, err
+	outputKey, err := transformerSection.GetKey("output")
+	if err == nil {
+		c.Output = outputKey.String()
 	}
-	c.URL = urlKey.String()
+
+	urlKey, err := transformerSection.GetKey("url")
+	if err == nil {
+		c.URL = urlKey.String()
+	}
 
 	authorKey, err := transformerSection.GetKey("author")
-	if err != nil {
-		return nil, err
+	if err == nil {
+		c.Author = authorKey.String()
 	}
-	c.Author = authorKey.String()
 
 	emailKey, err := transformerSection.GetKey("email")
-	if err != nil {
-		return nil, err
+	if err == nil {
+		c.Email = emailKey.String()
 	}
-	c.Email = emailKey.String()
 
 	descriptionKey, err := transformerSection.GetKey("description")
-	if err != nil {
-		return nil, err
+	if err == nil {
+		c.Description = descriptionKey.String()
 	}
-	c.Description = descriptionKey.String()
-
-	versionKey, err := transformerSection.GetKey("version")
-	if err != nil {
-		return nil, err
-	}
-	c.Version = versionKey.String()
 
 	return c, nil
 }

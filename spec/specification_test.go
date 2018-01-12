@@ -265,6 +265,24 @@ func TestSpecification_BuildAPINames(t *testing.T) {
 
 func TestSpecification_LoadSpecification(t *testing.T) {
 
+	Convey("Given I load a non existing specification file", t, func() {
+
+		_, err := LoadSpecification("./tests/not.spec")
+
+		Convey("Then err should not be nil", func() {
+			So(err, ShouldNotBeNil)
+		})
+	})
+
+	Convey("Given I load a bad formatted specification file", t, func() {
+
+		_, err := LoadSpecification("./tests/task.spec.bad")
+
+		Convey("Then err should not be nil", func() {
+			So(err, ShouldNotBeNil)
+		})
+	})
+
 	Convey("Given I load the root specification file", t, func() {
 
 		spec, err := LoadSpecification("./tests/root.spec")
