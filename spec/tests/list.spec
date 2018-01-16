@@ -118,7 +118,7 @@
             "exposed": true,
             "filterable": true,
             "foreign_key": null,
-            "format": "free",
+            "format": null,
             "getter": null,
             "identifier": null,
             "index": null,
@@ -134,9 +134,9 @@
             "secret": null,
             "setter": null,
             "stored": true,
-            "subtype": null,
+            "subtype": "string",
             "transient": null,
-            "type": "string",
+            "type": "list",
             "unique": null,
             "uniqueScope": null
         }
