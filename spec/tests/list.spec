@@ -127,7 +127,7 @@
             "delete": false,
             "deprecated": false,
             "get": true,
-            "relationship": "member",
+            "relationship": "child",
             "rest_name": "user",
             "update": true
         }

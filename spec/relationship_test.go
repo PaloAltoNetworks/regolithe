@@ -10,10 +10,10 @@ func TestRelationshio_NewRelationship(t *testing.T) {
 
 	Convey("Given I call NewRelationship", t, func() {
 
-		r := NewRelationship(APIRelationshipMember)
+		r := NewRelationship(APIRelationshipChild)
 
 		Convey("Then r should be correctlt initialized", func() {
-			So(r.Mode, ShouldEqual, APIRelationshipMember)
+			So(r.Mode, ShouldEqual, APIRelationshipChild)
 			So(r.AllowsCreate, ShouldResemble, map[string]struct{}{})
 			So(r.AllowsDelete, ShouldResemble, map[string]struct{}{})
 			So(r.AllowsGet, ShouldResemble, map[string]struct{}{})
@@ -26,7 +26,7 @@ func TestRelationshio_GetSet(t *testing.T) {
 
 	Convey("Given I call NewRelationship", t, func() {
 
-		r := NewRelationship(APIRelationshipMember)
+		r := NewRelationship(APIRelationshipChild)
 		r.Set("get", "a", "b", "c")
 		r.Set("update", "a", "b", "d")
 		r.Set("delete", "toto")
