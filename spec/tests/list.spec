@@ -220,7 +220,7 @@
             "default_value": null,
             "deprecated": null,
             "description": "This attribute is not exposed",
-            "exposed": true,
+            "exposed": false,
             "filterable": true,
             "foreign_key": null,
             "format": "free",
