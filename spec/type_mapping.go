@@ -39,17 +39,19 @@ func LoadTypeMapping(path string) (*TypeMapping, error) {
 }
 
 // Mapping returns the TypeMap for the given external type.
-func (t *TypeMapping) Mapping(mode string, externalType string) (mapping TypeMap, err error) {
+func (t *TypeMapping) Mapping(mode string, externalType string) (mapping *TypeMap, err error) {
 
 	section, err := t.data.GetSection(mode)
 	if err != nil {
-		return
+		return nil, nil
 	}
 
 	key, err := section.GetKey(externalType)
 	if err != nil {
 		return
 	}
+
+	mapping = &TypeMap{}
 
 	parts := key.Strings(";")
 	if len(parts) == 0 {

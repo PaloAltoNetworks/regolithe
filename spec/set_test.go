@@ -63,7 +63,7 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		Convey("Then the specification set should be correct", func() {
 			So(len(set.Specification("task").Attributes), ShouldEqual, 6)
 			So(len(set.Specification("root").Attributes), ShouldEqual, 0)
-			So(len(set.Specification("list").Attributes), ShouldEqual, 6)
+			So(len(set.Specification("list").Attributes), ShouldEqual, 10)
 			So(len(set.Specification("user").Attributes), ShouldEqual, 6)
 		})
 

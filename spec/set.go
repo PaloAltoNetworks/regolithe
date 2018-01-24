@@ -135,9 +135,13 @@ func NewSpecificationSet(
 					return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
 				}
 
-				attr.ConvertedType = m.Type
-				attr.Initializer = m.Initializer
-				attr.TypeProvider = m.Import
+				if m != nil {
+					attr.ConvertedType = m.Type
+					attr.Initializer = m.Initializer
+					attr.TypeProvider = m.Import
+				} else {
+					attr.ConvertedType = string(attr.Type)
+				}
 			}
 		}
 	}

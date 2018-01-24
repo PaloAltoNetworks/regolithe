@@ -27,7 +27,7 @@ func NewCommand(
 	nameConvertFunc spec.AttributeNameConverterFunc,
 	typeConvertFunc spec.AttributeTypeConverterFunc,
 	typeMappingName string,
-	generatorFunc func(*spec.SpecificationSet) error,
+	generatorFunc func(*spec.SpecificationSet, string) error,
 ) *cobra.Command {
 
 	cobra.OnInitialize(func() {
@@ -40,6 +40,8 @@ func NewCommand(
 		Use:   name,
 		Short: description,
 	}
+
+	rootCmd.PersistentFlags().StringP("out", "o", "codegen", "Default output path.")
 
 	var versionCmd = &cobra.Command{
 		Use:   "version",
@@ -66,7 +68,7 @@ func NewCommand(
 				return err
 			}
 
-			return generatorFunc(specSet)
+			return generatorFunc(specSet, viper.GetString("out"))
 		},
 	}
 	cmdFolderGen.Flags().StringP("dir", "d", "", "Path of the specifications folder.")
@@ -153,7 +155,7 @@ func NewCommand(
 				return err
 			}
 
-			return generatorFunc(specSet)
+			return generatorFunc(specSet, viper.GetString("out"))
 		},
 	}
 	githubGen.Flags().StringP("repo", "r", "", "Endpoint for the github api.")
