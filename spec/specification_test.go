@@ -475,7 +475,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 		Convey("When I apply the base specification", func() {
 
 			base, err := LoadSpecification("./tests/@base.spec")
-			spec.ApplyBaseSpecifications(base)
+			spec.ApplyBaseSpecifications(base) // nolint: errcheck
 
 			Convey("Then err should be nil", func() {
 				So(err, ShouldBeNil)

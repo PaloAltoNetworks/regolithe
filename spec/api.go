@@ -9,7 +9,7 @@ const (
 	APIRelationshipRoot  APIRelationship = "root"
 )
 
-// An API represents a specifcation API.
+// An API represents a specification API.
 type API struct {
 	RestName         string          `json:"rest_name"`
 	AllowsGet        bool            `json:"get"`

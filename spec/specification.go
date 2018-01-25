@@ -31,11 +31,10 @@ type Specification struct {
 	Attributes []*Attribute `json:"attributes"`
 	APIs       []*API       `json:"children"`
 
-	attributeMap            map[string]*Attribute
-	apiMap                  map[string]*API
-	orderingAttributes      []*Attribute
-	additionalTypeProviders []string
-	identifier              *Attribute
+	attributeMap       map[string]*Attribute
+	apiMap             map[string]*API
+	orderingAttributes []*Attribute
+	identifier         *Attribute
 
 	*model `json:"model,inline"`
 }
@@ -118,11 +117,7 @@ func (s *Specification) Attribute(name string) *Attribute {
 // OriginalSortedAttributes returns the list of attribute sorted by names.
 func (s *Specification) OriginalSortedAttributes() []*Attribute {
 
-	var attrs []*Attribute
-
-	for _, attr := range s.Attributes {
-		attrs = append(attrs, attr)
-	}
+	attrs := append([]*Attribute{}, s.Attributes...)
 
 	sort.Slice(attrs, func(i int, j int) bool {
 		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
