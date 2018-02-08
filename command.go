@@ -27,7 +27,7 @@ func NewCommand(
 	nameConvertFunc spec.AttributeNameConverterFunc,
 	typeConvertFunc spec.AttributeTypeConverterFunc,
 	typeMappingName string,
-	generatorFunc func(*spec.SpecificationSet, string) error,
+	generatorFunc func([]*spec.SpecificationSet, string) error,
 ) *cobra.Command {
 
 	cobra.OnInitialize(func() {
@@ -58,20 +58,31 @@ func NewCommand(
 			return viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			specSet, err := spec.NewSpecificationSet(
-				viper.GetString("dir"),
-				nameConvertFunc,
-				typeConvertFunc,
-				typeMappingName,
-			)
-			if err != nil {
-				return err
+
+			if len(viper.GetStringSlice("dir")) == 0 {
+				return errors.New("--dir is required")
 			}
 
-			return generatorFunc(specSet, viper.GetString("out"))
+			var specSets []*spec.SpecificationSet
+
+			for _, dir := range viper.GetStringSlice("dir") {
+				set, err := spec.NewSpecificationSet(
+					dir,
+					nameConvertFunc,
+					typeConvertFunc,
+					typeMappingName,
+				)
+				if err != nil {
+					return err
+				}
+
+				specSets = append(specSets, set)
+			}
+
+			return generatorFunc(specSets, viper.GetString("out"))
 		},
 	}
-	cmdFolderGen.Flags().StringP("dir", "d", "", "Path of the specifications folder.")
+	cmdFolderGen.Flags().StringSliceP("dir", "d", nil, "Path of the specifications folder.")
 
 	var githubGen = &cobra.Command{
 		Use:   "github",
@@ -80,10 +91,6 @@ func NewCommand(
 			return viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-
-			if viper.GetString("repo") == "" {
-				return errors.New("--repo is required")
-			}
 
 			var auth transport.AuthMethod
 			if viper.GetString("token") != "" {
@@ -155,7 +162,7 @@ func NewCommand(
 				return err
 			}
 
-			return generatorFunc(specSet, viper.GetString("out"))
+			return generatorFunc([]*spec.SpecificationSet{specSet}, viper.GetString("out"))
 		},
 	}
 	githubGen.Flags().StringP("repo", "r", "", "Endpoint for the github api.")

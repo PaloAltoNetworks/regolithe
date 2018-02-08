@@ -20,7 +20,7 @@ type model struct {
 	Exposed          string   `json:"exposed"`
 	Extends          []string `json:"extends"`
 	InstanceName     string   `json:"instance_name"`
-	IsRoot           bool     `json:"is_root"`
+	IsRoot           bool     `json:"root"`
 	Package          string   `json:"package"`
 	ResourceName     string   `json:"resource_name"`
 	RestName         string   `json:"rest_name"`

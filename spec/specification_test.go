@@ -303,7 +303,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(spec.ResourceName, ShouldEqual, "root")
 			So(spec.RestName, ShouldEqual, "root")
 			So(spec.Extends, ShouldResemble, []string{})
-			So(spec.IsRoot, ShouldBeFalse)
+			So(spec.IsRoot, ShouldBeTrue)
 			So(spec.Aliases, ShouldResemble, []string{})
 		})
 

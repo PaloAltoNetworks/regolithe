@@ -13,6 +13,8 @@ type Config struct {
 	ProductName string
 	URL         string
 	Version     string
+
+	cfg *ini.File
 }
 
 // NewConfig returns a new APIInfo.
@@ -29,6 +31,8 @@ func LoadConfig(path string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	c.cfg = cfg
 
 	// Load the sections
 	monolitheSection, err := cfg.GetSection("monolithe")
@@ -91,4 +95,20 @@ func LoadConfig(path string) (*Config, error) {
 	}
 
 	return c, nil
+}
+
+// Key returns the value of the given key in the given section.
+func (c *Config) Key(section, key string) string {
+
+	s, err := c.cfg.GetSection(section)
+	if err != nil {
+		return ""
+	}
+
+	k, err := s.GetKey(key)
+	if err != nil {
+		return ""
+	}
+
+	return k.String()
 }
