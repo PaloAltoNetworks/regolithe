@@ -5,33 +5,25 @@ import (
 	"sort"
 )
 
-// A RelationshipHolder implements some common method about relationship.
-type RelationshipHolder interface {
-	GetRestName() string
-	GetEntityName() string
-	GetAllowsGet() bool
-	GetAllowsUpdate() bool
-	GetAllowsCreate() bool
-	GetAllowsDelete() bool
-}
-
 // A Relationship describes the hierarchical relationship of the models.
 type Relationship struct {
-	AllowsCreate map[string]struct{}
-	AllowsDelete map[string]struct{}
-	AllowsGet    map[string]struct{}
-	AllowsUpdate map[string]struct{}
-	Mode         APIRelationship
+	AllowsCreate  map[string]struct{}
+	AllowsDelete  map[string]struct{}
+	AllowsGet     map[string]struct{}
+	AllowsGetMany map[string]struct{}
+	AllowsUpdate  map[string]struct{}
+	Mode          APIRelationship
 }
 
 // NewRelationship returns a new Relationship.
 func NewRelationship(mode APIRelationship) *Relationship {
 	return &Relationship{
-		AllowsCreate: map[string]struct{}{},
-		AllowsDelete: map[string]struct{}{},
-		AllowsGet:    map[string]struct{}{},
-		AllowsUpdate: map[string]struct{}{},
-		Mode:         mode,
+		AllowsCreate:  map[string]struct{}{},
+		AllowsDelete:  map[string]struct{}{},
+		AllowsGet:     map[string]struct{}{},
+		AllowsGetMany: map[string]struct{}{},
+		AllowsUpdate:  map[string]struct{}{},
+		Mode:          mode,
 	}
 }
 
@@ -47,10 +39,12 @@ func (r *Relationship) Set(action string, names ...string) {
 		prop = r.AllowsDelete
 	case "get":
 		prop = r.AllowsGet
+	case "getmany":
+		prop = r.AllowsGetMany
 	case "update":
 		prop = r.AllowsUpdate
 	default:
-		panic(fmt.Sprintf("action '%s' is not valid. Must be 'create', 'delete', 'get' or 'update'", action))
+		panic(fmt.Sprintf("action '%s' is not valid. Must be 'create', 'delete', 'get', 'getmany' or 'update'", action))
 	}
 
 	for _, n := range names {
@@ -70,10 +64,12 @@ func (r *Relationship) Get(action string) (names []string) {
 		prop = r.AllowsDelete
 	case "get":
 		prop = r.AllowsGet
+	case "getmany":
+		prop = r.AllowsGetMany
 	case "update":
 		prop = r.AllowsUpdate
 	default:
-		panic(fmt.Sprintf("action '%s' is not valid. Must be 'create', 'delete', 'get' or 'update'", action))
+		panic(fmt.Sprintf("action '%s' is not valid. Must be 'create', 'delete', 'get', 'getmany' or 'update'", action))
 	}
 
 	for k := range prop {

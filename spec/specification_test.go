@@ -48,10 +48,6 @@ func TestSpecification_Getters(t *testing.T) {
 
 		s.buildAttributesInfo() // nolint: errcheck
 
-		Convey("Then s should implement the RelationshipHolder interface", func() {
-			So(s, ShouldImplement, (*RelationshipHolder)(nil))
-		})
-
 		Convey("Then the getters should work", func() {
 			So(s.GetRestName(), ShouldEqual, "test")
 			So(s.GetEntityName(), ShouldEqual, "Test")

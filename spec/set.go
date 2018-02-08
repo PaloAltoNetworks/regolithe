@@ -172,50 +172,42 @@ func (s *SpecificationSet) Len() int {
 	return len(s.specs)
 }
 
-// Relationships returns the relationship of the specifications.
+// Relationships is better
 func (s *SpecificationSet) Relationships() map[string]*Relationship {
 
 	relationships := map[string]*Relationship{}
 
 	for _, spec := range s.Specifications() {
-		addRelation(relationships, spec, "root", "")
+		relationships[spec.EntityName] = NewRelationship(APIRelationshipChild)
+	}
+
+	for _, spec := range s.Specifications() {
+
+		if !spec.IsRoot {
+			if spec.AllowsUpdate {
+				relationships[spec.EntityName].Set("update", "root")
+			}
+			if spec.AllowsDelete {
+				relationships[spec.EntityName].Set("delete", "root")
+			}
+			if spec.AllowsGet {
+				relationships[spec.EntityName].Set("get", "root")
+			}
+		}
 
 		for _, api := range spec.APIs {
-			addRelation(relationships, api, spec.RestName, api.Relationship)
+
+			childrenSpec := s.specs[api.RestName]
+
+			if api.AllowsGet {
+				relationships[childrenSpec.EntityName].Set("getmany", spec.RestName)
+			}
+			if api.AllowsCreate {
+				relationships[childrenSpec.EntityName].Set("create", spec.RestName)
+			}
+
 		}
 	}
 
 	return relationships
-}
-
-func addRelation(relationships map[string]*Relationship, object RelationshipHolder, parentRestName string, childRelationshipMode APIRelationship) {
-
-	r, ok := relationships[object.GetEntityName()]
-	if !ok {
-		r = NewRelationship(childRelationshipMode)
-		relationships[object.GetEntityName()] = r
-	}
-
-	if object.GetRestName() == parentRestName {
-		return
-	}
-
-	if parentRestName != "" {
-		if object.GetAllowsGet() {
-			r.AllowsGet[parentRestName] = struct{}{}
-		}
-		if object.GetAllowsUpdate() {
-			r.AllowsUpdate[parentRestName] = struct{}{}
-		}
-		if object.GetAllowsCreate() {
-			r.AllowsCreate[parentRestName] = struct{}{}
-		}
-		if object.GetAllowsDelete() {
-			r.AllowsDelete[parentRestName] = struct{}{}
-		}
-	}
-
-	if childRelationshipMode != "" && r.Mode == "" {
-		r.Mode = childRelationshipMode
-	}
 }

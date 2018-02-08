@@ -25,10 +25,6 @@ func TestAPI_Getters(t *testing.T) {
 			},
 		}
 
-		Convey("Then api should implement the relationshiper interface", func() {
-			So(api, ShouldImplement, (*RelationshipHolder)(nil))
-		})
-
 		Convey("Then the getters should work", func() {
 			So(api.Specification().EntityName, ShouldEqual, api.GetEntityName())
 			So(api.GetRestName(), ShouldEqual, "test")
