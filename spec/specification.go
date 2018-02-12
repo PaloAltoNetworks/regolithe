@@ -17,13 +17,14 @@ type model struct {
 	Description      string   `json:"description"`
 	EntityName       string   `json:"entity_name"`
 	EntityNamePlural string   `json:"-"`
-	Exposed          string   `json:"exposed"`
+	Exposed          bool     `json:"exposed"`
 	Extends          []string `json:"extends"`
 	InstanceName     string   `json:"instance_name"`
 	IsRoot           bool     `json:"root"`
 	Package          string   `json:"package"`
 	ResourceName     string   `json:"resource_name"`
 	RestName         string   `json:"rest_name"`
+	Private          bool     `json:"private"`
 }
 
 // A Specification represents the a Monolithe Specification.

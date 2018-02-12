@@ -12,18 +12,16 @@ type Relationship struct {
 	AllowsGet     map[string]struct{}
 	AllowsGetMany map[string]struct{}
 	AllowsUpdate  map[string]struct{}
-	Mode          APIRelationship
 }
 
 // NewRelationship returns a new Relationship.
-func NewRelationship(mode APIRelationship) *Relationship {
+func NewRelationship() *Relationship {
 	return &Relationship{
 		AllowsCreate:  map[string]struct{}{},
 		AllowsDelete:  map[string]struct{}{},
 		AllowsGet:     map[string]struct{}{},
 		AllowsGetMany: map[string]struct{}{},
 		AllowsUpdate:  map[string]struct{}{},
-		Mode:          mode,
 	}
 }
 

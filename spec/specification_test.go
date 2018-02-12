@@ -308,27 +308,19 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 		})
 
 		Convey("Then the list child API should be correct", func() {
-			So(apis[0].AllowsBulkCreate, ShouldBeFalse)
-			So(apis[0].AllowsBulkDelete, ShouldBeFalse)
-			So(apis[0].AllowsBulkUpdate, ShouldBeFalse)
 			So(apis[0].AllowsCreate, ShouldBeTrue)
 			So(apis[0].AllowsDelete, ShouldBeFalse)
 			So(apis[0].Deprecated, ShouldBeFalse)
 			So(apis[0].AllowsGet, ShouldBeTrue)
-			So(apis[0].Relationship, ShouldEqual, APIRelationshipRoot)
 			So(apis[0].RestName, ShouldEqual, "list")
 			So(apis[0].AllowsUpdate, ShouldBeFalse)
 		})
 
 		Convey("Then the user child API should be correct", func() {
-			So(apis[1].AllowsBulkCreate, ShouldBeFalse)
-			So(apis[1].AllowsBulkDelete, ShouldBeFalse)
-			So(apis[1].AllowsBulkUpdate, ShouldBeFalse)
 			So(apis[1].AllowsCreate, ShouldBeTrue)
 			So(apis[1].AllowsDelete, ShouldBeFalse)
 			So(apis[1].Deprecated, ShouldBeFalse)
 			So(apis[1].AllowsGet, ShouldBeTrue)
-			So(apis[1].Relationship, ShouldEqual, APIRelationshipRoot)
 			So(apis[1].RestName, ShouldEqual, "user")
 			So(apis[1].AllowsUpdate, ShouldBeFalse)
 		})

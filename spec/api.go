@@ -1,26 +1,13 @@
 package spec
 
-// APIRelationship represents the relationhip of an API.
-type APIRelationship string
-
-// Various values for API relationship
-const (
-	APIRelationshipChild APIRelationship = "child"
-	APIRelationshipRoot  APIRelationship = "root"
-)
-
 // An API represents a specification API.
 type API struct {
-	RestName         string          `json:"rest_name"`
-	AllowsGet        bool            `json:"get"`
-	AllowsCreate     bool            `json:"create"`
-	AllowsUpdate     bool            `json:"update"`
-	AllowsDelete     bool            `json:"delete"`
-	AllowsBulkCreate bool            `json:"bulk_create"`
-	AllowsBulkUpdate bool            `json:"bulk+update"`
-	AllowsBulkDelete bool            `json:"bulk_delete"`
-	Deprecated       bool            `json:"deprecated"`
-	Relationship     APIRelationship `json:"relationship"`
+	RestName     string `json:"rest_name"`
+	AllowsGet    bool   `json:"get"`
+	AllowsCreate bool   `json:"create"`
+	AllowsUpdate bool   `json:"update"`
+	AllowsDelete bool   `json:"delete"`
+	Deprecated   bool   `json:"deprecated"`
 
 	linkedSpecification *Specification
 }

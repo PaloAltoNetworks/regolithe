@@ -178,7 +178,7 @@ func (s *SpecificationSet) Relationships() map[string]*Relationship {
 	relationships := map[string]*Relationship{}
 
 	for _, spec := range s.Specifications() {
-		relationships[spec.EntityName] = NewRelationship(APIRelationshipChild)
+		relationships[spec.EntityName] = NewRelationship()
 	}
 
 	for _, spec := range s.Specifications() {

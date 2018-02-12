@@ -10,14 +10,11 @@ func TestAPI_Getters(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {
 		api := &API{
-			RestName:         "test",
-			AllowsGet:        true,
-			AllowsCreate:     true,
-			AllowsUpdate:     true,
-			AllowsDelete:     true,
-			AllowsBulkCreate: true,
-			AllowsBulkUpdate: true,
-			AllowsBulkDelete: true,
+			RestName:     "test",
+			AllowsGet:    true,
+			AllowsCreate: true,
+			AllowsUpdate: true,
+			AllowsDelete: true,
 			linkedSpecification: &Specification{
 				model: &model{
 					EntityName: "test2",
