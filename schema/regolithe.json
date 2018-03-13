@@ -7,6 +7,7 @@
     "properties": {
         "attributes": {
             "type": "array",
+            "description": "List of attribute of the represented object",
             "items": {
                 "type": "object",
                 "oneOf": [
@@ -16,6 +17,7 @@
         },
         "children": {
             "type": "array",
+            "description": "List of child apis of the represented object",
             "items": {
                 "type": "object",
                 "oneOf": [
@@ -24,13 +26,11 @@
             }
         },
         "model": {
+            "description": "Base information of the represented object",
             "type": "object",
-            "items": {
-                "type": "object",
-                "oneOf": [
-                    {"$ref": "#/definitions/model"}
-                ]
-            }
+            "oneOf": [
+                {"$ref": "#/definitions/model"}
+            ]
         }
     },
     "additionalProperties": false,
@@ -77,7 +77,7 @@
                 },
                 "package": {
                     "description": "The name of the package of the represented object",
-                    "type": "boolean"
+                    "type": "string"
                 },
                 "private": {
                     "description": "The represented object is private",
