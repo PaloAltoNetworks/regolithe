@@ -7,10 +7,9 @@ import (
 	"path"
 	"strings"
 
+	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	"github.com/aporeto-inc/regolithe/spec"
 )
 
 func main() {
