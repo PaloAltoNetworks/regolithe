@@ -9,10 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func main() {
+const (
+	name        = "rego"
+	description = "Tool to manipulate regolithe specifications"
+)
 
-	const name = "rego"
-	const description = "Tool to manipulate regolithe specifications"
+func main() {
 
 	cobra.OnInitialize(func() {
 		viper.SetEnvPrefix(name)
