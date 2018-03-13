@@ -43,8 +43,23 @@ func main() {
 	beautifyCmd.Flags().StringP("src", "s", "", "Source directory containing the specs")
 	beautifyCmd.Flags().StringP("dst", "d", "", "Destination directory where to write the specs")
 
+	var validateCmd = &cobra.Command{
+		Use:   "validate",
+		Short: "Validate a specifications file.",
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return viper.BindPFlags(cmd.Flags())
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return validate(
+				viper.GetString("file"),
+			)
+		},
+	}
+	validateCmd.Flags().StringP("file", "f", "", "Path to the spec to validate")
+
 	rootCmd.AddCommand(
 		beautifyCmd,
+		validateCmd,
 	)
 
 	if err := rootCmd.Execute(); err != nil {
