@@ -130,23 +130,37 @@ func NewSpecificationSet(
 					continue
 				}
 
-				m, err := set.ExternalTypes.Mapping(typeMappingName, attr.SubType)
-				if err != nil {
-					return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
-				}
+				if typeMappingName != "" {
+					m, err := set.ExternalTypes.Mapping(typeMappingName, attr.SubType)
+					if err != nil {
+						return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
+					}
 
-				if m != nil {
-					attr.ConvertedType = m.Type
-					attr.Initializer = m.Initializer
-					attr.TypeProvider = m.Import
-				} else {
-					attr.ConvertedType = string(attr.Type)
+					if m != nil {
+						attr.ConvertedType = m.Type
+						attr.Initializer = m.Initializer
+						attr.TypeProvider = m.Import
+					} else {
+						attr.ConvertedType = string(attr.Type)
+					}
 				}
 			}
 		}
 	}
 
 	return set, nil
+}
+
+// WriteSpecificationSet writes the specification set in the given directory.
+func WriteSpecificationSet(dir string, set *SpecificationSet) error {
+
+	for _, s := range set.specs {
+		if err := s.Write(dir); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // Specification returns the Specification with the given name.

@@ -7,9 +7,9 @@ import (
 
 // An APIInfo holds general information about the API.
 type APIInfo struct {
-	Prefix  string `json:"prefix"`
-	Root    string `json:"root"`
-	Version string `json:"version"`
+	Prefix  string `json:"prefix,omitempty"`
+	Root    string `json:"root,omitempty"`
+	Version string `json:"version,omitempty"`
 }
 
 // NewAPIInfo returns a new APIInfo.

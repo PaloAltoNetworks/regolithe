@@ -3,34 +3,35 @@ package spec
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
 	"sort"
 	"strings"
 )
 
 type model struct {
-	Aliases          []string `json:"aliases"`
-	AllowsCreate     bool     `json:"create"`
-	AllowsDelete     bool     `json:"delete"`
-	AllowsGet        bool     `json:"get"`
-	AllowsUpdate     bool     `json:"update"`
-	Description      string   `json:"description"`
-	EntityName       string   `json:"entity_name"`
+	Aliases          []string `json:"aliases,omitempty"`
+	AllowsCreate     bool     `json:"create,omitempty"`
+	AllowsDelete     bool     `json:"delete,omitempty"`
+	AllowsGet        bool     `json:"get,omitempty"`
+	AllowsUpdate     bool     `json:"update,omitempty"`
+	Description      string   `json:"description,omitempty"`
+	EntityName       string   `json:"entity_name,omitempty"`
 	EntityNamePlural string   `json:"-"`
-	Exposed          bool     `json:"exposed"`
-	Extends          []string `json:"extends"`
-	InstanceName     string   `json:"instance_name"`
-	IsRoot           bool     `json:"root"`
-	Package          string   `json:"package"`
-	ResourceName     string   `json:"resource_name"`
-	RestName         string   `json:"rest_name"`
-	Private          bool     `json:"private"`
+	Extends          []string `json:"extends,omitempty"`
+	InstanceName     string   `json:"instance_name,omitempty"`
+	IsRoot           bool     `json:"root,omitempty"`
+	Package          string   `json:"package,omitempty"`
+	ResourceName     string   `json:"resource_name,omitempty"`
+	RestName         string   `json:"rest_name,omitempty"`
+	Private          bool     `json:"private,omitempty"`
 }
 
 // A Specification represents the a Monolithe Specification.
 type Specification struct {
-	Attributes []*Attribute `json:"attributes"`
-	APIs       []*API       `json:"children"`
+	Attributes []*Attribute `json:"attributes,omitempty"`
+	APIs       []*API       `json:"children,omitempty"`
 
 	attributeMap       map[string]*Attribute
 	apiMap             map[string]*API
@@ -43,21 +44,16 @@ type Specification struct {
 // NewSpecification returns a new specification.
 func NewSpecification() *Specification {
 	return &Specification{
-		Attributes: []*Attribute{},
-		APIs:       []*API{},
-		model: &model{
-			Extends: []string{},
-			Aliases: []string{},
-		},
+		model: &model{},
 	}
 }
 
 // LoadSpecification returns a new specification using the given file path.
-func LoadSpecification(path string) (*Specification, error) {
+func LoadSpecification(specPath string) (*Specification, error) {
 
 	spec := NewSpecification()
 
-	file, err := os.Open(path)
+	file, err := os.Open(specPath)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +73,26 @@ func LoadSpecification(path string) (*Specification, error) {
 
 	spec.EntityNamePlural = Pluralize(spec.EntityName)
 
+	// This is mostly a abstract.
+	if spec.RestName == "" {
+		_, file := path.Split(specPath)
+		if strings.HasPrefix(file, "@") {
+			spec.RestName = strings.Replace(file, ".spec", "", 1)
+		}
+	}
+
 	return spec, nil
+}
+
+// Write writes the specification in the given directory.
+func (s *Specification) Write(dir string) error {
+
+	data, err := json.MarshalIndent(s, "", "    ")
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(path.Join(dir, s.RestName+".spec"), data, 0644)
 }
 
 // GetRestName returns the rest name.

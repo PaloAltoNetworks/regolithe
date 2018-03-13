@@ -64,10 +64,6 @@
                     "description": "Camel-cased version of the rest_name",
                     "type": "string"
                 },
-                "exposed": {
-                    "description": "The represented object is exposed",
-                    "type": "boolean"
-                },
                 "extends": {
                     "description": "List of base specification this specification extends on",
                     "type": "array",

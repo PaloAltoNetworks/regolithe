@@ -13,9 +13,7 @@ func TestSpecification_NewSpecification(t *testing.T) {
 		spec := NewSpecification()
 
 		Convey("Then the spec should be correctly initialized", func() {
-			So(spec.APIs, ShouldNotBeNil)
-			So(spec.Attributes, ShouldNotBeNil)
-			So(spec.Extends, ShouldNotBeNil)
+			So(spec, ShouldNotBeNil)
 		})
 	})
 }
