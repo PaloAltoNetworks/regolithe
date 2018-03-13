@@ -387,7 +387,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[0].SubType, ShouldEqual, "")
 			So(attrs[0].Transient, ShouldBeFalse)
 			So(attrs[0].Type, ShouldEqual, AttributeTypeString)
-			So(attrs[0].Unique, ShouldBeFalse)
 		})
 
 		Convey("Then the spec attribute name be correctly initialized", func() {
@@ -422,7 +421,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[1].SubType, ShouldEqual, "")
 			So(attrs[1].Transient, ShouldBeFalse)
 			So(attrs[1].Type, ShouldEqual, AttributeTypeString)
-			So(attrs[1].Unique, ShouldBeFalse)
 		})
 
 		Convey("Then the spec attribbute status be correctly initialized", func() {
@@ -457,7 +455,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[2].SubType, ShouldEqual, "")
 			So(attrs[2].Transient, ShouldBeFalse)
 			So(attrs[2].Type, ShouldEqual, AttributeTypeEnum)
-			So(attrs[2].Unique, ShouldBeFalse)
 		})
 
 		Convey("When I apply the base specification", func() {

@@ -33,6 +33,7 @@
             }
         }
     },
+    "additionalProperties": false,
     "required": [
         "model"
     ],
@@ -103,11 +104,13 @@
                     "type": "boolean"
                 }
             },
+            "additionalProperties": false,
             "required": [
                 "package",
                 "rest_name",
                 "resource_name",
-                "entity_name"
+                "entity_name",
+                "description"
             ]
 
         },
@@ -126,14 +129,19 @@
                     "type": "boolean"
                 },
                 "get": {
-                    "description": "The child objects can be retrived from the current specification",
+                    "description": "The child objects can be retrivied from the current specification",
                     "type": "boolean"
                 },
                 "rest_name": {
                     "description": "rest_name used as a link to the child object",
                     "type": "string"
+                },
+                "update": {
+                    "description": "The child objects can be updated from the current specification",
+                    "type": "boolean"
                 }
             },
+            "additionalProperties": false,
             "required": [
                 "rest_name"
             ]
@@ -298,7 +306,12 @@
                     ]
                 }
             },
-            "required": ["name", "type"]
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "type",
+                "description"
+            ]
         }
     }
 }
