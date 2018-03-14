@@ -88,7 +88,7 @@ func schemaRegoAbstractJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "schema/rego-abstract.json", size: 845, mode: os.FileMode(420), modTime: time.Unix(1520999747, 0)}
+	info := bindataFileInfo{name: "schema/rego-abstract.json", size: 845, mode: os.FileMode(420), modTime: time.Unix(1521051776, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -108,7 +108,7 @@ func schemaRegoApiJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "schema/rego-api.json", size: 1164, mode: os.FileMode(420), modTime: time.Unix(1520999528, 0)}
+	info := bindataFileInfo{name: "schema/rego-api.json", size: 1164, mode: os.FileMode(420), modTime: time.Unix(1521051776, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -128,7 +128,7 @@ func schemaRegoAttributeJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "schema/rego-attribute.json", size: 5359, mode: os.FileMode(420), modTime: time.Unix(1520999472, 0)}
+	info := bindataFileInfo{name: "schema/rego-attribute.json", size: 5359, mode: os.FileMode(420), modTime: time.Unix(1521051776, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -148,7 +148,7 @@ func schemaRegoInfoJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "schema/rego-info.json", size: 723, mode: os.FileMode(420), modTime: time.Unix(1521000357, 0)}
+	info := bindataFileInfo{name: "schema/rego-info.json", size: 723, mode: os.FileMode(420), modTime: time.Unix(1521051776, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -168,7 +168,7 @@ func schemaRegoModelJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "schema/rego-model.json", size: 2257, mode: os.FileMode(420), modTime: time.Unix(1520999576, 0)}
+	info := bindataFileInfo{name: "schema/rego-model.json", size: 2257, mode: os.FileMode(420), modTime: time.Unix(1521051776, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -188,7 +188,7 @@ func schemaRegoSpecJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "schema/rego-spec.json", size: 1100, mode: os.FileMode(420), modTime: time.Unix(1520999697, 0)}
+	info := bindataFileInfo{name: "schema/rego-spec.json", size: 1100, mode: os.FileMode(420), modTime: time.Unix(1521051776, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
