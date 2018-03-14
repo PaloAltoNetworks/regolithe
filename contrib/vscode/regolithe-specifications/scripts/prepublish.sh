@@ -3,7 +3,7 @@ set -e
 
 rm -rf ./schemas
 mkdir ./schemas
-cp ../../../schema/regolithe.json ./schemas
+cp ../../../schema/*.json ./schemas
 
 cd ../../../cmd/rego/ || exit 1
 make codegen

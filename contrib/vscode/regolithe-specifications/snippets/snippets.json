@@ -26,5 +26,13 @@
             "    \"type\": \"string\",",
             "}"
         ]
+    },
+    "Regolithe: New API": {
+        "prefix": "api",
+        "body": [
+            "{",
+            "    \"rest_name\": \"childspec\"",
+            "}"
+        ]
     }
 }

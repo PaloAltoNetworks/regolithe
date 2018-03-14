@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Regolithe Specification",
+    "description": "An attribute of a specification",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "rest_name"
+    ],
+
+    "properties": {
+        "create": {
+            "description": "The child objects can be created from the current specification",
+            "type": "boolean"
+        },
+        "delete": {
+            "description": "The child objects can be deleted from the current specification",
+            "type": "boolean"
+        },
+        "deprecated": {
+            "description": "The child api is deprecated",
+            "type": "boolean"
+        },
+        "get": {
+            "description": "The child objects can be retrivied from the current specification",
+            "type": "boolean"
+        },
+        "rest_name": {
+            "description": "rest_name used as a link to the child object",
+            "type": "string"
+        },
+        "update": {
+            "description": "The child objects can be updated from the current specification",
+            "type": "boolean"
+        }
+    }
+}

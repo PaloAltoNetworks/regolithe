@@ -39,7 +39,7 @@ type Specification struct {
 	orderingAttributes []*Attribute
 	identifier         *Attribute
 
-	*model `json:"model,inline"`
+	*model `json:"model,inline,omitempty"`
 }
 
 // NewSpecification returns a new specification.
@@ -83,14 +83,6 @@ func LoadSpecification(specPath string) (*Specification, error) {
 	spec, err := LoadSpecificationFrom(file)
 	if err != nil {
 		return nil, err
-	}
-
-	// HACK: This is mostly a abstract.
-	if spec.RestName == "" {
-		_, file := path.Split(specPath)
-		if strings.HasPrefix(file, "@") {
-			spec.RestName = strings.Replace(file, ".spec", "", 1)
-		}
 	}
 
 	return spec, nil

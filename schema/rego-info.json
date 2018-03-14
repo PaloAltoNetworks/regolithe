@@ -1,0 +1,29 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Regolithe Specification",
+    "description": "An attribute of a specification",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "prefix",
+        "root",
+        "version"
+    ],
+
+    "properties": {
+        "prefix": {
+            "type": "string",
+            "description": "Prefix to use to call apis",
+            "default": "api"
+        },
+        "root": {
+            "type": "string",
+            "description": "Name of the root specification",
+            "default": "root"
+        },
+        "version": {
+            "description": "Version of the API",
+            "type": "string"
+        }
+    }
+}

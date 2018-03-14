@@ -21,7 +21,8 @@
     },
     "categories": [
         "Linters",
-        "Snippets"
+        "Snippets",
+        "Formatters"
     ],
     "activationEvents": [
         "onLanguage:json"
@@ -36,8 +37,16 @@
         ],
         "jsonValidation": [
             {
+                "fileMatch": "api.info",
+                "url": "./schemas/rego-info.json"
+            },
+            {
+                "fileMatch": "*.abs",
+                "url": "./schemas/rego-abstract.json"
+            },
+            {
                 "fileMatch": "*.spec",
-                "url": "./schemas/regolithe.json"
+                "url": "./schemas/rego-spec.json"
             }
         ],
         "configurationDefaults": {
