@@ -152,18 +152,6 @@ func NewSpecificationSet(
 	return set, nil
 }
 
-// WriteSpecificationSet writes the specification set in the given directory.
-func WriteSpecificationSet(dir string, set *SpecificationSet) error {
-
-	for _, s := range set.specs {
-		if err := s.Write(dir); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 // Specification returns the Specification with the given name.
 func (s *SpecificationSet) Specification(name string) *Specification {
 	return s.specs[name]

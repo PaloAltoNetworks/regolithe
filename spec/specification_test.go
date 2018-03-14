@@ -296,9 +296,9 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(spec.Package, ShouldEqual, "todo-list")
 			So(spec.ResourceName, ShouldEqual, "root")
 			So(spec.RestName, ShouldEqual, "root")
-			So(spec.Extends, ShouldResemble, []string{})
+			So(spec.Extends, ShouldBeNil)
 			So(spec.IsRoot, ShouldBeTrue)
-			So(spec.Aliases, ShouldResemble, []string{})
+			So(spec.Aliases, ShouldBeNil)
 		})
 
 		Convey("Then the number of api should be correct", func() {
@@ -457,7 +457,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 		Convey("When I apply the base specification", func() {
 
-			base, err := LoadSpecification("./tests/@base.spec")
+			base, err := LoadSpecification("./tests/@base.abs")
 			spec.ApplyBaseSpecifications(base) // nolint: errcheck
 
 			Convey("Then err should be nil", func() {

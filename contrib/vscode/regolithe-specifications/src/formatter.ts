@@ -13,7 +13,7 @@ export class RegolitheDocumentFormattingEditProvider implements vscode.DocumentF
 
     public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions, token: vscode.CancellationToken): Thenable<vscode.TextEdit[]> {
 
-        if (!document.fileName.endsWith('.spec')) {
+        if (!document.fileName.endsWith('.spec') && !document.fileName.endsWith('.abs')) {
             return null;
         }
 
