@@ -1,0 +1,30 @@
+{
+    "Regolithe: New Spec File": {
+        "prefix": "nsf",
+        "body": [
+            "{",
+            "    \"attributes\": [],",
+            "    \"children\": [],",
+            "    \"model\": {",
+            "        \"description\": \"My new spec\",",
+            "        \"entity_name\": \"MySpec\",",
+            "        \"package\": \"package\",",
+            "        \"resource_name\": \"newspecs\",",
+            "        \"rest_name\": \"newspec\",",
+            "    }",
+            "}"
+        ]
+    },
+    "Regolithe: New Attribute": {
+        "prefix": "attr",
+        "body": [
+            "{",
+            "    \"description\": \"My attribute\",",
+            "    \"exposed\": true,",
+            "    \"name\": \"myAttribute\",",
+            "    \"stored\": true,",
+            "    \"type\": \"string\",",
+            "}"
+        ]
+    }
+}
