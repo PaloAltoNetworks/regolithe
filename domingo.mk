@@ -20,6 +20,8 @@ domingo_write_versions:
 domingo_lint:
 	@echo "running linters..."
 	@gometalinter --vendor --disable-all \
+		--exclude vendor \
+		--exclude bindata.go \
 		--enable=vet \
 		--enable=vetshadow \
 		--enable=golint \
