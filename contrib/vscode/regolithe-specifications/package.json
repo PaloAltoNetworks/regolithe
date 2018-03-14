@@ -35,6 +35,11 @@
                 "path": "./snippets/snippets.json"
             }
         ],
+        "languages": [{
+            "id": "json",
+            "extensions": [ ".abs", ".spec", ".info" ],
+            "aliases": [ "Specs", "spec" ]
+        }],
         "jsonValidation": [
             {
                 "fileMatch": "api.info",

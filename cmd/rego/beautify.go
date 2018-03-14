@@ -63,6 +63,7 @@ func beautifyOne(src string) (err error) {
 		return fmt.Errorf("Unable to read file '%s': %s", src, err)
 	}
 
+	s.Attributes = s.OriginalSortedAttributes()
 	data, err := json.MarshalIndent(s, "", "    ")
 	if err != nil {
 		return err

@@ -91,12 +91,14 @@ func LoadSpecification(specPath string) (*Specification, error) {
 // Write writes the specification in the given directory.
 func (s *Specification) Write(dir string) error {
 
+	s.Attributes = s.OriginalSortedAttributes()
+
 	data, err := json.MarshalIndent(s, "", "    ")
 	if err != nil {
 		return err
 	}
 
-	return ioutil.WriteFile(path.Join(dir, s.RestName+".spec"), data, 0644)
+	return ioutil.WriteFile(path.Join(dir, s.RestName+".spec"), append(data, '\n'), 0644)
 }
 
 // GetRestName returns the rest name.

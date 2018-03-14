@@ -23,7 +23,7 @@
             "    \"exposed\": true,",
             "    \"name\": \"myAttribute\",",
             "    \"stored\": true,",
-            "    \"type\": \"string\",",
+            "    \"type\": \"string\"",
             "}"
         ]
     },
