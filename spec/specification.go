@@ -3,6 +3,7 @@ package spec
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path"
@@ -48,10 +49,30 @@ func NewSpecification() *Specification {
 	}
 }
 
-// LoadSpecification returns a new specification using the given file path.
-func LoadSpecification(specPath string) (*Specification, error) {
+// LoadSpecificationFrom loads a specifaction from the given io.Reader
+func LoadSpecificationFrom(reader io.Reader) (*Specification, error) {
 
 	spec := NewSpecification()
+
+	if err := json.NewDecoder(reader).Decode(spec); err != nil {
+		return nil, err
+	}
+
+	if err := spec.buildAttributesInfo(); err != nil {
+		return nil, err
+	}
+
+	if err := spec.buildAPIsInfo(); err != nil {
+		return nil, err
+	}
+
+	spec.EntityNamePlural = Pluralize(spec.EntityName)
+
+	return spec, nil
+}
+
+// LoadSpecification returns a new specification using the given file path.
+func LoadSpecification(specPath string) (*Specification, error) {
 
 	file, err := os.Open(specPath)
 	if err != nil {
@@ -59,21 +80,12 @@ func LoadSpecification(specPath string) (*Specification, error) {
 	}
 	defer file.Close() // nolint: errcheck
 
-	if err = json.NewDecoder(file).Decode(spec); err != nil {
+	spec, err := LoadSpecificationFrom(file)
+	if err != nil {
 		return nil, err
 	}
 
-	if err = spec.buildAttributesInfo(); err != nil {
-		return nil, err
-	}
-
-	if err = spec.buildAPIsInfo(); err != nil {
-		return nil, err
-	}
-
-	spec.EntityNamePlural = Pluralize(spec.EntityName)
-
-	// This is mostly a abstract.
+	// HACK: This is mostly a abstract.
 	if spec.RestName == "" {
 		_, file := path.Split(specPath)
 		if strings.HasPrefix(file, "@") {
