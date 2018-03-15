@@ -6,11 +6,11 @@
             "    \"attributes\": [],",
             "    \"children\": [],",
             "    \"model\": {",
-            "        \"description\": \"My new spec\",",
-            "        \"entity_name\": \"MySpec\",",
-            "        \"package\": \"package\",",
-            "        \"resource_name\": \"newspecs\",",
-            "        \"rest_name\": \"newspec\",",
+            "        \"description\": \"${1:description}\",",
+            "        \"entity_name\": \"${2:MySpec}\",",
+            "        \"package\": \"${3:package}\",",
+            "        \"resource_name\": \"${4:myspecs}\",",
+            "        \"rest_name\": \"${5:myspec}\"",
             "    }",
             "}"
         ]
@@ -19,11 +19,11 @@
         "prefix": "attr",
         "body": [
             "{",
-            "    \"description\": \"My attribute\",",
+            "    \"description\": \"${1:description}\",",
             "    \"exposed\": true,",
-            "    \"name\": \"myAttribute\",",
+            "    \"name\": \"${2:name}\",",
             "    \"stored\": true,",
-            "    \"type\": \"string\"",
+            "    \"type\": \"${3:type}\"",
             "}"
         ]
     },
@@ -31,7 +31,7 @@
         "prefix": "api",
         "body": [
             "{",
-            "    \"rest_name\": \"childspec\"",
+            "    \"rest_name\": \"${1:restname}\"",
             "}"
         ]
     }

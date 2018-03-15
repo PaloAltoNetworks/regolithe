@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
-    "title": "Regolithe Specification",
-    "description": "An attribute of a specification",
+    "title": "Specification",
+    "description": "Represents an object with all its attributes and relations",
     "type": "object",
     "additionalProperties": false,
     "required": [
@@ -11,7 +11,7 @@
     "properties": {
         "attributes": {
             "type": "array",
-            "description": "List of attributes of the represented object",
+            "description": "List of attributes of the represented object.",
             "items": {
                 "type": "object",
                 "oneOf": [
@@ -21,16 +21,16 @@
         },
         "children": {
             "type": "array",
-            "description": "List of child apis of the represented object",
+            "description": "List of relations between the represented object and other ones.",
             "items": {
                 "type": "object",
                 "oneOf": [
-                    {"$ref": "rego-api.json"}
+                    {"$ref": "rego-relation.json"}
                 ]
             }
         },
         "model": {
-            "description": "Base information of the represented object",
+            "description": "Base information of the represented object.",
             "type": "object",
             "oneOf": [
                 {"$ref": "rego-model.json"}

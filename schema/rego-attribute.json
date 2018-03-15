@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
-    "title": "Regolithe Specification",
+    "title": "Attribute",
     "description": "An attribute of a specification",
     "type": "object",
     "additionalProperties": false,

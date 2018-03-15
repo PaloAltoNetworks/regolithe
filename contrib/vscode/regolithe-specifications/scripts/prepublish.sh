@@ -6,7 +6,6 @@ mkdir ./schemas
 cp ../../../schema/*.json ./schemas
 
 cd ../../../cmd/rego/ || exit 1
-make codegen
 go build
 cd - || exit 1
 

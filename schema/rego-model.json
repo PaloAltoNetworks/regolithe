@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
-    "title": "Regolithe Specification",
-    "description": "An attribute of a specification",
+    "title": "Model",
+    "description": "Holds basic information of the represented object",
     "type": "object",
     "additionalProperties": false,
     "required": [

@@ -43,12 +43,10 @@
                 "id": "json",
                 "extensions": [
                     ".abs",
-                    ".spec",
-                    ".info"
+                    ".spec"
                 ],
-                "aliases": [
-                    "Specs",
-                    "spec"
+                "filenames": [
+                    "api.info"
                 ]
             }
         ],
@@ -68,7 +66,9 @@
         ],
         "configurationDefaults": {
             "[json]": {
-                "editor.formatOnSave": true
+                "editor.formatOnSave": true,
+                "editor.insertSpaces": true,
+                "editor.tabSize": 4
             }
         }
     },

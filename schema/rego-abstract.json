@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
-    "title": "Regolithe Specification",
-    "description": "An attribute of a specification",
+    "title": "Abstract",
+    "description": "An abstract allows to declare a set of base attributes and/or child apis that can be reused into other specifications",
     "type": "object",
     "additionalProperties": false,
 
