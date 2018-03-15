@@ -1,0 +1,38 @@
+{
+    "Regolithe: New Spec File": {
+        "prefix": "spec",
+        "body": [
+            "{",
+            "    \"attributes\": [],",
+            "    \"children\": [],",
+            "    \"model\": {",
+            "        \"description\": \"${1:description}\",",
+            "        \"entity_name\": \"${2:MySpec}\",",
+            "        \"package\": \"${3:package}\",",
+            "        \"resource_name\": \"${4:myspecs}\",",
+            "        \"rest_name\": \"${5:myspec}\"",
+            "    }",
+            "}"
+        ]
+    },
+    "Regolithe: New Attribute": {
+        "prefix": "attr",
+        "body": [
+            "{",
+            "    \"description\": \"${1:description}\",",
+            "    \"exposed\": true,",
+            "    \"name\": \"${2:name}\",",
+            "    \"stored\": true,",
+            "    \"type\": \"${3:type}\"",
+            "}"
+        ]
+    },
+    "Regolithe: New Relation": {
+        "prefix": "rel",
+        "body": [
+            "{",
+            "    \"rest_name\": \"${1:restname}\"",
+            "}"
+        ]
+    }
+}

@@ -2,9 +2,6 @@
 .tags
 
 */debug
-codegen
-*.pyc
-*.egg-info
 vendor
-testresults.xml
-test/*
+*.cover
+coverage.txt

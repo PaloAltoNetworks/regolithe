@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -27,19 +28,27 @@ func main() {
 		Short: description,
 	}
 
-	var beautifyCmd = &cobra.Command{
-		Use:   "beautify",
-		Short: "Beautify a specifications.",
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return viper.BindPFlags(cmd.Flags())
-		},
+	var formatCmd = &cobra.Command{
+		Use:   "format",
+		Short: "Reads a specification from stdin and prints it formatted on std out.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return beautify(os.Stdin)
+
+			s := spec.NewSpecification()
+
+			if err := s.Read(os.Stdin); err != nil {
+				return fmt.Errorf("Unable to load specs: %s", err)
+			}
+
+			if err := s.Write(os.Stdout); err != nil {
+				return err
+			}
+
+			return nil
 		},
 	}
 
 	rootCmd.AddCommand(
-		beautifyCmd,
+		formatCmd,
 	)
 
 	if err := rootCmd.Execute(); err != nil {
