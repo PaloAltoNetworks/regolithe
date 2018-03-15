@@ -1,6 +1,6 @@
 {
     "Regolithe: New Spec File": {
-        "prefix": "nsf",
+        "prefix": "spec",
         "body": [
             "{",
             "    \"attributes\": [],",
@@ -27,8 +27,8 @@
             "}"
         ]
     },
-    "Regolithe: New API": {
-        "prefix": "api",
+    "Regolithe: New Relation": {
+        "prefix": "rel",
         "body": [
             "{",
             "    \"rest_name\": \"${1:restname}\"",
