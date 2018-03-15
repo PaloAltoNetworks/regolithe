@@ -1,6 +1,12 @@
-# regolithe-specifications
+# Regolithe Specifications for VSCode
 
 This package provides snippets and schema validation for Regolithe Specifications.
+
+## What is Regolithe
+
+For now it's internal. You mostly don't need this extension.
+
+Yet :)
 
 ## Features
 
