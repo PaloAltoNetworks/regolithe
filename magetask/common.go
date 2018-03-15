@@ -31,24 +31,6 @@ func SetProjectName(name string) {
 	projectName = name
 }
 
-// InstallDependencies installs the package dependencies.
-func InstallDependencies() error {
-
-	if _, err := os.Stat("./Gopkg.toml"); err == nil {
-
-		if err = run(nil, "dep", "ensure", "-v"); err != nil {
-			return err
-		}
-
-		fmt.Println("complete: dependencies from dep")
-
-		return nil
-	}
-
-	fmt.Println("complete: dependencies from go get ./...")
-	return run(nil, "go", "get", "./...")
-}
-
 // WriteVersion creates the version file if needed.
 func WriteVersion() error {
 
