@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Abstract",
+    "description": "An abstract allows to declare a set of base attributes and/or child apis that can be reused into other specifications",
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+        "attributes": {
+            "type": "array",
+            "description": "List of attributes of the represented object",
+            "items": {
+                "type": "object",
+                "oneOf": [
+                    {"$ref": "rego-attribute.json"}
+                ]
+            }
+        },
+        "children": {
+            "type": "array",
+            "description": "List of child apis of the represented object",
+            "items": {
+                "type": "object",
+                "oneOf": [
+                    {"$ref": "rego-api.json"}
+                ]
+            }
+        }
+    }
+}

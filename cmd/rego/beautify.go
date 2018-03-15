@@ -1,74 +1,28 @@
 package main
 
 import (
-	"encoding/json"
+	"bytes"
 	"fmt"
-	"io/ioutil"
-	"os"
-	"path"
+	"io"
 
 	"github.com/aporeto-inc/regolithe/spec"
 )
 
-func beautifyAll(srcdir, dstdir string) error {
+func beautify(reader io.Reader) error {
 
-	filesInfo, err := ioutil.ReadDir(srcdir)
-	if err != nil {
-		return fmt.Errorf("Unable to read dir: %s", err)
+	s := spec.NewSpecification()
+
+	if err := s.Read(reader); err != nil {
+		return fmt.Errorf("Unable to load specs: %s", err)
 	}
 
-	for _, info := range filesInfo {
+	buf := &bytes.Buffer{}
 
-		if path.Ext(info.Name()) != ".spec" {
-			continue
-		}
-
-		s, err := spec.LoadSpecification(path.Join(srcdir, info.Name()))
-		if err != nil {
-			return fmt.Errorf("Unable to read file '%s': %s", info.Name(), err)
-		}
-
-		if err = s.Write(dstdir); err != nil {
-			return fmt.Errorf("Unable to write file '%s': %s", info.Name(), err)
-		}
-	}
-
-	return nil
-}
-
-func beautifyOne(src string) (err error) {
-
-	var s *spec.Specification
-
-	if src != "" {
-		fi, err1 := os.Stat(src)
-		if err1 != nil {
-			return fmt.Errorf("Unable to read file '%s': %s", src, err1)
-		}
-
-		if fi.IsDir() {
-			return fmt.Errorf("Given read file '%s' is a directory", src)
-		}
-
-		if path.Ext(fi.Name()) != ".spec" {
-			return fmt.Errorf("Given read file '%s' is not a spec file", src)
-		}
-
-		s, err = spec.LoadSpecification(src)
-	} else {
-		s, err = spec.LoadSpecificationFrom(os.Stdin)
-	}
-
-	if err != nil {
-		return fmt.Errorf("Unable to read file '%s': %s", src, err)
-	}
-
-	data, err := json.MarshalIndent(s, "", "    ")
-	if err != nil {
+	if err := s.Write(buf); err != nil {
 		return err
 	}
 
-	fmt.Println(string(data))
+	fmt.Println(buf.String())
 
 	return nil
 }

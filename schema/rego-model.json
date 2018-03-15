@@ -1,0 +1,75 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Model",
+    "description": "Holds basic information of the represented object",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "package",
+        "rest_name",
+        "resource_name",
+        "entity_name",
+        "description"
+    ],
+
+    "properties": {
+        "aliases": {
+            "description": "List of aliases to represent a specification",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "create": {
+            "description": "The represented object can be created",
+            "type": "boolean"
+        },
+        "delete": {
+            "description": "Therepresented object can be deleted",
+            "type": "boolean"
+        },
+        "description": {
+            "description": "The description of the represented object",
+            "type": "string"
+        },
+        "entity_name": {
+            "description": "Camel-cased version of the rest_name",
+            "type": "string"
+        },
+        "extends": {
+            "description": "List of base specification this specification extends on",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "get": {
+            "description": "The represented object can be retrieved",
+            "type": "boolean"
+        },
+        "package": {
+            "description": "The name of the package of the represented object",
+            "type": "string"
+        },
+        "private": {
+            "description": "The represented object is private",
+            "type": "boolean"
+        },
+        "resource_name": {
+            "description": "The plural version of the rest_name",
+            "type": "string"
+        },
+        "rest_name": {
+            "description": "The unique name representing the object",
+            "type": "string"
+        },
+        "root": {
+            "description": "The represented object acts as the root specification",
+            "type": "boolean"
+        },
+        "update": {
+            "description": "The represented object can be updated",
+            "type": "boolean"
+        }
+    }
+}

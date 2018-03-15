@@ -2,7 +2,7 @@
     "name": "regolithe-specifications",
     "displayName": "Regolithe Specifications",
     "description": "Snippets and schema validation for Regolithe Specifications",
-    "version": "1.0.0",
+    "version": "1.11.0",
     "icon": "assets/icon.png",
     "publisher": "aporeto",
     "scripts": {
@@ -19,9 +19,13 @@
     "engines": {
         "vscode": "^1.21.0"
     },
+    "files": [
+        "./bin"
+    ],
     "categories": [
         "Linters",
-        "Snippets"
+        "Snippets",
+        "Formatters"
     ],
     "activationEvents": [
         "onLanguage:json"
@@ -34,15 +38,37 @@
                 "path": "./snippets/snippets.json"
             }
         ],
+        "languages": [
+            {
+                "id": "json",
+                "extensions": [
+                    ".abs",
+                    ".spec"
+                ],
+                "filenames": [
+                    "api.info"
+                ]
+            }
+        ],
         "jsonValidation": [
             {
+                "fileMatch": "api.info",
+                "url": "./schemas/rego-info.json"
+            },
+            {
+                "fileMatch": "*.abs",
+                "url": "./schemas/rego-abstract.json"
+            },
+            {
                 "fileMatch": "*.spec",
-                "url": "./schemas/regolithe.json"
+                "url": "./schemas/rego-spec.json"
             }
         ],
         "configurationDefaults": {
             "[json]": {
-              "editor.formatOnSave": true
+                "editor.formatOnSave": true,
+                "editor.insertSpaces": true,
+                "editor.tabSize": 4
             }
         }
     },

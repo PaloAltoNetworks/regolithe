@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
-	"path"
+	"reflect"
 	"sort"
 	"strings"
 )
@@ -39,7 +38,7 @@ type Specification struct {
 	orderingAttributes []*Attribute
 	identifier         *Attribute
 
-	*model `json:"model,inline"`
+	*model `json:"model,inline,omitempty"`
 }
 
 // NewSpecification returns a new specification.
@@ -47,28 +46,6 @@ func NewSpecification() *Specification {
 	return &Specification{
 		model: &model{},
 	}
-}
-
-// LoadSpecificationFrom loads a specifaction from the given io.Reader
-func LoadSpecificationFrom(reader io.Reader) (*Specification, error) {
-
-	spec := NewSpecification()
-
-	if err := json.NewDecoder(reader).Decode(spec); err != nil {
-		return nil, err
-	}
-
-	if err := spec.buildAttributesInfo(); err != nil {
-		return nil, err
-	}
-
-	if err := spec.buildAPIsInfo(); err != nil {
-		return nil, err
-	}
-
-	spec.EntityNamePlural = Pluralize(spec.EntityName)
-
-	return spec, nil
 }
 
 // LoadSpecification returns a new specification using the given file path.
@@ -80,31 +57,49 @@ func LoadSpecification(specPath string) (*Specification, error) {
 	}
 	defer file.Close() // nolint: errcheck
 
-	spec, err := LoadSpecificationFrom(file)
-	if err != nil {
-		return nil, err
-	}
+	spec := NewSpecification()
 
-	// HACK: This is mostly a abstract.
-	if spec.RestName == "" {
-		_, file := path.Split(specPath)
-		if strings.HasPrefix(file, "@") {
-			spec.RestName = strings.Replace(file, ".spec", "", 1)
-		}
+	if err := spec.Read(file); err != nil {
+		return nil, err
 	}
 
 	return spec, nil
 }
 
-// Write writes the specification in the given directory.
-func (s *Specification) Write(dir string) error {
+// Read loads a specifaction from the given io.Reader
+func (s *Specification) Read(reader io.Reader) error {
 
-	data, err := json.MarshalIndent(s, "", "    ")
-	if err != nil {
+	if err := json.NewDecoder(reader).Decode(s); err != nil {
 		return err
 	}
 
-	return ioutil.WriteFile(path.Join(dir, s.RestName+".spec"), data, 0644)
+	if err := s.buildAttributesInfo(); err != nil {
+		return err
+	}
+
+	if err := s.buildAPIsInfo(); err != nil {
+		return err
+	}
+
+	s.EntityNamePlural = Pluralize(s.EntityName)
+
+	return nil
+}
+
+// Write dumps the specification into a []byte.
+func (s *Specification) Write(writer io.Writer) error {
+
+	s.Attributes = s.OriginalSortedAttributes()
+
+	if reflect.DeepEqual(s.model, &model{}) {
+		s.model = nil
+		defer func() { s.model = &model{} }()
+	}
+
+	encoder := json.NewEncoder(writer)
+	encoder.SetIndent("", "    ")
+
+	return encoder.Encode(s)
 }
 
 // GetRestName returns the rest name.

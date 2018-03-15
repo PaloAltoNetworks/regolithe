@@ -66,16 +66,17 @@ func NewSpecificationSet(
 
 		default:
 
-			if path.Ext(info.Name()) != ".spec" {
+			if path.Ext(info.Name()) != ".spec" && path.Ext(info.Name()) != ".abs" {
 				continue
 			}
 
-			baseName := strings.Replace(info.Name(), ".spec", "", 1)
-
 			targetMap := set.specs
-			if strings.HasPrefix(info.Name(), "@") {
+
+			if path.Ext(info.Name()) == ".abs" {
 				targetMap = baseSpecs
 			}
+
+			baseName := strings.Replace(strings.Replace(info.Name(), ".spec", "", 1), ".abs", "", 1)
 
 			targetMap[baseName], err = LoadSpecification(path.Join(dirname, info.Name()))
 			if err != nil {
@@ -149,18 +150,6 @@ func NewSpecificationSet(
 	}
 
 	return set, nil
-}
-
-// WriteSpecificationSet writes the specification set in the given directory.
-func WriteSpecificationSet(dir string, set *SpecificationSet) error {
-
-	for _, s := range set.specs {
-		if err := s.Write(dir); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 // Specification returns the Specification with the given name.
