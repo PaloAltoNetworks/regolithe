@@ -6,10 +6,10 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestAPI_Getters(t *testing.T) {
+func TestRelation_Getters(t *testing.T) {
 
-	Convey("Given I have a new API", t, func() {
-		api := &API{
+	Convey("Given I have a new Relation", t, func() {
+		rel := &Relation{
 			RestName:     "test",
 			AllowsGet:    true,
 			AllowsCreate: true,
@@ -23,7 +23,7 @@ func TestAPI_Getters(t *testing.T) {
 		}
 
 		Convey("Then the getters should work", func() {
-			So(api.Specification().Model.EntityName, ShouldEqual, api.linkedSpecification.Model.EntityName)
+			So(rel.Specification().Model.EntityName, ShouldEqual, rel.linkedSpecification.Model.EntityName)
 		})
 	})
 }

@@ -106,14 +106,14 @@ func NewSpecificationSet(
 		}
 
 		// Link the APIs to corresponding specifications
-		for _, api := range spec.APIs {
+		for _, rel := range spec.Relations {
 
-			linked, ok := set.specs[api.RestName]
+			linked, ok := set.specs[rel.RestName]
 			if !ok {
-				return nil, fmt.Errorf("Unable to find linked spec '%s' for spec '%s'", api.RestName, spec.Model.RestName)
+				return nil, fmt.Errorf("Unable to find related spec '%s' for spec '%s'", rel.RestName, spec.Model.RestName)
 			}
 
-			api.linkedSpecification = linked
+			rel.linkedSpecification = linked
 		}
 
 		if set.ExternalTypes != nil {
@@ -198,14 +198,14 @@ func (s *SpecificationSet) Relationships() map[string]*Relationship {
 			}
 		}
 
-		for _, api := range spec.APIs {
+		for _, rel := range spec.Relations {
 
-			childrenSpec := s.specs[api.RestName]
+			childrenSpec := s.specs[rel.RestName]
 
-			if api.AllowsGet {
+			if rel.AllowsGet {
 				relationships[childrenSpec.Model.EntityName].Set("getmany", spec.Model.RestName)
 			}
-			if api.AllowsCreate {
+			if rel.AllowsCreate {
 				relationships[childrenSpec.Model.EntityName].Set("create", spec.Model.RestName)
 			}
 

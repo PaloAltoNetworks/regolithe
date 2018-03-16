@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
     "title": "Abstract",
-    "description": "An abstract allows to declare a set of base attributes and/or child apis that can be reused into other specifications",
+    "description": "An abstract allows to declare a set of base attributes and/or relations that can be reused into other specifications",
     "type": "object",
     "additionalProperties": false,
 
@@ -16,9 +16,9 @@
                 ]
             }
         },
-        "children": {
+        "relations": {
             "type": "array",
-            "description": "List of child apis of the represented object",
+            "description": "List of relations between the represented object and other ones.",
             "items": {
                 "type": "object",
                 "oneOf": [

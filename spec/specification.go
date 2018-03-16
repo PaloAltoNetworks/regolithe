@@ -1,6 +1,7 @@
 package spec
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -10,14 +11,20 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+const (
+	rootModelKey      = "model"
+	rootAttributesKey = "attributes"
+	rootRelationsKey  = "relations"
+)
+
 // A Specification represents the a Monolithe Specification.
 type Specification struct {
 	Attributes []*Attribute `yaml:"attributes,omitempty"`
-	APIs       []*API       `yaml:"children,omitempty"`
+	Relations  []*Relation  `yaml:"relations,omitempty"`
 	Model      *Model       `yaml:"model,omitempty"`
 
 	attributeMap       map[string]*Attribute
-	apiMap             map[string]*API
+	relationsMap       map[string]*Relation
 	orderingAttributes []*Attribute
 	identifier         *Attribute
 }
@@ -56,7 +63,7 @@ func (s *Specification) Read(reader io.Reader) error {
 		return err
 	}
 
-	if err := s.buildAPIsInfo(); err != nil {
+	if err := s.buildRelationssInfo(); err != nil {
 		return err
 	}
 
@@ -70,10 +77,80 @@ func (s *Specification) Read(reader io.Reader) error {
 // Write dumps the specification into a []byte.
 func (s *Specification) Write(writer io.Writer) error {
 
-	s.Attributes = s.OriginalSortedAttributes()
+	repr := yaml.MapSlice{}
 
-	encoder := yaml.NewEncoder(writer)
-	return encoder.Encode(s)
+	if s.Model != nil {
+		repr = append(repr, yaml.MapItem{Key: rootModelKey, Value: toYAMLMapSlice(s.Model)})
+	}
+
+	if len(s.Attributes) != 0 {
+
+		attrs := make([]yaml.MapSlice, len(s.Attributes))
+
+		for i, attr := range s.SortedAttributes() {
+			attrs[i] = toYAMLMapSlice(attr)
+		}
+
+		repr = append(repr, yaml.MapItem{Key: rootAttributesKey, Value: attrs})
+	}
+
+	if len(s.Relations) != 0 {
+
+		relations := make([]yaml.MapSlice, len(s.Relations))
+
+		for i, rel := range s.Relations {
+			relations[i] = toYAMLMapSlice(rel)
+		}
+
+		repr = append(repr, yaml.MapItem{Key: rootRelationsKey, Value: relations})
+	}
+
+	data, err := yaml.Marshal(repr)
+	if err != nil {
+		return err
+	}
+
+	var previousLine []byte
+	buf := &bytes.Buffer{}
+	prfx1 := []byte("- ")
+	prfx2 := []byte(" ")
+	yamlModelKey := []byte(rootModelKey + ":")
+	yamlAttrKey := []byte(rootAttributesKey + ":")
+	yamlAttrRelation := []byte(rootRelationsKey + ":")
+
+	lines := bytes.Split(data, []byte("\n"))
+	lineN := len(lines)
+
+	for i, line := range lines {
+
+		condFirstLine := i == 0
+		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
+		condPrefixed := bytes.HasPrefix(line, prfx1) || !bytes.HasPrefix(line, prfx2)
+
+		if !condFirstLine && !condFirstIn && condPrefixed {
+			buf.WriteRune('\n')
+		}
+
+		if bytes.Equal(line, yamlModelKey) {
+			buf.WriteString("# Model\n")
+		}
+		if bytes.Equal(line, yamlAttrKey) {
+			buf.WriteString("# Attributes\n")
+		}
+		if bytes.Equal(line, yamlAttrRelation) {
+			buf.WriteString("# Relations\n")
+		}
+
+		buf.Write(line)
+		if i+2 < lineN {
+			buf.WriteRune('\n')
+		}
+
+		previousLine = line
+	}
+
+	_, err = writer.Write(buf.Bytes())
+	return err
 }
 
 // Attribute returns the Attributes with the given name.
@@ -81,8 +158,8 @@ func (s *Specification) Attribute(name string) *Attribute {
 	return s.attributeMap[name]
 }
 
-// OriginalSortedAttributes returns the list of attribute sorted by names.
-func (s *Specification) OriginalSortedAttributes() []*Attribute {
+// SortedAttributes returns the list of attribute sorted by names.
+func (s *Specification) SortedAttributes() []*Attribute {
 
 	attrs := append([]*Attribute{}, s.Attributes...)
 
@@ -93,9 +170,9 @@ func (s *Specification) OriginalSortedAttributes() []*Attribute {
 	return attrs
 }
 
-// API returns the API with the given rest name.
-func (s *Specification) API(restName string) *API {
-	return s.apiMap[restName]
+// Relation returns the Relation with the given rest name.
+func (s *Specification) Relation(restName string) *Relation {
+	return s.relationsMap[restName]
 }
 
 // Identifier returns all the identifier attribute.
@@ -119,9 +196,9 @@ func (s *Specification) ApplyBaseSpecifications(specs ...*Specification) error {
 			}
 		}
 
-		for _, api := range spec.APIs {
-			if _, ok := s.apiMap[api.RestName]; !ok {
-				s.APIs = append(s.APIs, api)
+		for _, rel := range spec.Relations {
+			if _, ok := s.relationsMap[rel.RestName]; !ok {
+				s.Relations = append(s.Relations, rel)
 			}
 		}
 	}
@@ -130,7 +207,7 @@ func (s *Specification) ApplyBaseSpecifications(specs ...*Specification) error {
 		return err
 	}
 
-	if err := s.buildAPIsInfo(); err != nil {
+	if err := s.buildRelationssInfo(); err != nil {
 		return err
 	}
 
@@ -213,23 +290,22 @@ func (s *Specification) buildAttributesInfo() error {
 			}
 			s.identifier = attr
 		}
-
 	}
 
 	return nil
 }
 
-// buildAPIsInfo builds the apis map.
-func (s *Specification) buildAPIsInfo() error {
+// buildRelationssInfo builds the relations map.
+func (s *Specification) buildRelationssInfo() error {
 
-	s.apiMap = map[string]*API{}
-	for _, api := range s.APIs {
+	s.relationsMap = map[string]*Relation{}
+	for _, rel := range s.Relations {
 
-		if _, ok := s.apiMap[api.RestName]; ok {
-			return fmt.Errorf("Specification has more than one child api pointing to %s", api.RestName)
+		if _, ok := s.relationsMap[rel.RestName]; ok {
+			return fmt.Errorf("Specification has more than one child relation pointing to %s", rel.RestName)
 		}
 
-		s.apiMap[api.RestName] = api
+		s.relationsMap[rel.RestName] = rel
 	}
 
 	return nil

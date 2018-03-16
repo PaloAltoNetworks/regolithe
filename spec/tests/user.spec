@@ -1,42 +1,46 @@
-attributes:
-- description: The first name
-  exposed: true
-  filterable: true
-  format: free
-  name: firstName
-  orderable: true
-  required: true
-  stored: true
-  type: string
-- description: The last name
-  exposed: true
-  filterable: true
-  format: free
-  name: lastName
-  orderable: true
-  required: true
-  stored: true
-  type: string
-- description: the login
-  exposed: true
-  filterable: true
-  format: free
-  name: userName
-  orderable: true
-  required: true
-  stored: true
-  type: string
-  unique: true
+# Model
 model:
+  rest_name: user
+  resource_name: users
+  entity_name: User
+  package: todo-list
+  description: Represent a user.
   aliases:
   - usr
+  get: true
+  update: true
   delete: true
-  description: Represent a user.
-  entity_name: User
   extends:
   - '@base'
-  get: true
-  package: todo-list
-  resource_name: users
-  rest_name: user
-  update: true
+
+# Attributes
+attributes:
+- name: firstName
+  description: The first name
+  type: string
+  exposed: true
+  stored: true
+  required: true
+  filterable: true
+  format: free
+  orderable: true
+
+- name: lastName
+  description: The last name
+  type: string
+  exposed: true
+  stored: true
+  required: true
+  filterable: true
+  format: free
+  orderable: true
+
+- name: userName
+  description: the login
+  type: string
+  exposed: true
+  stored: true
+  required: true
+  filterable: true
+  format: free
+  orderable: true

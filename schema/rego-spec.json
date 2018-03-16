@@ -19,7 +19,7 @@
                 ]
             }
         },
-        "children": {
+        "relations": {
             "type": "array",
             "description": "List of relations between the represented object and other ones.",
             "items": {

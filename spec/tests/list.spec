@@ -1,82 +1,91 @@
+# Model
+model:
+  rest_name: list
+  resource_name: lists
+  entity_name: List
+  package: todo-list
+  description: Represent a a list of task to do.
+  aliases:
+  - lst
+  get: true
+  update: true
+  delete: true
+  extends:
+  - '@base'
+
+# Attributes
 attributes:
-- creation_only: true
+- name: creationOnly
   description: This attribute is creation only
+  type: string
   exposed: true
+  stored: true
+  creation_only: true
   filterable: true
   format: free
-  name: creationOnly
   orderable: true
-  stored: true
-  type: string
-- description: The date
-  exposed: true
-  filterable: true
-  name: date
-  orderable: true
-  stored: true
+
+- name: date
+  description: The date
   type: time
-- description: The description
   exposed: true
+  stored: true
+  filterable: true
+  orderable: true
+
+- name: description
+  description: The description
+  type: string
+  exposed: true
+  stored: true
   filterable: true
   format: free
-  name: description
   orderable: true
-  stored: true
+
+- name: name
+  description: The name
   type: string
-- description: The name
   exposed: true
+  stored: true
+  required: true
   filterable: true
   format: free
   getter: true
-  name: name
-  orderable: true
-  required: true
   setter: true
-  stored: true
-  type: string
-  unique: true
-- description: This attribute is readonly
-  exposed: true
-  filterable: true
-  format: free
-  name: readOnly
   orderable: true
+
+- name: readOnly
+  description: This attribute is readonly
+  type: string
+  exposed: true
+  stored: true
   read_only: true
-  stored: true
-  type: string
-- description: this is a slice
-  exposed: true
-  filterable: true
-  name: slice
-  orderable: true
-  stored: true
-  subtype: string
-  type: list
-- description: This attribute is not exposed
   filterable: true
   format: free
-  name: unexposed
   orderable: true
+
+- name: slice
+  description: this is a slice
+  type: list
+  exposed: true
+  subtype: string
   stored: true
+  filterable: true
+  orderable: true
+
+- name: unexposed
+  description: This attribute is not exposed
   type: string
-children:
-- create: true
+  stored: true
+  filterable: true
+  format: free
+  orderable: true
+
+# Relations
+relations:
+- rest_name: task
   get: true
-  relationship: child
-  rest_name: task
-- get: true
-  relationship: child
-  rest_name: user
-model:
-  aliases:
-  - lst
-  delete: true
-  description: Represent a a list of task to do.
-  entity_name: List
-  extends:
-  - '@base'
+  create: true
+
+- rest_name: user
   get: true
-  package: todo-list
-  resource_name: lists
-  rest_name: list
-  update: true

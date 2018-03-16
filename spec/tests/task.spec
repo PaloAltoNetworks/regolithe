@@ -1,45 +1,50 @@
+# Model
+model:
+  rest_name: task
+  resource_name: tasks
+  entity_name: Task
+  package: todo-list
+  description: Represent a task to do in a listd
+  aliases:
+  - tsk
+  get: true
+  update: true
+  delete: true
+  extends:
+  - '@base'
+
+# Attributes
 attributes:
-- description: The description
+- name: description
+  description: The description
+  type: string
   exposed: true
+  stored: true
   filterable: true
   format: free
-  name: description
   orderable: true
-  stored: true
+
+- name: name
+  description: The name
   type: string
-- description: The name
   exposed: true
+  stored: true
+  required: true
   filterable: true
   format: free
   getter: true
-  name: name
-  orderable: true
-  required: true
   setter: true
+  orderable: true
+
+- name: status
+  description: The status of the task
+  type: enum
+  exposed: true
   stored: true
-  type: string
-- allowed_choices:
+  allowed_choices:
   - DONE
   - PROGRESS
   - TODO
   default_value: TODO
-  description: The status of the task
-  exposed: true
   filterable: true
-  name: status
   orderable: true
-  stored: true
-  type: enum
-model:
-  aliases:
-  - tsk
-  delete: true
-  description: Represent a task to do in a listd
-  entity_name: Task
-  extends:
-  - '@base'
-  get: true
-  package: todo-list
-  resource_name: tasks
-  rest_name: task
-  update: true

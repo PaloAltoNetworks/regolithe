@@ -1,7 +1,11 @@
 package spec
 
-// An API represents a specification API.
-type API struct {
+// An Relation represents a specification Relation.
+type Relation struct {
+
+	// NOTE: Order of attributes matters!
+	// The YAML will be dumped respecting this order.
+
 	RestName     string `yaml:"rest_name,omitempty"`
 	AllowsGet    bool   `yaml:"get,omitempty"`
 	AllowsCreate bool   `yaml:"create,omitempty"`
@@ -13,6 +17,6 @@ type API struct {
 }
 
 // Specification returns the Specification the API links to.
-func (a *API) Specification() *Specification {
+func (a *Relation) Specification() *Specification {
 	return a.linkedSpecification
 }

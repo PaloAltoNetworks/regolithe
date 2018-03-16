@@ -1,17 +1,19 @@
-children:
-- create: true
-  get: true
-  relationship: root
-  rest_name: list
-- create: true
-  get: true
-  relationship: root
-  rest_name: user
+# Model
 model:
-  description: Root object of the API
-  entity_name: Root
-  get: true
-  package: todo-list
-  resource_name: root
   rest_name: root
+  resource_name: root
+  entity_name: Root
+  package: todo-list
+  description: Root object of the API
+  get: true
   root: true
+
+# Relations
+relations:
+- rest_name: list
+  get: true
+  create: true
+
+- rest_name: user
+  get: true
+  create: true

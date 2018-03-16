@@ -215,32 +215,32 @@ func TestSpecification_APIMap(t *testing.T) {
 			So(err, ShouldBeNil)
 		})
 
-		Convey("Then the child api map should be correctly built", func() {
-			So(len(spec.APIs), ShouldEqual, 2)
-			So(spec.API("list").RestName, ShouldEqual, "list")
-			So(spec.API("user").RestName, ShouldEqual, "user")
+		Convey("Then the relation map should be correctly built", func() {
+			So(len(spec.Relations), ShouldEqual, 2)
+			So(spec.Relation("list").RestName, ShouldEqual, "list")
+			So(spec.Relation("user").RestName, ShouldEqual, "user")
 		})
 	})
 }
 
-func TestSpecification_BuildAPINames(t *testing.T) {
+func TestSpecification_buildRelationssInfo(t *testing.T) {
 
-	Convey("Given I create a specification with the same child api twice.", t, func() {
+	Convey("Given I create a specification with the same relation twice.", t, func() {
 
 		spec := &Specification{
-			APIs: []*API{
-				&API{
+			Relations: []*Relation{
+				&Relation{
 					RestName: "a",
 				},
-				&API{
+				&Relation{
 					RestName: "a",
 				},
 			},
 		}
 
-		Convey("When I call BuildAPINames", func() {
+		Convey("When I call buildRelationssInfo", func() {
 
-			err := spec.buildAPIsInfo()
+			err := spec.buildRelationssInfo()
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)
@@ -272,7 +272,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 	Convey("Given I load the root specification file", t, func() {
 
 		spec, err := LoadSpecification("./tests/root.spec")
-		apis := spec.APIs
+		rels := spec.Relations
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -293,26 +293,26 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(spec.Model.Aliases, ShouldBeNil)
 		})
 
-		Convey("Then the number of api should be correct", func() {
-			So(len(spec.APIs), ShouldEqual, 2)
+		Convey("Then the number of relations should be correct", func() {
+			So(len(spec.Relations), ShouldEqual, 2)
 		})
 
-		Convey("Then the list child API should be correct", func() {
-			So(apis[0].AllowsCreate, ShouldBeTrue)
-			So(apis[0].AllowsDelete, ShouldBeFalse)
-			So(apis[0].Deprecated, ShouldBeFalse)
-			So(apis[0].AllowsGet, ShouldBeTrue)
-			So(apis[0].RestName, ShouldEqual, "list")
-			So(apis[0].AllowsUpdate, ShouldBeFalse)
+		Convey("Then the list of relations should be correct", func() {
+			So(rels[0].AllowsCreate, ShouldBeTrue)
+			So(rels[0].AllowsDelete, ShouldBeFalse)
+			So(rels[0].Deprecated, ShouldBeFalse)
+			So(rels[0].AllowsGet, ShouldBeTrue)
+			So(rels[0].RestName, ShouldEqual, "list")
+			So(rels[0].AllowsUpdate, ShouldBeFalse)
 		})
 
-		Convey("Then the user child API should be correct", func() {
-			So(apis[1].AllowsCreate, ShouldBeTrue)
-			So(apis[1].AllowsDelete, ShouldBeFalse)
-			So(apis[1].Deprecated, ShouldBeFalse)
-			So(apis[1].AllowsGet, ShouldBeTrue)
-			So(apis[1].RestName, ShouldEqual, "user")
-			So(apis[1].AllowsUpdate, ShouldBeFalse)
+		Convey("Then the user relation should be correct", func() {
+			So(rels[1].AllowsCreate, ShouldBeTrue)
+			So(rels[1].AllowsDelete, ShouldBeFalse)
+			So(rels[1].Deprecated, ShouldBeFalse)
+			So(rels[1].AllowsGet, ShouldBeTrue)
+			So(rels[1].RestName, ShouldEqual, "user")
+			So(rels[1].AllowsUpdate, ShouldBeFalse)
 		})
 
 	})

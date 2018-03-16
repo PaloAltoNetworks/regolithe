@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
     "title": "Relation",
-    "description": "Allows to declare a parent/child relation between two specifications.",
+    "description": "Allows to declare a relation between two specifications.",
     "type": "object",
     "additionalProperties": false,
     "required": [
@@ -10,27 +10,27 @@
 
     "properties": {
         "create": {
-            "description": "The child objects can be created from the current specification",
+            "description": "The related objects can be created from the current represented object",
             "type": "boolean"
         },
         "delete": {
-            "description": "The child objects can be deleted from the current specification",
+            "description": "The related objects can be deleted from the current represented object",
             "type": "boolean"
         },
         "deprecated": {
-            "description": "The child api is deprecated",
+            "description": "The relation is deprecated",
             "type": "boolean"
         },
         "get": {
-            "description": "The child objects can be retrivied from the current specification",
+            "description": "The related objects can be retrieved from the current represented object",
             "type": "boolean"
         },
         "rest_name": {
-            "description": "rest_name used as a link to the child object",
+            "description": "rest_name used as a link to the related object",
             "type": "string"
         },
         "update": {
-            "description": "The child objects can be updated from the current specification",
+            "description": "The related objects can be updated from the current represented object",
             "type": "boolean"
         }
     }

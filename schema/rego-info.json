@@ -13,8 +13,7 @@
     "properties": {
         "prefix": {
             "type": "string",
-            "description": "Prefix to use to call apis",
-            "default": "api"
+            "description": "Prefix to use to call apis"
         },
         "root": {
             "type": "string",

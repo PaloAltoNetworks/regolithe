@@ -70,9 +70,9 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		})
 
 		Convey("Then the API linking should be correct", func() {
-			So(set.Specification("root").API("user").Specification(), ShouldEqual, set.Specification("user"))
-			So(set.Specification("root").API("list").Specification(), ShouldEqual, set.Specification("list"))
-			So(set.Specification("list").API("task").Specification(), ShouldEqual, set.Specification("task"))
+			So(set.Specification("root").Relation("user").Specification(), ShouldEqual, set.Specification("user"))
+			So(set.Specification("root").Relation("list").Specification(), ShouldEqual, set.Specification("list"))
+			So(set.Specification("list").Relation("task").Specification(), ShouldEqual, set.Specification("task"))
 		})
 
 		Convey("Then the config should be correctly loaded", func() {
