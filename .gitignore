@@ -5,3 +5,4 @@
 vendor
 *.cover
 coverage.txt
+Gopkg.lock
