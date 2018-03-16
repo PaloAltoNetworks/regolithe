@@ -66,14 +66,7 @@
                 "fileMatch": "*.spec",
                 "url": "./schemas/rego-spec.json"
             }
-        ],
-        "configurationDefaults": {
-            "[json]": {
-                "editor.formatOnSave": true,
-                "editor.insertSpaces": true,
-                "editor.tabSize": 4
-            }
-        }
+        ]
     },
     "devDependencies": {
         "typescript": "^2.6.1",

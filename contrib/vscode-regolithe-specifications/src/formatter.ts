@@ -5,25 +5,19 @@ import * as cp from 'child_process';
 
 import { shouldConsiderDocument } from './utils';
 
-export class RegolitheDocumentFormattingEditProvider implements vscode.DocumentFormattingEditProvider {
+export class RegolitheDocumentFormattingEditProvider {
 
     formatCommandBinPath: string;
 
     constructor(toolPath: string) {
-
         this.formatCommandBinPath = toolPath;
     }
 
-    public provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions, token: vscode.CancellationToken): Thenable<vscode.TextEdit[]> {
+    public format(doc: vscode.TextDocument): Thenable<vscode.TextEdit[]> {
 
-        if (!shouldConsiderDocument(document)) {
+        if (!shouldConsiderDocument(doc)) {
             return null
         }
-
-        return this.format(document).then(edits => edits)
-    }
-
-    private format(doc: vscode.TextDocument): Thenable<vscode.TextEdit[]> {
 
         return new Promise<vscode.TextEdit[]>((resolve, reject) => {
 

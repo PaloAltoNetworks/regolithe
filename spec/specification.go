@@ -72,7 +72,8 @@ func (s *Specification) Write(writer io.Writer) error {
 
 	s.Attributes = s.OriginalSortedAttributes()
 
-	return yaml.NewEncoder(writer).Encode(s)
+	encoder := yaml.NewEncoder(writer)
+	return encoder.Encode(s)
 }
 
 // Attribute returns the Attributes with the given name.
