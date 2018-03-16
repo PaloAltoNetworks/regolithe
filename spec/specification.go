@@ -1,19 +1,20 @@
 package spec
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"sort"
 	"strings"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 // A Specification represents the a Monolithe Specification.
 type Specification struct {
-	Attributes []*Attribute `json:"attributes,omitempty"`
-	APIs       []*API       `json:"children,omitempty"`
-	Model      *Model       `json:"model,omitempty"`
+	Attributes []*Attribute `yaml:"attributes,omitempty"`
+	APIs       []*API       `yaml:"children,omitempty"`
+	Model      *Model       `yaml:"model,omitempty"`
 
 	attributeMap       map[string]*Attribute
 	apiMap             map[string]*API
@@ -47,7 +48,7 @@ func LoadSpecification(specPath string) (*Specification, error) {
 // Read loads a specifaction from the given io.Reader
 func (s *Specification) Read(reader io.Reader) error {
 
-	if err := json.NewDecoder(reader).Decode(s); err != nil {
+	if err := yaml.NewDecoder(reader).Decode(s); err != nil {
 		return err
 	}
 
@@ -71,10 +72,7 @@ func (s *Specification) Write(writer io.Writer) error {
 
 	s.Attributes = s.OriginalSortedAttributes()
 
-	encoder := json.NewEncoder(writer)
-	encoder.SetIndent("", "    ")
-
-	return encoder.Encode(s)
+	return yaml.NewEncoder(writer).Encode(s)
 }
 
 // Attribute returns the Attributes with the given name.

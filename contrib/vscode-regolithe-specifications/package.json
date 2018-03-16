@@ -27,20 +27,23 @@
         "Snippets",
         "Formatters"
     ],
+    "extensionDependencies": [
+        "redhat.vscode-yaml"
+    ],
     "activationEvents": [
-        "onLanguage:json"
+        "onLanguage:yaml"
     ],
     "main": "out/extension",
     "contributes": {
         "snippets": [
             {
-                "language": "json",
+                "language": "yaml",
                 "path": "./snippets/snippets.json"
             }
         ],
         "languages": [
             {
-                "id": "json",
+                "id": "yaml",
                 "extensions": [
                     ".abs",
                     ".spec"
@@ -50,7 +53,7 @@
                 ]
             }
         ],
-        "jsonValidation": [
+        "yamlValidation": [
             {
                 "fileMatch": "api.info",
                 "url": "./schemas/rego-info.json"

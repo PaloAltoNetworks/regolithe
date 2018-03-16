@@ -7,3 +7,10 @@ vendor
 coverage.txt
 Gopkg.lock
 cmd/rego/rego
+
+
+for p in *.spec ; do
+    data=$(cat $p)
+    $GOPATH/bin/yq r <(cat $p) > $p.json
+    mv $p.json $p
+done;

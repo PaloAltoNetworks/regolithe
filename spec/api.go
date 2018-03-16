@@ -2,12 +2,12 @@ package spec
 
 // An API represents a specification API.
 type API struct {
-	RestName     string `json:"rest_name,omitempty"`
-	AllowsGet    bool   `json:"get,omitempty"`
-	AllowsCreate bool   `json:"create,omitempty"`
-	AllowsUpdate bool   `json:"update,omitempty"`
-	AllowsDelete bool   `json:"delete,omitempty"`
-	Deprecated   bool   `json:"deprecated,omitempty"`
+	RestName     string `yaml:"rest_name,omitempty"`
+	AllowsGet    bool   `yaml:"get,omitempty"`
+	AllowsCreate bool   `yaml:"create,omitempty"`
+	AllowsUpdate bool   `yaml:"update,omitempty"`
+	AllowsDelete bool   `yaml:"delete,omitempty"`
+	Deprecated   bool   `yaml:"deprecated,omitempty"`
 
 	linkedSpecification *Specification
 }
