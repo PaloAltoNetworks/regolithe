@@ -93,11 +93,11 @@ func NewSpecificationSet(
 	for _, spec := range set.specs {
 
 		// Apply base specs.
-		for _, ext := range spec.Extends {
+		for _, ext := range spec.Model.Extends {
 
 			base, ok := baseSpecs[ext]
 			if !ok {
-				return nil, fmt.Errorf("Unable to find base spec '%s' for spec '%s'", ext, spec.RestName)
+				return nil, fmt.Errorf("Unable to find base spec '%s' for spec '%s'", ext, spec.Model.RestName)
 			}
 
 			if err = spec.ApplyBaseSpecifications(base); err != nil {
@@ -110,7 +110,7 @@ func NewSpecificationSet(
 
 			linked, ok := set.specs[api.RestName]
 			if !ok {
-				return nil, fmt.Errorf("Unable to find linked spec '%s' for spec '%s'", api.RestName, spec.RestName)
+				return nil, fmt.Errorf("Unable to find linked spec '%s' for spec '%s'", api.RestName, spec.Model.RestName)
 			}
 
 			api.linkedSpecification = linked
@@ -165,7 +165,7 @@ func (s *SpecificationSet) Specifications() (specs []*Specification) {
 	}
 
 	sort.Slice(specs, func(i int, j int) bool {
-		return strings.Compare(specs[i].RestName, specs[j].RestName) == -1
+		return strings.Compare(specs[i].Model.RestName, specs[j].Model.RestName) == -1
 	})
 	return
 }
@@ -181,20 +181,20 @@ func (s *SpecificationSet) Relationships() map[string]*Relationship {
 	relationships := map[string]*Relationship{}
 
 	for _, spec := range s.Specifications() {
-		relationships[spec.EntityName] = NewRelationship()
+		relationships[spec.Model.EntityName] = NewRelationship()
 	}
 
 	for _, spec := range s.Specifications() {
 
-		if !spec.IsRoot {
-			if spec.AllowsUpdate {
-				relationships[spec.EntityName].Set("update", "root")
+		if !spec.Model.IsRoot {
+			if spec.Model.AllowsUpdate {
+				relationships[spec.Model.EntityName].Set("update", "root")
 			}
-			if spec.AllowsDelete {
-				relationships[spec.EntityName].Set("delete", "root")
+			if spec.Model.AllowsDelete {
+				relationships[spec.Model.EntityName].Set("delete", "root")
 			}
-			if spec.AllowsGet {
-				relationships[spec.EntityName].Set("get", "root")
+			if spec.Model.AllowsGet {
+				relationships[spec.Model.EntityName].Set("get", "root")
 			}
 		}
 
@@ -203,10 +203,10 @@ func (s *SpecificationSet) Relationships() map[string]*Relationship {
 			childrenSpec := s.specs[api.RestName]
 
 			if api.AllowsGet {
-				relationships[childrenSpec.EntityName].Set("getmany", spec.RestName)
+				relationships[childrenSpec.Model.EntityName].Set("getmany", spec.Model.RestName)
 			}
 			if api.AllowsCreate {
-				relationships[childrenSpec.EntityName].Set("create", spec.RestName)
+				relationships[childrenSpec.Model.EntityName].Set("create", spec.Model.RestName)
 			}
 
 		}

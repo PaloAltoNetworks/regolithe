@@ -16,19 +16,14 @@ func TestAPI_Getters(t *testing.T) {
 			AllowsUpdate: true,
 			AllowsDelete: true,
 			linkedSpecification: &Specification{
-				model: &model{
+				Model: &Model{
 					EntityName: "test2",
 				},
 			},
 		}
 
 		Convey("Then the getters should work", func() {
-			So(api.Specification().EntityName, ShouldEqual, api.GetEntityName())
-			So(api.GetRestName(), ShouldEqual, "test")
-			So(api.GetAllowsGet(), ShouldBeTrue)
-			So(api.GetAllowsUpdate(), ShouldBeTrue)
-			So(api.GetAllowsCreate(), ShouldBeTrue)
-			So(api.GetAllowsDelete(), ShouldBeTrue)
+			So(api.Specification().Model.EntityName, ShouldEqual, api.linkedSpecification.Model.EntityName)
 		})
 	})
 }

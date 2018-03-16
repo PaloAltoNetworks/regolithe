@@ -38,10 +38,10 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 
 		Convey("Then calling Specifications should return the sorted list", func() {
 			ss := set.Specifications()
-			So(ss[0].RestName, ShouldEqual, "list")
-			So(ss[1].RestName, ShouldEqual, "root")
-			So(ss[2].RestName, ShouldEqual, "task")
-			So(ss[3].RestName, ShouldEqual, "user")
+			So(ss[0].Model.RestName, ShouldEqual, "list")
+			So(ss[1].Model.RestName, ShouldEqual, "root")
+			So(ss[2].Model.RestName, ShouldEqual, "task")
+			So(ss[3].Model.RestName, ShouldEqual, "user")
 		})
 
 		Convey("Then the relationships should be correct", func() {

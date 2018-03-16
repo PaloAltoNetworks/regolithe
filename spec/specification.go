@@ -5,47 +5,25 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"reflect"
 	"sort"
 	"strings"
 )
-
-type model struct {
-	Aliases          []string `json:"aliases,omitempty"`
-	AllowsCreate     bool     `json:"create,omitempty"`
-	AllowsDelete     bool     `json:"delete,omitempty"`
-	AllowsGet        bool     `json:"get,omitempty"`
-	AllowsUpdate     bool     `json:"update,omitempty"`
-	Description      string   `json:"description,omitempty"`
-	EntityName       string   `json:"entity_name,omitempty"`
-	EntityNamePlural string   `json:"-"`
-	Extends          []string `json:"extends,omitempty"`
-	InstanceName     string   `json:"instance_name,omitempty"`
-	IsRoot           bool     `json:"root,omitempty"`
-	Package          string   `json:"package,omitempty"`
-	ResourceName     string   `json:"resource_name,omitempty"`
-	RestName         string   `json:"rest_name,omitempty"`
-	Private          bool     `json:"private,omitempty"`
-}
 
 // A Specification represents the a Monolithe Specification.
 type Specification struct {
 	Attributes []*Attribute `json:"attributes,omitempty"`
 	APIs       []*API       `json:"children,omitempty"`
+	Model      *Model       `json:"model,omitempty"`
 
 	attributeMap       map[string]*Attribute
 	apiMap             map[string]*API
 	orderingAttributes []*Attribute
 	identifier         *Attribute
-
-	*model `json:"model,inline,omitempty"`
 }
 
 // NewSpecification returns a new specification.
 func NewSpecification() *Specification {
-	return &Specification{
-		model: &model{},
-	}
+	return &Specification{}
 }
 
 // LoadSpecification returns a new specification using the given file path.
@@ -81,7 +59,9 @@ func (s *Specification) Read(reader io.Reader) error {
 		return err
 	}
 
-	s.EntityNamePlural = Pluralize(s.EntityName)
+	if s.Model != nil {
+		s.Model.EntityNamePlural = Pluralize(s.Model.EntityName)
+	}
 
 	return nil
 }
@@ -91,45 +71,10 @@ func (s *Specification) Write(writer io.Writer) error {
 
 	s.Attributes = s.OriginalSortedAttributes()
 
-	if reflect.DeepEqual(s.model, &model{}) {
-		s.model = nil
-		defer func() { s.model = &model{} }()
-	}
-
 	encoder := json.NewEncoder(writer)
 	encoder.SetIndent("", "    ")
 
 	return encoder.Encode(s)
-}
-
-// GetRestName returns the rest name.
-func (s *Specification) GetRestName() string {
-	return s.RestName
-}
-
-// GetEntityName returns the rest name.
-func (s *Specification) GetEntityName() string {
-	return s.EntityName
-}
-
-// GetAllowsGet returns if get is allowed.
-func (s *Specification) GetAllowsGet() bool {
-	return s.AllowsGet
-}
-
-// GetAllowsUpdate returns if update is allowed.
-func (s *Specification) GetAllowsUpdate() bool {
-	return s.AllowsUpdate
-}
-
-// GetAllowsCreate returns if create is allowed.
-func (s *Specification) GetAllowsCreate() bool {
-	return s.AllowsCreate
-}
-
-// GetAllowsDelete returns if delete is allowed.
-func (s *Specification) GetAllowsDelete() bool {
-	return s.AllowsDelete
 }
 
 // Attribute returns the Attributes with the given name.
@@ -250,7 +195,11 @@ func (s *Specification) buildAttributesInfo() error {
 	for _, attr := range s.Attributes {
 
 		if _, ok := s.attributeMap[attr.Name]; ok {
-			return fmt.Errorf("Specification %s has more than one attribute named %s", s.RestName, attr.Name)
+			if s.Model != nil {
+				return fmt.Errorf("Specification %s has more than one attribute named %s", s.Model.RestName, attr.Name)
+			}
+
+			return fmt.Errorf("One abstract has more than one attribute named %s", attr.Name)
 		}
 
 		s.attributeMap[attr.Name] = attr
@@ -261,7 +210,7 @@ func (s *Specification) buildAttributesInfo() error {
 
 		if attr.Identifier {
 			if s.identifier != nil {
-				return fmt.Errorf("Specification %s has more than one identifier attributes: At least %s and %s", s.RestName, s.identifier.Name, attr.Name)
+				return fmt.Errorf("Specification %s has more than one identifier attributes: At least %s and %s", s.Model.RestName, s.identifier.Name, attr.Name)
 			}
 			s.identifier = attr
 		}

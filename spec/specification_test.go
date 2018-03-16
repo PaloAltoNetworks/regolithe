@@ -23,7 +23,7 @@ func TestSpecification_Getters(t *testing.T) {
 	Convey("Given I have a new API", t, func() {
 
 		s := &Specification{
-			model: &model{
+			Model: &Model{
 				EntityName:   "Test",
 				ResourceName: "tests",
 				RestName:     "test",
@@ -47,12 +47,6 @@ func TestSpecification_Getters(t *testing.T) {
 		s.buildAttributesInfo() // nolint: errcheck
 
 		Convey("Then the getters should work", func() {
-			So(s.GetRestName(), ShouldEqual, "test")
-			So(s.GetEntityName(), ShouldEqual, "Test")
-			So(s.GetAllowsGet(), ShouldBeTrue)
-			So(s.GetAllowsUpdate(), ShouldBeTrue)
-			So(s.GetAllowsCreate(), ShouldBeTrue)
-			So(s.GetAllowsDelete(), ShouldBeTrue)
 			So(s.Identifier().Name, ShouldEqual, "id")
 		})
 	})
@@ -63,7 +57,6 @@ func TestSpecification_TypeProviders(t *testing.T) {
 	Convey("Given I have a new API", t, func() {
 
 		s := &Specification{
-			model: &model{},
 			Attributes: []*Attribute{
 				&Attribute{
 					Name:          "not-id",
@@ -191,7 +184,6 @@ func TestSpecification_BuildAttributeNames(t *testing.T) {
 	Convey("Given I create a specification with the same attribute twice.", t, func() {
 
 		spec := &Specification{
-			model: &model{},
 			Attributes: []*Attribute{
 				&Attribute{
 					Name: "a",
@@ -287,18 +279,18 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 		})
 
 		Convey("Then the spec should be correctly initialized", func() {
-			So(spec.AllowsGet, ShouldBeTrue)
-			So(spec.AllowsCreate, ShouldBeFalse)
-			So(spec.AllowsDelete, ShouldBeFalse)
-			So(spec.AllowsUpdate, ShouldBeFalse)
-			So(spec.Description, ShouldEqual, "Root object of the API")
-			So(spec.EntityName, ShouldEqual, "Root")
-			So(spec.Package, ShouldEqual, "todo-list")
-			So(spec.ResourceName, ShouldEqual, "root")
-			So(spec.RestName, ShouldEqual, "root")
-			So(spec.Extends, ShouldBeNil)
-			So(spec.IsRoot, ShouldBeTrue)
-			So(spec.Aliases, ShouldBeNil)
+			So(spec.Model.AllowsGet, ShouldBeTrue)
+			So(spec.Model.AllowsCreate, ShouldBeFalse)
+			So(spec.Model.AllowsDelete, ShouldBeFalse)
+			So(spec.Model.AllowsUpdate, ShouldBeFalse)
+			So(spec.Model.Description, ShouldEqual, "Root object of the API")
+			So(spec.Model.EntityName, ShouldEqual, "Root")
+			So(spec.Model.Package, ShouldEqual, "todo-list")
+			So(spec.Model.ResourceName, ShouldEqual, "root")
+			So(spec.Model.RestName, ShouldEqual, "root")
+			So(spec.Model.Extends, ShouldBeNil)
+			So(spec.Model.IsRoot, ShouldBeTrue)
+			So(spec.Model.Aliases, ShouldBeNil)
 		})
 
 		Convey("Then the number of api should be correct", func() {
@@ -335,18 +327,18 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 		})
 
 		Convey("Then the spec should be correctly initialized", func() {
-			So(spec.AllowsGet, ShouldBeTrue)
-			So(spec.AllowsCreate, ShouldBeFalse)
-			So(spec.AllowsDelete, ShouldBeTrue)
-			So(spec.AllowsUpdate, ShouldBeTrue)
-			So(spec.Description, ShouldEqual, "Represent a task to do in a listd")
-			So(spec.EntityName, ShouldEqual, "Task")
-			So(spec.Package, ShouldEqual, "todo-list")
-			So(spec.ResourceName, ShouldEqual, "tasks")
-			So(spec.RestName, ShouldEqual, "task")
-			So(spec.Extends, ShouldResemble, []string{"@base"})
-			So(spec.IsRoot, ShouldBeFalse)
-			So(spec.Aliases, ShouldResemble, []string{"tsk"})
+			So(spec.Model.AllowsGet, ShouldBeTrue)
+			So(spec.Model.AllowsCreate, ShouldBeFalse)
+			So(spec.Model.AllowsDelete, ShouldBeTrue)
+			So(spec.Model.AllowsUpdate, ShouldBeTrue)
+			So(spec.Model.Description, ShouldEqual, "Represent a task to do in a listd")
+			So(spec.Model.EntityName, ShouldEqual, "Task")
+			So(spec.Model.Package, ShouldEqual, "todo-list")
+			So(spec.Model.ResourceName, ShouldEqual, "tasks")
+			So(spec.Model.RestName, ShouldEqual, "task")
+			So(spec.Model.Extends, ShouldResemble, []string{"@base"})
+			So(spec.Model.IsRoot, ShouldBeFalse)
+			So(spec.Model.Aliases, ShouldResemble, []string{"tsk"})
 		})
 
 		Convey("Then the number of attributes should be correct", func() {
