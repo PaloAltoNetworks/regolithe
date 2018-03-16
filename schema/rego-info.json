@@ -23,7 +23,7 @@
         },
         "version": {
             "description": "Version of the API",
-            "type": "string"
+            "type": "integer"
         }
     }
 }

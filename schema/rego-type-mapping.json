@@ -1,0 +1,48 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Type Mappings",
+    "description": "This file is used to map external types to language specifics.",
+    "type": "object",
+    "additionalProperties": false,
+    "patternProperties": {
+        ".*": {
+            "$ref": "#/definitions/category"
+        }
+    },
+    "definitions": {
+        "category": {
+            "title": "Category",
+            "description": "The category is used by generators in order to translate external types into their own implementation.",
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                ".*": {
+                    "$ref": "#/definitions/mapping"
+                }
+            }
+        },
+        "mapping": {
+            "title": "Type Mapping",
+            "description": "This key is used to translation an external type's subtype from a specification.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "type": {
+                    "description": "The translated type.",
+                    "type": "string"
+                },
+                "init": {
+                    "description": "How to initialize the type.",
+                    "type": "string"
+                },
+                "import": {
+                    "description": "Eventual additional import or package that provides the type.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

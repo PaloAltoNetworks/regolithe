@@ -11,7 +11,7 @@ import (
 // A SpecificationSet represents a compete set of Specification
 type SpecificationSet struct {
 	Configuration *Config
-	ExternalTypes *TypeMapping
+	ExternalTypes TypeMapping
 	APIInfo       *APIInfo
 
 	specs map[string]*Specification
@@ -51,14 +51,14 @@ func NewSpecificationSet(
 
 			loadedMonolitheINI = true
 
-		case "type_mapping.ini":
+		case "_type.mapping":
 
 			set.ExternalTypes, err = LoadTypeMapping(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err
 			}
 
-		case "api.info":
+		case "_api.info":
 			set.APIInfo, err = LoadAPIInfo(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err

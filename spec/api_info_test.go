@@ -10,7 +10,7 @@ func TestInfo_LoadAPIInfo(t *testing.T) {
 
 	Convey("Given I load an api info", t, func() {
 
-		info, err := LoadAPIInfo("./tests/api.info")
+		info, err := LoadAPIInfo("./tests/_api.info")
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -34,7 +34,7 @@ func TestInfo_LoadAPIInfo(t *testing.T) {
 
 	Convey("Given I load an bad formatted api info", t, func() {
 
-		_, err := LoadAPIInfo("./tests/broken/api.info.bad")
+		_, err := LoadAPIInfo("./tests/broken/_api.info.bad")
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldNotBeNil)

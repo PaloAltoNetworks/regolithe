@@ -29,12 +29,14 @@ export class RegolitheDocumentFormattingEditProvider {
             p.stdout.on('data', data => stdout += data);
             p.stderr.on('data', data => stderr += data);
             p.on('error', err => {
+                console.error('Regolithe: unable to format: ', err);
                 return reject();
             });
 
             p.on('close', code => {
 
                 if (code !== 0) {
+                    console.error('Regolithe: unable to format: ', stderr);
                     return reject(stderr);
                 }
 

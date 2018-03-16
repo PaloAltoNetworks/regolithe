@@ -18,7 +18,10 @@ export class RegolitheGenerator {
 
     public generate(doc: vscode.TextDocument): void {
 
-        if (!shouldConsiderDocument(doc)) {
+        if (!shouldConsiderDocument(doc)
+            && !doc.fileName.endsWith('_type.mapping')
+            && !doc.fileName.endsWith('_api.info')
+        ) {
             return;
         }
 

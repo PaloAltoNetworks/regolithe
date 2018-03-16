@@ -80,7 +80,7 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		})
 
 		Convey("Then the type mapping should be correctly loaded", func() {
-			m, _ := set.ExternalTypes.Mapping("elemental", "string_map")
+			m, _ := set.ExternalTypes.Mapping("test", "string_map")
 			So(m.Type, ShouldEqual, "map[string]string")
 		})
 

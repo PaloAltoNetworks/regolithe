@@ -1,0 +1,10 @@
+test:
+  string_map:
+    type: map[string]string
+  int_array:
+    type: '[]int'
+    init: '[]int{}'
+  toto:
+    type: Toto
+    init: Toto{}
+    import: github.com/toto/toto

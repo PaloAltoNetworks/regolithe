@@ -49,14 +49,19 @@
                     ".spec"
                 ],
                 "filenames": [
-                    "api.info"
+                    "_api.info",
+                    "_type.mapping"
                 ]
             }
         ],
         "yamlValidation": [
             {
-                "fileMatch": "api.info",
+                "fileMatch": "_api.info",
                 "url": "./schemas/rego-info.json"
+            },
+            {
+                "fileMatch": "_type.mapping",
+                "url": "./schemas/rego-type-mapping.json"
             },
             {
                 "fileMatch": "*.abs",
