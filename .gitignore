@@ -6,3 +6,4 @@ vendor
 *.cover
 coverage.txt
 Gopkg.lock
+cmd/rego/rego

@@ -22,7 +22,7 @@
             "items": {
                 "type": "object",
                 "oneOf": [
-                    {"$ref": "rego-api.json"}
+                    {"$ref": "rego-relation.json"}
                 ]
             }
         }
