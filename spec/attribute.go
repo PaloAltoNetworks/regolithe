@@ -39,12 +39,6 @@ const (
 	AttributeTypeExt    AttributeType = "external"
 )
 
-var attributesKeyOrdering = []string{
-	"Name",
-	"Description",
-	"Type",
-}
-
 // AttributeNameConverterFunc is the type of a attribute name conveter.
 type AttributeNameConverterFunc func(name string) string
 
