@@ -1,0 +1,32 @@
+# {{ .Spec.Model.EntityName }}
+
+## Description
+
+{{ trimspace .Spec.Model.Description }}
+{{ if .Spec.Relations }}
+## Relations
+{{ range .Spec.Relations }}
+{{ if or .AllowsGet .AllowsCreate -}}
+Relation with [{{ ($.Set.Specification .RestName).Model.EntityName }}](#{{ ($.Set.Specification .RestName).Model.ResourceName }})
+
+{{ end -}}
+{{ if .AllowsGet -}}
+- `GET  /{{$.Spec.Model.ResourceName}}/id/{{ ($.Set.Specification .RestName).Model.ResourceName }}`
+{{ end -}}
+{{ if .AllowsCreate -}}
+- `POST /{{$.Spec.Model.ResourceName}}/id/{{ ($.Set.Specification .RestName).Model.ResourceName }}`
+{{ end -}}
+{{ end -}}
+{{ end -}}
+{{ if .Spec.Attributes }}
+## Attributes
+{{ range .Spec.SortedAttributes }}
+{{- if .Exposed }}
+### `{{ .Name }} ({{ if eq .Type "external" }}{{ .Type }}:{{ .SubType }}{{ else }}{{ .Type }}{{ end }})`
+{{ if .Deprecated}}> This attribute is deprecated{{ end }}
+{{ trimspace .Description }}
+
+{{ characteristics . -}}
+{{- end -}}
+{{- end -}}
+{{ end -}}

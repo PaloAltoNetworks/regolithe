@@ -1,0 +1,7 @@
+<!-- markdownlint-disable MD024 MD025 -->
+
+# {{ title (.Configuration.Key "monolithe" "product_name") }} API Documentation
+
+> Version: {{ .APIInfo.Version }}
+
+{{ toc .Specifications -}}
