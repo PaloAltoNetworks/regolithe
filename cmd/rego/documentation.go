@@ -28,7 +28,7 @@ var functions = template.FuncMap{
 		w := &tabwriter.Writer{}
 		w.Init(buf, 0, 8, 0, ' ', 0)
 
-		fmt.Fprintln(w, "| \t|\t \t|")
+		fmt.Fprintln(w, "| Object \t|\t Description \t|")
 		fmt.Fprintln(w, "| - \t|\t - \t|")
 
 		for _, spec := range specs {
