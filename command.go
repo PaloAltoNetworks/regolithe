@@ -176,5 +176,7 @@ func NewCommand(
 		githubGen,
 	)
 
+	rootCmd.SilenceUsage = true
+
 	return rootCmd
 }
