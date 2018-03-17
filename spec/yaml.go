@@ -4,6 +4,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/mitchellh/go-wordwrap"
+
 	"github.com/fatih/structs"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -27,9 +29,16 @@ func toYAMLMapSlice(s interface{}) yaml.MapSlice {
 			continue
 		}
 
+		var v interface{}
+		if yamlName == "description" {
+			v = wordwrap.WrapString(field.Value().(string), 80)
+		} else {
+			v = field.Value()
+		}
+
 		item := yaml.MapItem{
 			Key:   yamlName,
-			Value: field.Value(),
+			Value: v,
 		}
 
 		out = append(out, item)

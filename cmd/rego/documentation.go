@@ -12,6 +12,7 @@ import (
 )
 
 func shortString(s string, max int) string {
+	s = strings.Split(s, "\n")[0]
 	if len(s) < max {
 		return s
 	}

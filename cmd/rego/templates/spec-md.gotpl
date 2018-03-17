@@ -1,6 +1,6 @@
 # {{ .Spec.Model.EntityName }}
 
-## Description
+> Operations:{{ if .Spec.Model.AllowsGet}} `GET`{{ end }}{{ if .Spec.Model.AllowsUpdate}} `UPDATE`{{ end }}{{ if .Spec.Model.AllowsDelete}} `DELETE`{{ end }}
 
 {{ trimspace .Spec.Model.Description }}
 {{ if .Spec.Relations }}

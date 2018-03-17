@@ -113,7 +113,6 @@ func (s *Specification) Write(writer io.Writer) error {
 	var previousLine []byte
 	buf := &bytes.Buffer{}
 	prfx1 := []byte("- ")
-	prfx2 := []byte(" ")
 	yamlModelKey := []byte(rootModelKey + ":")
 	yamlAttrKey := []byte(rootAttributesKey + ":")
 	yamlAttrRelation := []byte(rootRelationsKey + ":")
@@ -125,24 +124,33 @@ func (s *Specification) Write(writer io.Writer) error {
 
 		condFirstLine := i == 0
 		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
-		condPrefixed := bytes.HasPrefix(line, prfx1) || !bytes.HasPrefix(line, prfx2)
+		condPrefixed := bytes.HasPrefix(line, prfx1)
 
 		if !condFirstLine && !condFirstIn && condPrefixed {
 			buf.WriteRune('\n')
 		}
 
 		if bytes.Equal(line, yamlModelKey) {
+			if !condFirstLine {
+				buf.WriteRune('\n')
+			}
 			buf.WriteString("# Model\n")
 		}
 		if bytes.Equal(line, yamlAttrKey) {
+			if !condFirstLine {
+				buf.WriteRune('\n')
+			}
 			buf.WriteString("# Attributes\n")
 		}
 		if bytes.Equal(line, yamlAttrRelation) {
+			if !condFirstLine {
+				buf.WriteRune('\n')
+			}
 			buf.WriteString("# Relations\n")
 		}
 
 		buf.Write(line)
-		if i+2 < lineN {
+		if i+1 < lineN {
 			buf.WriteRune('\n')
 		}
 
