@@ -112,7 +112,7 @@ var functions = template.FuncMap{
 		}
 
 		if attr.Filterable {
-			fmt.Fprintln(w, "| Filterable \t|\t ☑️ \t|")
+			fmt.Fprintln(w, "| Filterable \t|\t `true` \t|")
 		}
 
 		w.Flush() // nolint: errcheck
