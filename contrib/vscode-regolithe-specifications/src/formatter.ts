@@ -2,6 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
+import * as path from 'path';
 
 import { shouldConsiderDocument } from './utils';
 
@@ -36,7 +37,7 @@ export class RegolitheDocumentFormattingEditProvider {
             p.on('close', code => {
 
                 if (code !== 0) {
-                    console.error('Regolithe: unable to format: ', stderr);
+                    vscode.window.showErrorMessage(`Unable to format Regolithe specification '${path.basename(doc.fileName)}': ${stderr}`)
                     return reject(stderr);
                 }
 

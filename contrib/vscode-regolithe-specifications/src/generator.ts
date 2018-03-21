@@ -34,7 +34,11 @@ export class RegolitheGenerator {
 
         const cmd = fs.readFileSync(p).toString();
 
-        exec(`cd '${docDir}' && ${cmd}`)
+        exec(`cd '${docDir}' && ${cmd}`, (err: Error, stdout: string, stderr: string) => {
+            if (err) {
+                vscode.window.showErrorMessage(`Unable to run generation for file '${path.basename(doc.fileName)}': ${err}`);
+            }
+        })
 
         console.log('Regolithe: model generated for', doc.fileName);
     }
