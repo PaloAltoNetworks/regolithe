@@ -1,0 +1,172 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Specification",
+    "description": "Represents an object with all its attributes and relations",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "model"
+    ],
+    "properties": {
+        "attributes": {
+            "type": "array",
+            "description": "List of attributes of the represented object.",
+            "items": {
+                "$ref": "#/definitions/attribute"
+            }
+        },
+        "relations": {
+            "type": "array",
+            "description": "List of relations between the represented object and other ones.",
+            "items": {
+                "$ref": "#/definitions/relation"
+            }
+        },
+        "model": {
+            "$ref": "#/definitions/model"
+        }
+    },
+    "definitions": {
+        "model": {
+            "title": "Model",
+            "description": "Holds basic information of the represented object.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "package",
+                "rest_name",
+                "resource_name",
+                "entity_name",
+                "description"
+            ],
+
+            "properties": {
+                "aliases": {
+                    "description": "List of aliases to represent a specification.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "create": {
+                    "description": "The represented object can be created.",
+                    "type": "boolean"
+                },
+                "delete": {
+                    "description": "Therepresented object can be deleted.",
+                    "type": "boolean"
+                },
+                "description": {
+                    "description": "The description of the represented object.",
+                    "type": "string"
+                },
+                "entity_name": {
+                    "description": "Camel-cased version of the rest_name.",
+                    "type": "string"
+                },
+                "extends": {
+                    "description": "List of base specification this specification extends on.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "get": {
+                    "description": "The represented object can be retrieved.",
+                    "type": "boolean"
+                },
+                "package": {
+                    "description": "The name of the package of the represented object.",
+                    "type": "string"
+                },
+                "private": {
+                    "description": "The represented object is private.",
+                    "type": "boolean"
+                },
+                "resource_name": {
+                    "description": "The plural version of the rest_name.",
+                    "type": "string"
+                },
+                "rest_name": {
+                    "description": "The unique name representing the object.",
+                    "type": "string"
+                },
+                "root": {
+                    "description": "The represented object acts as the root specification.",
+                    "type": "boolean"
+                },
+                "update": {
+                    "description": "The represented object can be updated.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "attribute": {
+__ATTRIBUTE__
+        },
+        "relation": {
+            "title": "Relation",
+            "description": "Allows to declare a relation between two specifications.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "rest_name",
+                "descriptions"
+            ],
+
+            "properties": {
+                "create": {
+                    "description": "The related objects can be created from the current represented object",
+                    "type": "boolean"
+                },
+                "delete": {
+                    "description": "The related objects can be deleted from the current represented object",
+                    "type": "boolean"
+                },
+                "deprecated": {
+                    "description": "The relation is deprecated",
+                    "type": "boolean"
+                },
+                "descriptions": {
+                    "$ref": "#/definitions/descriptions"
+                },
+                "get": {
+                    "description": "The related objects can be retrieved from the current represented object",
+                    "type": "boolean"
+                },
+                "rest_name": {
+                    "description": "rest_name used as a link to the related object",
+                    "type": "string"
+                },
+                "update": {
+                    "description": "The related objects can be updated from the current represented object",
+                    "type": "boolean"
+                }
+            }
+        },
+        "descriptions": {
+            "title": "Relation descriptions per action",
+            "description": "Documentation of the relation.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "create": {
+                    "description": "Documentation for the create operation.",
+                    "type": "string"
+                },
+                "delete": {
+                    "description": "Documentation for the delete operation",
+                    "type": "string"
+                },
+                "get": {
+                    "description": "Documentation for the get operation",
+                    "type": "string"
+                },
+                "update": {
+                    "description": "Documentation for the update operation",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

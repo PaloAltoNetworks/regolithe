@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/aporeto-inc/regolithe/schema"
+	"github.com/xeipuuv/gojsonschema"
 	"gopkg.in/yaml.v2"
 )
 
 // A TypeMap represent a single Type Map.
 type TypeMap struct {
-	Type        string `yaml:"type,omitempty"`
-	Initializer string `yaml:"init,omitempty"`
-	Import      string `yaml:"import,omitempty"`
+	Type        string `yaml:"type,omitempty"           json:"type,omitempty"`
+	Initializer string `yaml:"init,omitempty"           json:"init,omitempty"`
+	Import      string `yaml:"import,omitempty"         json:"import,omitempty"`
+	Description string `yaml:"description,omitempty"    json:"description,omitempty"`
 }
 
 // TypeMapping holds the mapping of the external types.
@@ -35,6 +38,11 @@ func LoadTypeMapping(path string) (TypeMapping, error) {
 		return nil, err
 	}
 
+	if res, err := tm.Validate(); err != nil {
+		writeValidationErrors("validation error in _type.mapping", res)
+		return nil, err
+	}
+
 	return tm, nil
 }
 
@@ -52,4 +60,27 @@ func (t TypeMapping) Mapping(mode string, externalType string) (mapping *TypeMap
 	}
 
 	return tm, nil
+}
+
+// Validate validates the type mappings against the schema.
+func (t TypeMapping) Validate() ([]gojsonschema.ResultError, error) {
+
+	schemaData, err := schema.Asset("rego-type-mapping.json")
+	if err != nil {
+		return nil, err
+	}
+
+	schemaLoader := gojsonschema.NewBytesLoader(schemaData)
+	specLoader := gojsonschema.NewGoLoader(t)
+
+	res, err := gojsonschema.Validate(schemaLoader, specLoader)
+	if err != nil {
+		return nil, err
+	}
+
+	if !res.Valid() {
+		return res.Errors(), fmt.Errorf("Invalid _type.mapping")
+	}
+
+	return nil, nil
 }

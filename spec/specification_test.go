@@ -18,6 +18,140 @@ func TestSpecification_NewSpecification(t *testing.T) {
 	})
 }
 
+func TestSpecification_Validate(t *testing.T) {
+
+	Convey("Given I have a specification with no validation error", t, func() {
+
+		s := &Specification{
+			Model: &Model{
+				ResourceName: "things",
+				RestName:     "thing",
+				Description:  "desc",
+				EntityName:   "toto",
+				Package:      "package",
+			},
+			Attributes: []*Attribute{
+				&Attribute{
+					Name:        "attr1",
+					Description: "desc",
+					Type:        "string",
+				},
+			},
+		}
+
+		Convey("When I call validate", func() {
+
+			res, err := s.Validate()
+
+			Convey("Then err should be nil", func() {
+				So(err, ShouldBeNil)
+			})
+
+			Convey("Then res should be nil", func() {
+				So(res, ShouldBeNil)
+			})
+		})
+	})
+
+	Convey("Given I have a specification with validation error", t, func() {
+
+		s := &Specification{
+			Model: &Model{
+				ResourceName: "things",
+				RestName:     "thing",
+				Description:  "desc",
+				EntityName:   "toto",
+			},
+			Attributes: []*Attribute{
+				&Attribute{
+					Identifier: false,
+					Name:       "not-id",
+				},
+				&Attribute{
+					Name:        "id",
+					Type:        "coucou",
+					Description: "wala",
+				},
+			},
+		}
+
+		Convey("When I call validate", func() {
+
+			res, err := s.Validate()
+
+			Convey("Then err should not be nil", func() {
+				So(err, ShouldNotBeNil)
+			})
+
+			Convey("Then res should be correct", func() {
+				So(len(res), ShouldEqual, 4)
+				So(res[0].String(), ShouldEqual, "type: type is required")
+				So(res[1].String(), ShouldEqual, "description: description is required")
+				So(res[2].String(), ShouldEqual, `attributes.1.type: attributes.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"`)
+				So(res[3].String(), ShouldEqual, `package: package is required`)
+			})
+		})
+	})
+
+	Convey("Given I have an abstract with no validation error", t, func() {
+
+		s := &Specification{
+			Attributes: []*Attribute{
+				&Attribute{
+					Name:        "attr1",
+					Description: "desc",
+					Type:        "string",
+				},
+			},
+		}
+
+		Convey("When I call validate", func() {
+
+			res, err := s.Validate()
+
+			Convey("Then err should be nil", func() {
+				So(err, ShouldBeNil)
+			})
+
+			Convey("Then res should be nil", func() {
+				So(res, ShouldBeNil)
+			})
+		})
+	})
+
+	Convey("Given I have an abstract with validation error", t, func() {
+
+		s := &Specification{
+			Attributes: []*Attribute{
+				&Attribute{
+					Name:        "attr1",
+					Description: "desc",
+					Type:        "string",
+				},
+			},
+			Relations: []*Relation{
+				&Relation{
+					RestName: "a",
+				},
+			},
+		}
+
+		Convey("When I call validate", func() {
+
+			res, err := s.Validate()
+
+			Convey("Then err should not be nil", func() {
+				So(err, ShouldNotBeNil)
+			})
+
+			Convey("Then res should be correct", func() {
+				So(len(res), ShouldEqual, 1)
+				So(res[0].String(), ShouldEqual, `relations: Additional property relations is not allowed`)
+			})
+		})
+	})
+}
+
 func TestSpecification_Getters(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {

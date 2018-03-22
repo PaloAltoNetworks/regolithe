@@ -52,8 +52,10 @@ func NewCommand(
 	}
 
 	var cmdFolderGen = &cobra.Command{
-		Use:   "folder",
-		Short: "Generate the model using a local directory containing the specs.",
+		Use:           "folder",
+		Short:         "Generate the model using a local directory containing the specs.",
+		SilenceUsage:  true,
+		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return viper.BindPFlags(cmd.Flags())
 		},
@@ -85,8 +87,10 @@ func NewCommand(
 	cmdFolderGen.Flags().StringSliceP("dir", "d", nil, "Path of the specifications folder.")
 
 	var githubGen = &cobra.Command{
-		Use:   "github",
-		Short: "Generate the model using a remote github repository.",
+		Use:           "github",
+		Short:         "Generate the model using a remote github repository.",
+		SilenceUsage:  true,
+		SilenceErrors: true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return viper.BindPFlags(cmd.Flags())
 		},
@@ -175,8 +179,6 @@ func NewCommand(
 		cmdFolderGen,
 		githubGen,
 	)
-
-	rootCmd.SilenceUsage = true
 
 	return rootCmd
 }

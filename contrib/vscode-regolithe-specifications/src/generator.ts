@@ -36,7 +36,7 @@ export class RegolitheGenerator {
 
         exec(`cd '${docDir}' && ${cmd}`, (err: Error, stdout: string, stderr: string) => {
             if (err) {
-                vscode.window.showErrorMessage(`Unable to run generation for file '${path.basename(doc.fileName)}': ${err}`);
+                vscode.window.showErrorMessage(`Unable to run generation for file '${path.basename(doc.fileName)}': ${stderr}`);
             }
         })
 

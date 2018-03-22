@@ -1,5 +1,12 @@
 package spec
 
+import (
+	"fmt"
+	"os"
+
+	"github.com/xeipuuv/gojsonschema"
+)
+
 // Pluralize pluralizes the given word.
 func Pluralize(word string) string {
 
@@ -27,4 +34,15 @@ func Pluralize(word string) string {
 	}
 
 	return word + "s"
+}
+
+func writeValidationErrors(message string, res []gojsonschema.ResultError) {
+
+	fmt.Fprintf(os.Stderr, "\n%s:\n", message)
+
+	for _, r := range res {
+		fmt.Fprintf(os.Stderr, " - %s\n", r.String())
+	}
+
+	fmt.Fprintln(os.Stderr)
 }

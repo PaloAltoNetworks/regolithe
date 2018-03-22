@@ -214,3 +214,81 @@ func (s *SpecificationSet) Relationships() map[string]*Relationship {
 
 	return relationships
 }
+
+// RelationshipsByRestName returns the relationships indexed by rest name.
+func (s *SpecificationSet) RelationshipsByRestName() map[string]*Relationship {
+
+	relationships := map[string]*Relationship{}
+
+	for _, spec := range s.Specifications() {
+		relationships[spec.Model.RestName] = NewRelationship()
+	}
+
+	for _, spec := range s.Specifications() {
+
+		if !spec.Model.IsRoot {
+			if spec.Model.AllowsUpdate {
+				relationships[spec.Model.RestName].Set("update", "root")
+			}
+			if spec.Model.AllowsDelete {
+				relationships[spec.Model.RestName].Set("delete", "root")
+			}
+			if spec.Model.AllowsGet {
+				relationships[spec.Model.RestName].Set("get", "root")
+			}
+		}
+
+		for _, rel := range spec.Relations {
+
+			if rel.AllowsGet {
+				relationships[rel.RestName].Set("getmany", spec.Model.RestName)
+			}
+			if rel.AllowsCreate {
+				relationships[rel.RestName].Set("create", spec.Model.RestName)
+			}
+
+		}
+	}
+
+	return relationships
+}
+
+// RelationshipsByResourceName returns the relationships indexed by resource name.
+func (s *SpecificationSet) RelationshipsByResourceName() map[string]*Relationship {
+
+	relationships := map[string]*Relationship{}
+
+	for _, spec := range s.Specifications() {
+		relationships[spec.Model.ResourceName] = NewRelationship()
+	}
+
+	for _, spec := range s.Specifications() {
+
+		if !spec.Model.IsRoot {
+			if spec.Model.AllowsUpdate {
+				relationships[spec.Model.ResourceName].Set("update", "root")
+			}
+			if spec.Model.AllowsDelete {
+				relationships[spec.Model.ResourceName].Set("delete", "root")
+			}
+			if spec.Model.AllowsGet {
+				relationships[spec.Model.ResourceName].Set("get", "root")
+			}
+		}
+
+		for _, rel := range spec.Relations {
+
+			childrenSpec := s.specs[rel.RestName]
+
+			if rel.AllowsGet {
+				relationships[childrenSpec.Model.ResourceName].Set("getmany", spec.Model.RestName)
+			}
+			if rel.AllowsCreate {
+				relationships[childrenSpec.Model.ResourceName].Set("create", spec.Model.RestName)
+			}
+
+		}
+	}
+
+	return relationships
+}

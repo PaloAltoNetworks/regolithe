@@ -8,6 +8,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/aporeto-inc/regolithe/schema"
+	"github.com/xeipuuv/gojsonschema"
+
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -19,14 +22,15 @@ const (
 
 // A Specification represents the a Monolithe Specification.
 type Specification struct {
-	Attributes []*Attribute `yaml:"attributes,omitempty"`
-	Relations  []*Relation  `yaml:"relations,omitempty"`
-	Model      *Model       `yaml:"model,omitempty"`
+	Attributes []*Attribute `yaml:"attributes,omitempty"    json:"attributes,omitempty"`
+	Relations  []*Relation  `yaml:"relations,omitempty"     json:"relations,omitempty"`
+	Model      *Model       `yaml:"model,omitempty"         json:"model,omitempty"`
 
 	attributeMap       map[string]*Attribute
 	relationsMap       map[string]*Relation
 	orderingAttributes []*Attribute
 	identifier         *Attribute
+	path               string
 }
 
 // NewSpecification returns a new specification.
@@ -44,8 +48,9 @@ func LoadSpecification(specPath string) (*Specification, error) {
 	defer file.Close() // nolint: errcheck
 
 	spec := NewSpecification()
+	spec.path = specPath
 
-	if err := spec.Read(file); err != nil {
+	if err = spec.Read(file); err != nil {
 		return nil, err
 	}
 
@@ -69,6 +74,11 @@ func (s *Specification) Read(reader io.Reader) error {
 
 	if s.Model != nil {
 		s.Model.EntityNamePlural = Pluralize(s.Model.EntityName)
+	}
+
+	if res, err := s.Validate(); err != nil {
+		writeValidationErrors(fmt.Sprintf("validation error in %s", s.path), res)
+		return err
 	}
 
 	return nil
@@ -161,6 +171,37 @@ func (s *Specification) Write(writer io.Writer) error {
 	return err
 }
 
+// Validate validates the spec agains the schema.
+func (s *Specification) Validate() ([]gojsonschema.ResultError, error) {
+
+	var schemaData []byte
+	var err error
+
+	if s.Model == nil {
+		schemaData, err = schema.Asset("rego-abstract.json")
+	} else {
+		schemaData, err = schema.Asset("rego-spec.json")
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	schemaLoader := gojsonschema.NewBytesLoader(schemaData)
+	specLoader := gojsonschema.NewGoLoader(s)
+
+	res, err := gojsonschema.Validate(schemaLoader, specLoader)
+	if err != nil {
+		return nil, err
+	}
+
+	if !res.Valid() {
+		return res.Errors(), fmt.Errorf("Invalid specification")
+	}
+
+	return nil, nil
+}
+
 // Attribute returns the Attributes with the given name.
 func (s *Specification) Attribute(name string) *Attribute {
 	return s.attributeMap[name]
@@ -174,6 +215,22 @@ func (s *Specification) SortedAttributes() []*Attribute {
 	sort.Slice(attrs, func(i int, j int) bool {
 		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
 	})
+
+	return attrs
+}
+
+// ExposedAttributes returns the exposed attributes.
+func (s *Specification) ExposedAttributes() []*Attribute {
+
+	var attrs []*Attribute
+
+	for _, attr := range s.SortedAttributes() {
+		if !attr.Exposed {
+			continue
+		}
+
+		attrs = append(attrs, attr)
+	}
 
 	return attrs
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -29,8 +30,10 @@ func main() {
 	}
 
 	var formatCmd = &cobra.Command{
-		Use:   "format",
-		Short: "Reads a specification from stdin and prints it formatted on std out.",
+		Use:           "format",
+		Short:         "Reads a specification from stdin and prints it formatted on std out.",
+		SilenceErrors: true,
+		SilenceUsage:  true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			s := spec.NewSpecification()
@@ -48,8 +51,10 @@ func main() {
 	}
 
 	var docCmd = &cobra.Command{
-		Use:   "doc",
-		Short: "Generate a documentation for the given specification set",
+		Use:           "doc",
+		Short:         "Generate a documentation for the given specification set",
+		SilenceErrors: true,
+		SilenceUsage:  true,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return viper.BindPFlags(cmd.Flags())
 		},
@@ -65,12 +70,11 @@ func main() {
 				return err
 			}
 
-			return writeDoc(s, viper.GetString("format"), viper.GetString("out"))
+			return writeDoc(s, viper.GetString("format"))
 		},
 	}
 
 	docCmd.Flags().StringP("dir", "d", "", "Directory containing the specification")
-	docCmd.Flags().StringP("out", "o", "", "Directory where to write the documentation")
 	docCmd.Flags().String("format", "markdown", "Format of the documentation")
 	docCmd.Flags().String("category", "", "Category of the type mapping to look for")
 
@@ -80,7 +84,7 @@ func main() {
 	)
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Printf("error: %s\n", err)
+		logrus.WithError(err).Fatal("Error")
 		os.Exit(1)
 	}
 }

@@ -16,8 +16,9 @@ export function activate(ctx: vscode.ExtensionContext) {
 
     ctx.subscriptions.push(
         vscode.workspace.onWillSaveTextDocument(
-            (e: vscode.TextDocumentWillSaveEvent): void =>
+            (e: vscode.TextDocumentWillSaveEvent): void => {
                 e.waitUntil(formatter.format(e.document).then(edits => edits))
+            }
         ),
     );
 
