@@ -60,7 +60,10 @@ func LoadSpecification(specPath string) (*Specification, error) {
 // Read loads a specifaction from the given io.Reader
 func (s *Specification) Read(reader io.Reader) error {
 
-	if err := yaml.NewDecoder(reader).Decode(s); err != nil {
+	decoder := yaml.NewDecoder(reader)
+	decoder.SetStrict(true)
+
+	if err := decoder.Decode(s); err != nil {
 		return err
 	}
 

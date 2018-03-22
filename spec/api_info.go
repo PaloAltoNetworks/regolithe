@@ -32,7 +32,10 @@ func LoadAPIInfo(path string) (*APIInfo, error) {
 	}
 	defer file.Close() // nolint: errcheck
 
-	if err = yaml.NewDecoder(file).Decode(apiinfo); err != nil {
+	decoder := yaml.NewDecoder(file)
+	decoder.SetStrict(true)
+
+	if err = decoder.Decode(apiinfo); err != nil {
 		return nil, err
 	}
 

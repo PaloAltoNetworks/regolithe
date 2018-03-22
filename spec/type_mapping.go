@@ -2,7 +2,7 @@ package spec
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/aporeto-inc/regolithe/schema"
 	"github.com/xeipuuv/gojsonschema"
@@ -28,13 +28,18 @@ func NewTypeMapping() TypeMapping {
 // LoadTypeMapping loads a TypeMapping from the given ini file.
 func LoadTypeMapping(path string) (TypeMapping, error) {
 
-	data, err := ioutil.ReadFile(path)
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close() // nolint: errcheck
 
 	tm := NewTypeMapping()
-	if err := yaml.Unmarshal(data, tm); err != nil {
+
+	decoder := yaml.NewDecoder(file)
+	decoder.SetStrict(true)
+
+	if err := decoder.Decode(tm); err != nil {
 		return nil, err
 	}
 
