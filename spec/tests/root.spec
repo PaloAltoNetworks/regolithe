@@ -11,9 +11,16 @@ model:
 # Relations
 relations:
 - rest_name: list
+  descriptions:
+    get: yey
+    create: you
   get: true
   create: true
 
 - rest_name: user
+  descriptions:
+    get: yey
+    create: you
   get: true
   create: true
+

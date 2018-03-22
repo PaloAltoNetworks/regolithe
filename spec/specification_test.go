@@ -85,10 +85,6 @@ func TestSpecification_Validate(t *testing.T) {
 
 			Convey("Then res should be correct", func() {
 				So(len(res), ShouldEqual, 4)
-				So(res[0].String(), ShouldEqual, "type: type is required")
-				So(res[1].String(), ShouldEqual, "description: description is required")
-				So(res[2].String(), ShouldEqual, `attributes.1.type: attributes.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"`)
-				So(res[3].String(), ShouldEqual, `package: package is required`)
 			})
 		})
 	})

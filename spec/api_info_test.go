@@ -18,7 +18,7 @@ func TestInfo_LoadAPIInfo(t *testing.T) {
 
 		Convey("Then apiinfo should be correctly initialized", func() {
 			So(info.Prefix, ShouldEqual, "api")
-			So(info.Version, ShouldEqual, "1")
+			So(info.Version, ShouldEqual, 1)
 			So(info.Root, ShouldEqual, "root")
 		})
 	})

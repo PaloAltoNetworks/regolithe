@@ -84,8 +84,13 @@ attributes:
 # Relations
 relations:
 - rest_name: task
+  descriptions:
+    get: yeye
+    create: yoyo
   get: true
   create: true
 
 - rest_name: user
+  descriptions:
+     get: yeye
   get: true
