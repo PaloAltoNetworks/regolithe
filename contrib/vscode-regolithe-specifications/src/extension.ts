@@ -33,10 +33,10 @@ export function activate(ctx: vscode.ExtensionContext) {
     ctx.subscriptions.push(
         vscode.workspace.onDidSaveTextDocument(
             (doc: vscode.TextDocument) => {
-                lastFormatSuccess = false;
                 if (lastFormatSuccess) {
                     generator.generate(doc)
                 }
+                lastFormatSuccess = false;
             }
         ),
     );
