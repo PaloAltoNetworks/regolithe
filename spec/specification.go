@@ -178,7 +178,7 @@ func (s *Specification) Write(writer io.Writer) error {
 	return err
 }
 
-// Validate validates the spec agains the schema.
+// Validate validates the spec against the schema.
 func (s *Specification) Validate() ([]gojsonschema.ResultError, error) {
 
 	var schemaData []byte

@@ -10,6 +10,8 @@ import (
 	"github.com/aporeto-inc/regolithe/spec"
 )
 
+const rootSpecRestName = "root"
+
 func toc(specs []*spec.Specification) string {
 
 	buf := &bytes.Buffer{}
@@ -80,9 +82,9 @@ func operations(spec *spec.Specification, relationships map[string]*spec.Relatio
 	}
 
 	for k := range relationships[spec.Model.RestName].AllowsGetMany {
-		if k == "root" {
-			if k == "root" {
-				childSpec := set.Specification("root")
+		if k == rootSpecRestName {
+			if k == rootSpecRestName {
+				childSpec := set.Specification(rootSpecRestName)
 				rootOps = append(rootOps, operation{
 					method: "GET",
 					url:    fmt.Sprintf("/%s", spec.Model.ResourceName),
@@ -100,9 +102,9 @@ func operations(spec *spec.Specification, relationships map[string]*spec.Relatio
 	}
 
 	for k := range relationships[spec.Model.RestName].AllowsCreate {
-		if k == "root" {
-			if k == "root" {
-				childSpec := set.Specification("root")
+		if k == rootSpecRestName {
+			if k == rootSpecRestName {
+				childSpec := set.Specification(rootSpecRestName)
 				rootOps = append(rootOps, operation{
 					method: "POST",
 					url:    fmt.Sprintf("/%s", spec.Model.ResourceName),
