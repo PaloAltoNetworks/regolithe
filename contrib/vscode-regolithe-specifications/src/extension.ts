@@ -14,18 +14,30 @@ export function activate(ctx: vscode.ExtensionContext) {
     const regoGenFileName = '.regolithe-gen-cmd';
     const generator = new RegolitheGenerator(regoGenFileName);
 
+    let lastFormatSuccess = false;
+
     ctx.subscriptions.push(
         vscode.workspace.onWillSaveTextDocument(
             (e: vscode.TextDocumentWillSaveEvent): void => {
-                e.waitUntil(formatter.format(e.document).then(edits => edits))
+                e.waitUntil(formatter.format(e.document).then(
+                    edits => {
+                        lastFormatSuccess = true;
+                        return edits
+                    }, error => {
+                        lastFormatSuccess = false;
+                }))
             }
         ),
     );
 
     ctx.subscriptions.push(
         vscode.workspace.onDidSaveTextDocument(
-            (doc: vscode.TextDocument) =>
-                generator.generate(doc)
+            (doc: vscode.TextDocument) => {
+                lastFormatSuccess = false;
+                if (lastFormatSuccess) {
+                    generator.generate(doc)
+                }
+            }
         ),
     );
 }
