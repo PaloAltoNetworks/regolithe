@@ -11,6 +11,7 @@ import (
 	"github.com/aporeto-inc/regolithe/schema"
 	"github.com/xeipuuv/gojsonschema"
 
+	wordwrap "github.com/mitchellh/go-wordwrap"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -112,6 +113,9 @@ func (s *Specification) Write(writer io.Writer) error {
 		relations := make([]yaml.MapSlice, len(s.Relations))
 
 		for i, rel := range s.Relations {
+			for k, v := range rel.Descriptions {
+				rel.Descriptions[k] = wordwrap.WrapString(v, 80)
+			}
 			relations[i] = toYAMLMapSlice(rel)
 		}
 

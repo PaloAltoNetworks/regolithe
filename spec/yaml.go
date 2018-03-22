@@ -4,9 +4,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/fatih/structs"
 	"github.com/mitchellh/go-wordwrap"
 
-	"github.com/fatih/structs"
 	yaml "gopkg.in/yaml.v2"
 )
 
