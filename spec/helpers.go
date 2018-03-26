@@ -2,7 +2,8 @@ package spec
 
 import (
 	"fmt"
-	"os"
+	"sort"
+	"strings"
 
 	"github.com/xeipuuv/gojsonschema"
 )
@@ -36,13 +37,14 @@ func Pluralize(word string) string {
 	return word + "s"
 }
 
-func writeValidationErrors(message string, res []gojsonschema.ResultError) {
+func makeSchemaValidationError(message string, res []gojsonschema.ResultError) error {
 
-	fmt.Fprintf(os.Stderr, "\n%s:\n", message)
-
+	var out []string
 	for _, r := range res {
-		fmt.Fprintf(os.Stderr, " - %s\n", r.String())
+		out = append(out, fmt.Sprintf("- %s", r.String()))
 	}
 
-	fmt.Fprintln(os.Stderr)
+	sort.Strings(out)
+
+	return fmt.Errorf("%s:\n%s", message, strings.Join(out, "\n"))
 }

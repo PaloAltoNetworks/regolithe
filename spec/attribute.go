@@ -1,5 +1,7 @@
 package spec
 
+import "fmt"
+
 // AttributeFormat represent the allowed format for an attribute.
 type AttributeFormat string
 
@@ -88,4 +90,14 @@ type Attribute struct {
 	ConvertedType string `yaml:"-" json:"-"`
 	TypeProvider  string `yaml:"-" json:"-"`
 	Initializer   string `yaml:"-" json:"-"`
+}
+
+// Validate validates the attribute definition.
+func (a *Attribute) Validate() error {
+
+	if a.Required && a.DefaultValue == nil && a.ExampleValue == nil {
+		return fmt.Errorf("attribute %s is required but has no defaultValue or example value", a.Name)
+	}
+
+	return nil
 }

@@ -35,6 +35,7 @@ attributes:
   getter: true
   setter: true
   orderable: true
+  example_value: "the name"
 
 - name: status
   description: The status of the task

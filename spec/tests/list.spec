@@ -53,6 +53,7 @@ attributes:
   getter: true
   setter: true
   orderable: true
+  example_value: "the name"
 
 - name: readOnly
   description: This attribute is readonly

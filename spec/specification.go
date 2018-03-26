@@ -59,20 +59,20 @@ func LoadSpecification(specPath string) (*Specification, error) {
 }
 
 // Read loads a specifaction from the given io.Reader
-func (s *Specification) Read(reader io.Reader) error {
+func (s *Specification) Read(reader io.Reader) (err error) {
 
 	decoder := yaml.NewDecoder(reader)
 	decoder.SetStrict(true)
 
-	if err := decoder.Decode(s); err != nil {
+	if err = decoder.Decode(s); err != nil {
 		return err
 	}
 
-	if err := s.buildAttributesInfo(); err != nil {
+	if err = s.buildAttributesInfo(); err != nil {
 		return err
 	}
 
-	if err := s.buildRelationssInfo(); err != nil {
+	if err = s.buildRelationssInfo(); err != nil {
 		return err
 	}
 
@@ -80,9 +80,14 @@ func (s *Specification) Read(reader io.Reader) error {
 		s.Model.EntityNamePlural = Pluralize(s.Model.EntityName)
 	}
 
-	if res, err := s.Validate(); err != nil {
-		writeValidationErrors(fmt.Sprintf("validation error in %s", s.path), res)
+	if err = s.Validate(); err != nil {
 		return err
+	}
+
+	for _, attr := range s.Attributes {
+		if err = attr.Validate(); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -179,7 +184,7 @@ func (s *Specification) Write(writer io.Writer) error {
 }
 
 // Validate validates the spec against the schema.
-func (s *Specification) Validate() ([]gojsonschema.ResultError, error) {
+func (s *Specification) Validate() error {
 
 	var schemaData []byte
 	var err error
@@ -191,7 +196,7 @@ func (s *Specification) Validate() ([]gojsonschema.ResultError, error) {
 	}
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	schemaLoader := gojsonschema.NewBytesLoader(schemaData)
@@ -199,14 +204,14 @@ func (s *Specification) Validate() ([]gojsonschema.ResultError, error) {
 
 	res, err := gojsonschema.Validate(schemaLoader, specLoader)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if !res.Valid() {
-		return res.Errors(), fmt.Errorf("Invalid specification")
+		return makeSchemaValidationError("Schema validation error", res.Errors())
 	}
 
-	return nil, nil
+	return nil
 }
 
 // Attribute returns the Attributes with the given name.

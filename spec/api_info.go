@@ -1,7 +1,6 @@
 package spec
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/aporeto-inc/regolithe/schema"
@@ -39,8 +38,7 @@ func LoadAPIInfo(path string) (*APIInfo, error) {
 		return nil, err
 	}
 
-	if res, err := apiinfo.Validate(); err != nil {
-		writeValidationErrors("validation error in _api.info", res)
+	if err := apiinfo.Validate(); err != nil {
 		return nil, err
 	}
 
@@ -48,11 +46,11 @@ func LoadAPIInfo(path string) (*APIInfo, error) {
 }
 
 // Validate validates the api info against the schema.
-func (a *APIInfo) Validate() ([]gojsonschema.ResultError, error) {
+func (a *APIInfo) Validate() error {
 
 	schemaData, err := schema.Asset("rego-info.json")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	schemaLoader := gojsonschema.NewBytesLoader(schemaData)
@@ -60,12 +58,12 @@ func (a *APIInfo) Validate() ([]gojsonschema.ResultError, error) {
 
 	res, err := gojsonschema.Validate(schemaLoader, specLoader)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if !res.Valid() {
-		return res.Errors(), fmt.Errorf("Invalid _api.info")
+		return makeSchemaValidationError("validation error in _api.info", res.Errors())
 	}
 
-	return nil, nil
+	return nil
 }

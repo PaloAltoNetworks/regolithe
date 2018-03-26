@@ -41,14 +41,10 @@ func TestSpecification_Validate(t *testing.T) {
 
 		Convey("When I call validate", func() {
 
-			res, err := s.Validate()
+			err := s.Validate()
 
 			Convey("Then err should be nil", func() {
 				So(err, ShouldBeNil)
-			})
-
-			Convey("Then res should be nil", func() {
-				So(res, ShouldBeNil)
 			})
 		})
 	})
@@ -77,14 +73,11 @@ func TestSpecification_Validate(t *testing.T) {
 
 		Convey("When I call validate", func() {
 
-			res, err := s.Validate()
+			err := s.Validate()
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)
-			})
-
-			Convey("Then res should be correct", func() {
-				So(len(res), ShouldEqual, 4)
+				So(err.Error(), ShouldEqual, "Schema validation error:\n- attributes.1.type: attributes.1.type must be one of the following: \"string\", \"integer\", \"float\", \"boolean\", \"enum\", \"list\", \"object\", \"time\", \"external\"\n- description: description is required\n- package: package is required\n- type: type is required")
 			})
 		})
 	})
@@ -103,14 +96,10 @@ func TestSpecification_Validate(t *testing.T) {
 
 		Convey("When I call validate", func() {
 
-			res, err := s.Validate()
+			err := s.Validate()
 
 			Convey("Then err should be nil", func() {
 				So(err, ShouldBeNil)
-			})
-
-			Convey("Then res should be nil", func() {
-				So(res, ShouldBeNil)
 			})
 		})
 	})
@@ -134,15 +123,11 @@ func TestSpecification_Validate(t *testing.T) {
 
 		Convey("When I call validate", func() {
 
-			res, err := s.Validate()
+			err := s.Validate()
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)
-			})
-
-			Convey("Then res should be correct", func() {
-				So(len(res), ShouldEqual, 1)
-				So(res[0].String(), ShouldEqual, `relations: Additional property relations is not allowed`)
+				So(err.Error(), ShouldEqual, "Schema validation error:\n- relations: Additional property relations is not allowed")
 			})
 		})
 	})

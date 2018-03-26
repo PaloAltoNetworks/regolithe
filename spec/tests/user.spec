@@ -24,6 +24,7 @@ attributes:
   filterable: true
   format: free
   orderable: true
+  example_value: "firstName"
 
 - name: lastName
   description: The last name
@@ -34,6 +35,7 @@ attributes:
   filterable: true
   format: free
   orderable: true
+  example_value: "lastName"
 
 - name: userName
   description: the login
@@ -44,3 +46,4 @@ attributes:
   filterable: true
   format: free
   orderable: true
+  example_value: "userName"
