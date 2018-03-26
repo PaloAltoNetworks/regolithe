@@ -39,18 +39,18 @@ func LoadAPIInfo(path string) (*APIInfo, error) {
 	}
 
 	if err := apiinfo.Validate(); err != nil {
-		return nil, err
+		return nil, formatValidationErrors(err)
 	}
 
 	return apiinfo, nil
 }
 
 // Validate validates the api info against the schema.
-func (a *APIInfo) Validate() error {
+func (a *APIInfo) Validate() []error {
 
 	schemaData, err := schema.Asset("rego-info.json")
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	schemaLoader := gojsonschema.NewBytesLoader(schemaData)
@@ -58,11 +58,11 @@ func (a *APIInfo) Validate() error {
 
 	res, err := gojsonschema.Validate(schemaLoader, specLoader)
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	if !res.Valid() {
-		return makeSchemaValidationError("validation error in _api.info", res.Errors())
+		return makeSchemaValidationError("_api.info", res.Errors())
 	}
 
 	return nil

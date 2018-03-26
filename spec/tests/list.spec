@@ -16,7 +16,7 @@ model:
 # Attributes
 attributes:
 - name: creationOnly
-  description: This attribute is creation only
+  description: This attribute is creation only.
   type: string
   exposed: true
   stored: true
@@ -26,7 +26,7 @@ attributes:
   orderable: true
 
 - name: date
-  description: The date
+  description: The date.
   type: time
   exposed: true
   stored: true
@@ -34,7 +34,7 @@ attributes:
   orderable: true
 
 - name: description
-  description: The description
+  description: The description.
   type: string
   exposed: true
   stored: true
@@ -43,20 +43,20 @@ attributes:
   orderable: true
 
 - name: name
-  description: The name
+  description: The name.
   type: string
   exposed: true
   stored: true
   required: true
+  example_value: the name
   filterable: true
   format: free
   getter: true
   setter: true
   orderable: true
-  example_value: "the name"
 
 - name: readOnly
-  description: This attribute is readonly
+  description: This attribute is readonly.
   type: string
   exposed: true
   stored: true
@@ -66,7 +66,7 @@ attributes:
   orderable: true
 
 - name: slice
-  description: this is a slice
+  description: this is a slice.
   type: list
   exposed: true
   subtype: string
@@ -75,7 +75,7 @@ attributes:
   orderable: true
 
 - name: unexposed
-  description: This attribute is not exposed
+  description: This attribute is not exposed.
   type: string
   stored: true
   filterable: true
@@ -86,12 +86,12 @@ attributes:
 relations:
 - rest_name: task
   descriptions:
-    get: yeye
-    create: yoyo
+    create: yoyo.
+    get: yeye.
   get: true
   create: true
 
 - rest_name: user
   descriptions:
-     get: yeye
+    get: yeye.
   get: true

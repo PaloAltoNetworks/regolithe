@@ -1,6 +1,7 @@
 package spec
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -37,14 +38,28 @@ func Pluralize(word string) string {
 	return word + "s"
 }
 
-func makeSchemaValidationError(message string, res []gojsonschema.ResultError) error {
+func makeSchemaValidationError(message string, res []gojsonschema.ResultError) []error {
+
+	var out []error
+	for _, r := range res {
+		out = append(out, fmt.Errorf("%s: schema error: %s", message, r.String()))
+	}
+
+	return out
+}
+
+func formatValidationErrors(errs []error) error {
 
 	var out []string
-	for _, r := range res {
-		out = append(out, fmt.Sprintf("- %s", r.String()))
+	for _, err := range errs {
+		out = append(out, err.Error())
+	}
+
+	if len(out) == 0 {
+		return nil
 	}
 
 	sort.Strings(out)
 
-	return fmt.Errorf("%s:\n%s", message, strings.Join(out, "\n"))
+	return errors.New(strings.Join(out, "\n"))
 }

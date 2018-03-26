@@ -4,7 +4,7 @@ model:
   resource_name: tasks
   entity_name: Task
   package: todo-list
-  description: Represent a task to do in a listd
+  description: Represent a task to do in a listd.
   aliases:
   - tsk
   get: true
@@ -16,7 +16,7 @@ model:
 # Attributes
 attributes:
 - name: description
-  description: The description
+  description: The description.
   type: string
   exposed: true
   stored: true
@@ -25,20 +25,20 @@ attributes:
   orderable: true
 
 - name: name
-  description: The name
+  description: The name.
   type: string
   exposed: true
   stored: true
   required: true
+  example_value: the name
   filterable: true
   format: free
   getter: true
   setter: true
   orderable: true
-  example_value: "the name"
 
 - name: status
-  description: The status of the task
+  description: The status of the task.
   type: enum
   exposed: true
   stored: true

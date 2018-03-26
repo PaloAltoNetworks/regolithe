@@ -15,7 +15,7 @@ func TestRelation_Getters(t *testing.T) {
 			AllowsCreate: true,
 			AllowsUpdate: true,
 			AllowsDelete: true,
-			linkedSpecification: &Specification{
+			remoteSpecification: &Specification{
 				Model: &Model{
 					EntityName: "test2",
 				},
@@ -23,7 +23,7 @@ func TestRelation_Getters(t *testing.T) {
 		}
 
 		Convey("Then the getters should work", func() {
-			So(rel.Specification().Model.EntityName, ShouldEqual, rel.linkedSpecification.Model.EntityName)
+			So(rel.Specification().Model.EntityName, ShouldEqual, rel.remoteSpecification.Model.EntityName)
 		})
 	})
 }

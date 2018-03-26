@@ -3,6 +3,7 @@ package spec
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 	"sort"
 	"strings"
@@ -78,7 +79,7 @@ func NewSpecificationSet(
 
 			baseName := strings.Replace(strings.Replace(info.Name(), ".spec", "", 1), ".abs", "", 1)
 
-			targetMap[baseName], err = LoadSpecification(path.Join(dirname, info.Name()))
+			targetMap[baseName], err = LoadSpecification(path.Join(dirname, info.Name()), false)
 			if err != nil {
 				return nil, err
 			}
@@ -113,7 +114,7 @@ func NewSpecificationSet(
 				return nil, fmt.Errorf("Unable to find related spec '%s' for spec '%s'", rel.RestName, spec.Model.RestName)
 			}
 
-			rel.linkedSpecification = linked
+			rel.remoteSpecification = linked
 		}
 
 		if set.ExternalTypes != nil {
@@ -147,6 +148,18 @@ func NewSpecificationSet(
 				}
 			}
 		}
+	}
+
+	var errs []error
+	for _, spec := range set.Specifications() {
+		if err := spec.Validate(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	if len(errs) > 0 {
+		fmt.Fprintf(os.Stderr, formatValidationErrors(errs).Error()+"\n")
+		return nil, fmt.Errorf("Unable to validate specification set")
 	}
 
 	return set, nil

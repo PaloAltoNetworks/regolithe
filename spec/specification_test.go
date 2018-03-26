@@ -26,14 +26,14 @@ func TestSpecification_Validate(t *testing.T) {
 			Model: &Model{
 				ResourceName: "things",
 				RestName:     "thing",
-				Description:  "desc",
+				Description:  "desc.",
 				EntityName:   "toto",
 				Package:      "package",
 			},
 			Attributes: []*Attribute{
 				&Attribute{
 					Name:        "attr1",
-					Description: "desc",
+					Description: "desc.",
 					Type:        "string",
 				},
 			},
@@ -55,7 +55,7 @@ func TestSpecification_Validate(t *testing.T) {
 			Model: &Model{
 				ResourceName: "things",
 				RestName:     "thing",
-				Description:  "desc",
+				Description:  "desc.",
 				EntityName:   "toto",
 			},
 			Attributes: []*Attribute{
@@ -77,7 +77,10 @@ func TestSpecification_Validate(t *testing.T) {
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)
-				So(err.Error(), ShouldEqual, "Schema validation error:\n- attributes.1.type: attributes.1.type must be one of the following: \"string\", \"integer\", \"float\", \"boolean\", \"enum\", \"list\", \"object\", \"time\", \"external\"\n- description: description is required\n- package: package is required\n- type: type is required")
+				So(err.Error(), ShouldEqual, `thing.spec: schema error: attributes.1.type: attributes.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"
+thing.spec: schema error: description: description is required
+thing.spec: schema error: package: package is required
+thing.spec: schema error: type: type is required`)
 			})
 		})
 	})
@@ -88,7 +91,7 @@ func TestSpecification_Validate(t *testing.T) {
 			Attributes: []*Attribute{
 				&Attribute{
 					Name:        "attr1",
-					Description: "desc",
+					Description: "desc.",
 					Type:        "string",
 				},
 			},
@@ -110,7 +113,7 @@ func TestSpecification_Validate(t *testing.T) {
 			Attributes: []*Attribute{
 				&Attribute{
 					Name:        "attr1",
-					Description: "desc",
+					Description: "desc.",
 					Type:        "string",
 				},
 			},
@@ -127,7 +130,7 @@ func TestSpecification_Validate(t *testing.T) {
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)
-				So(err.Error(), ShouldEqual, "Schema validation error:\n- relations: Additional property relations is not allowed")
+				So(err.Error(), ShouldEqual, ".: schema error: relations: Additional property relations is not allowed")
 			})
 		})
 	})
@@ -279,7 +282,7 @@ func TestSpecification_AttributeMap(t *testing.T) {
 
 	Convey("Given I load the task specification file", t, func() {
 
-		spec, err := LoadSpecification("./tests/task.spec")
+		spec, err := LoadSpecification("./tests/task.spec", true)
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -324,7 +327,7 @@ func TestSpecification_APIMap(t *testing.T) {
 
 	Convey("Given I load the root specification file", t, func() {
 
-		spec, err := LoadSpecification("./tests/root.spec")
+		spec, err := LoadSpecification("./tests/root.spec", true)
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
@@ -368,7 +371,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 	Convey("Given I load a non existing specification file", t, func() {
 
-		_, err := LoadSpecification("./tests/not.spec")
+		_, err := LoadSpecification("./tests/not.spec", true)
 
 		Convey("Then err should not be nil", func() {
 			So(err, ShouldNotBeNil)
@@ -377,7 +380,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 	Convey("Given I load a bad formatted specification file", t, func() {
 
-		_, err := LoadSpecification("./tests/task.spec.bad")
+		_, err := LoadSpecification("./tests/task.spec.bad", true)
 
 		Convey("Then err should not be nil", func() {
 			So(err, ShouldNotBeNil)
@@ -386,7 +389,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 	Convey("Given I load the root specification file", t, func() {
 
-		spec, err := LoadSpecification("./tests/root.spec")
+		spec, err := LoadSpecification("./tests/root.spec", true)
 		rels := spec.Relations
 
 		Convey("Then err should be nil", func() {
@@ -398,7 +401,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(spec.Model.AllowsCreate, ShouldBeFalse)
 			So(spec.Model.AllowsDelete, ShouldBeFalse)
 			So(spec.Model.AllowsUpdate, ShouldBeFalse)
-			So(spec.Model.Description, ShouldEqual, "Root object of the API")
+			So(spec.Model.Description, ShouldEqual, "Root object of the API.")
 			So(spec.Model.EntityName, ShouldEqual, "Root")
 			So(spec.Model.Package, ShouldEqual, "todo-list")
 			So(spec.Model.ResourceName, ShouldEqual, "root")
@@ -434,7 +437,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 	Convey("Given I load the task specification file", t, func() {
 
-		spec, err := LoadSpecification("./tests/task.spec")
+		spec, err := LoadSpecification("./tests/task.spec", true)
 		attrs := spec.Attributes
 
 		Convey("Then err should be nil", func() {
@@ -446,7 +449,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(spec.Model.AllowsCreate, ShouldBeFalse)
 			So(spec.Model.AllowsDelete, ShouldBeTrue)
 			So(spec.Model.AllowsUpdate, ShouldBeTrue)
-			So(spec.Model.Description, ShouldEqual, "Represent a task to do in a listd")
+			So(spec.Model.Description, ShouldEqual, "Represent a task to do in a listd.")
 			So(spec.Model.EntityName, ShouldEqual, "Task")
 			So(spec.Model.Package, ShouldEqual, "todo-list")
 			So(spec.Model.ResourceName, ShouldEqual, "tasks")
@@ -469,7 +472,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[0].DefaultOrder, ShouldBeFalse)
 			So(attrs[0].DefaultValue, ShouldBeNil)
 			So(attrs[0].Deprecated, ShouldBeFalse)
-			So(attrs[0].Description, ShouldEqual, "The description")
+			So(attrs[0].Description, ShouldEqual, "The description.")
 			So(attrs[0].Exposed, ShouldBeTrue)
 			So(attrs[0].Filterable, ShouldBeTrue)
 			So(attrs[0].ForeignKey, ShouldBeFalse)
@@ -503,7 +506,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[1].DefaultOrder, ShouldBeFalse)
 			So(attrs[1].DefaultValue, ShouldBeNil)
 			So(attrs[1].Deprecated, ShouldBeFalse)
-			So(attrs[1].Description, ShouldEqual, "The name")
+			So(attrs[1].Description, ShouldEqual, "The name.")
 			So(attrs[1].Exposed, ShouldBeTrue)
 			So(attrs[1].Filterable, ShouldBeTrue)
 			So(attrs[1].ForeignKey, ShouldBeFalse)
@@ -537,7 +540,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[2].DefaultOrder, ShouldBeFalse)
 			So(attrs[2].DefaultValue, ShouldResemble, "TODO")
 			So(attrs[2].Deprecated, ShouldBeFalse)
-			So(attrs[2].Description, ShouldEqual, "The status of the task")
+			So(attrs[2].Description, ShouldEqual, "The status of the task.")
 			So(attrs[2].Exposed, ShouldBeTrue)
 			So(attrs[2].Filterable, ShouldBeTrue)
 			So(attrs[2].ForeignKey, ShouldBeFalse)
@@ -564,7 +567,7 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 		Convey("When I apply the base specification", func() {
 
-			base, err := LoadSpecification("./tests/@base.abs")
+			base, err := LoadSpecification("./tests/@base.abs", true)
 			spec.ApplyBaseSpecifications(base) // nolint: errcheck
 
 			Convey("Then err should be nil", func() {
@@ -578,14 +581,14 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			Convey("Then the additional attributes should have been applied", func() {
 				So(spec.Attribute("ID").Name, ShouldEqual, "ID")
 				So(spec.Attribute("ID").Autogenerated, ShouldBeTrue)
-				So(spec.Attribute("ID").Description, ShouldEqual, "The identifier")
+				So(spec.Attribute("ID").Description, ShouldEqual, "The identifier.")
 				So(spec.Attribute("ID").Identifier, ShouldBeTrue)
 				So(spec.Attribute("ID").PrimaryKey, ShouldBeTrue)
 				So(spec.Attribute("ID").ReadOnly, ShouldBeTrue)
 
 				So(spec.Attribute("parentID").Name, ShouldEqual, "parentID")
 				So(spec.Attribute("parentID").Autogenerated, ShouldBeTrue)
-				So(spec.Attribute("parentID").Description, ShouldEqual, "The identifier of the parent of the object")
+				So(spec.Attribute("parentID").Description, ShouldEqual, "The identifier of the parent of the object.")
 				So(spec.Attribute("parentID").ForeignKey, ShouldBeTrue)
 				So(spec.Attribute("parentID").Identifier, ShouldBeFalse)
 				So(spec.Attribute("parentID").PrimaryKey, ShouldBeFalse)

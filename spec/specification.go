@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"sort"
 	"strings"
 
@@ -40,7 +41,7 @@ func NewSpecification() *Specification {
 }
 
 // LoadSpecification returns a new specification using the given file path.
-func LoadSpecification(specPath string) (*Specification, error) {
+func LoadSpecification(specPath string, validate bool) (*Specification, error) {
 
 	file, err := os.Open(specPath)
 	if err != nil {
@@ -51,7 +52,7 @@ func LoadSpecification(specPath string) (*Specification, error) {
 	spec := NewSpecification()
 	spec.path = specPath
 
-	if err = spec.Read(file); err != nil {
+	if err = spec.Read(file, validate); err != nil {
 		return nil, err
 	}
 
@@ -59,7 +60,7 @@ func LoadSpecification(specPath string) (*Specification, error) {
 }
 
 // Read loads a specifaction from the given io.Reader
-func (s *Specification) Read(reader io.Reader) (err error) {
+func (s *Specification) Read(reader io.Reader, validate bool) (err error) {
 
 	decoder := yaml.NewDecoder(reader)
 	decoder.SetStrict(true)
@@ -80,12 +81,8 @@ func (s *Specification) Read(reader io.Reader) (err error) {
 		s.Model.EntityNamePlural = Pluralize(s.Model.EntityName)
 	}
 
-	if err = s.Validate(); err != nil {
-		return err
-	}
-
-	for _, attr := range s.Attributes {
-		if err = attr.Validate(); err != nil {
+	if validate {
+		if err = s.Validate(); err != nil {
 			return err
 		}
 	}
@@ -207,11 +204,34 @@ func (s *Specification) Validate() error {
 		return err
 	}
 
+	var errs []error
+
 	if !res.Valid() {
-		return makeSchemaValidationError("Schema validation error", res.Errors())
+		if s.Model != nil {
+			errs = append(errs, makeSchemaValidationError(fmt.Sprintf("%s.spec", s.Model.RestName), res.Errors())...)
+		} else {
+			errs = append(errs, makeSchemaValidationError(path.Base(s.path), res.Errors())...)
+		}
+
 	}
 
-	return nil
+	if s.Model != nil && s.Model.Description != "" && s.Model.Description[len(s.Model.Description)-1] != '.' {
+		errs = append(errs, fmt.Errorf("%s.spec: model description must end with a period", s.Model.RestName))
+	}
+
+	for _, attr := range s.Attributes {
+		if e := attr.Validate(); e != nil {
+			errs = append(errs, e...)
+		}
+	}
+
+	for _, rel := range s.Relations {
+		if e := rel.Validate(); e != nil {
+			errs = append(errs, e...)
+		}
+	}
+
+	return formatValidationErrors(errs)
 }
 
 // Attribute returns the Attributes with the given name.
@@ -347,6 +367,8 @@ func (s *Specification) buildAttributesInfo() error {
 
 	for _, attr := range s.Attributes {
 
+		attr.linkedSpecification = s
+
 		if _, ok := s.attributeMap[attr.Name]; ok {
 			if s.Model != nil {
 				return fmt.Errorf("Specification %s has more than one attribute named %s", s.Model.RestName, attr.Name)
@@ -377,6 +399,8 @@ func (s *Specification) buildRelationssInfo() error {
 
 	s.relationsMap = map[string]*Relation{}
 	for _, rel := range s.Relations {
+
+		rel.currentSpecification = s
 
 		if _, ok := s.relationsMap[rel.RestName]; ok {
 			return fmt.Errorf("Specification has more than one child relation pointing to %s", rel.RestName)

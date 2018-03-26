@@ -16,34 +16,34 @@ model:
 # Attributes
 attributes:
 - name: firstName
-  description: The first name
+  description: The first name.
   type: string
   exposed: true
   stored: true
   required: true
+  example_value: firstName
   filterable: true
   format: free
   orderable: true
-  example_value: "firstName"
 
 - name: lastName
-  description: The last name
+  description: The last name.
   type: string
   exposed: true
   stored: true
   required: true
+  example_value: lastName
   filterable: true
   format: free
   orderable: true
-  example_value: "lastName"
 
 - name: userName
-  description: the login
+  description: the login.
   type: string
   exposed: true
   stored: true
   required: true
+  example_value: userName
   filterable: true
   format: free
   orderable: true
-  example_value: "userName"

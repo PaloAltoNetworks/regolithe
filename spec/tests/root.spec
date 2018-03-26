@@ -4,7 +4,7 @@ model:
   resource_name: root
   entity_name: Root
   package: todo-list
-  description: Root object of the API
+  description: Root object of the API.
   get: true
   root: true
 
@@ -12,15 +12,14 @@ model:
 relations:
 - rest_name: list
   descriptions:
-    get: yey
-    create: you
+    create: you.
+    get: yey.
   get: true
   create: true
 
 - rest_name: user
   descriptions:
-    get: yey
-    create: you
+    create: you.
+    get: yey.
   get: true
   create: true
-

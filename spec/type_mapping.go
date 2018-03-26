@@ -44,7 +44,7 @@ func LoadTypeMapping(path string) (TypeMapping, error) {
 	}
 
 	if err := tm.Validate(); err != nil {
-		return nil, err
+		return nil, formatValidationErrors(err)
 	}
 
 	return tm, nil
@@ -67,11 +67,11 @@ func (t TypeMapping) Mapping(mode string, externalType string) (mapping *TypeMap
 }
 
 // Validate validates the type mappings against the schema.
-func (t TypeMapping) Validate() error {
+func (t TypeMapping) Validate() []error {
 
 	schemaData, err := schema.Asset("rego-type-mapping.json")
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	schemaLoader := gojsonschema.NewBytesLoader(schemaData)
@@ -79,11 +79,11 @@ func (t TypeMapping) Validate() error {
 
 	res, err := gojsonschema.Validate(schemaLoader, specLoader)
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	if !res.Valid() {
-		return makeSchemaValidationError("validation error in _type.mapping", res.Errors())
+		return makeSchemaValidationError("_type.mapping", res.Errors())
 	}
 
 	return nil

@@ -1,7 +1,7 @@
 # Attributes
 attributes:
 - name: ID
-  description: The identifier
+  description: The identifier.
   type: string
   exposed: true
   stored: true
@@ -14,7 +14,7 @@ attributes:
   primary_key: true
 
 - name: parentID
-  description: The identifier of the parent of the object
+  description: The identifier of the parent of the object.
   type: string
   exposed: true
   stored: true
@@ -26,7 +26,7 @@ attributes:
   orderable: true
 
 - name: parentType
-  description: The type of the parent of the object
+  description: The type of the parent of the object.
   type: string
   exposed: true
   stored: true

@@ -40,7 +40,7 @@ func main() {
 
 			s := spec.NewSpecification()
 
-			if err := s.Read(os.Stdin); err != nil {
+			if err := s.Read(os.Stdin, true); err != nil {
 				return fmt.Errorf("Unable to load specs: %s", err)
 			}
 
