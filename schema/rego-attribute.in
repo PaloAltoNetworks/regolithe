@@ -45,6 +45,10 @@
                     "description": "The description of the attribute",
                     "type": "string"
                 },
+                "example_value": {
+                    "description": "Example value for the attribute",
+                    "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                },
                 "exposed": {
                     "description": "The attribute is publicly exposed",
                     "type": "boolean",

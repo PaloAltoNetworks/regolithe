@@ -26,6 +26,7 @@ var functions = template.FuncMap{
 	"toc":             toc,
 	"operations":      operations,
 	"characteristics": characteristics,
+	"example":         makeExample,
 }
 
 func writeDoc(set *spec.SpecificationSet, format string) error {

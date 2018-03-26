@@ -2,6 +2,15 @@
 
 {{ trimspace .Spec.Model.Description }}
 
+{{ $example := example .Spec }}
+{{ if $example }}
+### Example
+
+```json
+{{ example .Spec}}
+```
+{{ end }}
+
 {{ $ops := operations .Spec .Relationships .Set }}
 {{ if $ops}}
 ### Relations

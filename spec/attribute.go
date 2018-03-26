@@ -67,6 +67,7 @@ type Attribute struct {
 	DefaultOrder   bool            `yaml:"default_order,omitempty"      json:"default_order,omitempty"`
 	DefaultValue   interface{}     `yaml:"default_value,omitempty"      json:"default_value,omitempty"`
 	Deprecated     bool            `yaml:"deprecated,omitempty"         json:"deprecated,omitempty"`
+	ExampleValue   interface{}     `yaml:"example_value,omitempty"      json:"example_value,omitempty"`
 	Filterable     bool            `yaml:"filterable,omitempty"         json:"filterable,omitempty"`
 	ForeignKey     bool            `yaml:"foreign_key,omitempty"        json:"foreign_key,omitempty"`
 	Format         AttributeFormat `yaml:"format,omitempty"             json:"format,omitempty"`

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -264,4 +265,31 @@ func characteristics(attr *spec.Attribute) string {
 	}
 
 	return str + "\n"
+}
+
+func makeExample(s *spec.Specification) string {
+
+	data := map[string]interface{}{}
+
+	for _, attr := range s.SortedAttributes() {
+
+		if attr.DefaultValue != nil {
+			continue
+		}
+
+		if attr.ExampleValue != nil {
+			data[attr.Name] = attr.ExampleValue
+		}
+	}
+
+	d, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+
+	if len(data) == 0 {
+		return ""
+	}
+
+	return string(d)
 }
