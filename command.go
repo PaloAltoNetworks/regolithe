@@ -104,11 +104,11 @@ func NewCommand(
 				}
 			}
 
-			tmpFolder, err := ioutil.TempDir("", "")
+			tmpFolder, err := ioutil.TempDir("", "regolithe-refs-head")
 			if err != nil {
 				return err
 			}
-			defer os.RemoveAll(tmpFolder) // nolint: errcheck
+			defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
 
 			var (
 				ref           plumbing.ReferenceName
@@ -129,9 +129,9 @@ func NewCommand(
 				"path": viper.GetString("path"),
 			}).Info("Retrieving repository")
 
-			cloneFunc := func(ref plumbing.ReferenceName) (*git.Repository, error) {
+			cloneFunc := func(folder string, ref plumbing.ReferenceName) (*git.Repository, error) {
 				return git.PlainClone(
-					tmpFolder,
+					folder,
 					false,
 					&git.CloneOptions{
 						URL:           viper.GetString("repo"),
@@ -141,7 +141,7 @@ func NewCommand(
 					})
 			}
 
-			repo, err := cloneFunc(ref)
+			repo, err := cloneFunc(tmpFolder, ref)
 
 			if err != nil {
 				if err == plumbing.ErrReferenceNotFound {
@@ -152,8 +152,16 @@ func NewCommand(
 						"path": viper.GetString("path"),
 					}).Warn("Trying to clone with refs/tags - failed to clone with refs/heads")
 
+					// Need to recreate a folder, get error repository already created otherwise
+					// Happened even if old tmp folder is deleted...
+					tmpFolder, err = ioutil.TempDir("", "regolithe-refs-tags")
+					if err != nil {
+						return err
+					}
+					defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
+
 					ref = plumbing.NewReferenceFromStrings("refs/tags/"+viper.GetString("ref"), "").Name()
-					repo, err = cloneFunc(ref)
+					repo, err = cloneFunc(tmpFolder, ref)
 
 					if err != nil {
 						return err
