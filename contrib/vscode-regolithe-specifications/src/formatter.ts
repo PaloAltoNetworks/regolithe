@@ -9,9 +9,11 @@ import { shouldConsiderDocument } from './utils';
 export class RegolitheDocumentFormattingEditProvider {
 
     formatCommandBinPath: string;
+    outputChannel: vscode.OutputChannel
 
-    constructor(toolPath: string) {
+    constructor(toolPath: string, outputChannel: vscode.OutputChannel) {
         this.formatCommandBinPath = toolPath;
+        this.outputChannel = outputChannel;
     }
 
     public format(doc: vscode.TextDocument): Thenable<vscode.TextEdit[]> {
@@ -37,8 +39,14 @@ export class RegolitheDocumentFormattingEditProvider {
             p.on('close', code => {
 
                 if (code !== 0) {
-                    vscode.window.showErrorMessage(`Unable to format Regolithe specification '${path.basename(doc.fileName)}': ${stderr}`)
+                    this.outputChannel.clear()
+                    this.outputChannel.appendLine("Error during formatting:")
+                    this.outputChannel.append(stderr)
+                    this.outputChannel.show();
                     return reject(stderr);
+                } else {
+                    this.outputChannel.clear();
+                    this.outputChannel.hide();
                 }
 
                 const edit = new vscode.WorkspaceEdit()

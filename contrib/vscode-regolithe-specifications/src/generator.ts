@@ -11,9 +11,11 @@ import { shouldConsiderDocument } from './utils';
 export class RegolitheGenerator {
 
     regoGenFileName: string;
+    outputChannel: vscode.OutputChannel
 
-    constructor(regoGenFileName: string) {
-        this.regoGenFileName = regoGenFileName
+    constructor(regoGenFileName: string, outputChannel: vscode.OutputChannel) {
+        this.regoGenFileName = regoGenFileName;
+        this.outputChannel = outputChannel;
     }
 
     public generate(doc: vscode.TextDocument): void {
@@ -36,7 +38,13 @@ export class RegolitheGenerator {
 
         exec(`cd '${docDir}' && ${cmd}`, (err: Error, stdout: string, stderr: string) => {
             if (err) {
-                vscode.window.showErrorMessage(`Unable to run generation for file '${path.basename(doc.fileName)}': ${stderr}`);
+                this.outputChannel.clear();
+                this.outputChannel.appendLine("Error during generation:")
+                this.outputChannel.append(stderr);
+                this.outputChannel.show();
+            } else {
+                this.outputChannel.clear();
+                this.outputChannel.hide();
             }
         })
 

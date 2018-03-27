@@ -3,7 +3,6 @@ package spec
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path"
 	"sort"
 	"strings"
@@ -158,8 +157,7 @@ func NewSpecificationSet(
 	}
 
 	if len(errs) > 0 {
-		fmt.Fprintf(os.Stderr, formatValidationErrors(errs).Error()+"\n")
-		return nil, fmt.Errorf("Unable to validate specification set")
+		return nil, formatValidationErrors(errs)
 	}
 
 	return set, nil

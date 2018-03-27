@@ -8,11 +8,12 @@ import { RegolitheGenerator } from './generator';
 
 export function activate(ctx: vscode.ExtensionContext) {
 
+    const outputChannel = vscode.window.createOutputChannel("regolithe")
     const regoPath = path.join(ctx.extensionPath, 'bin', 'rego')
-    const formatter = new RegolitheDocumentFormattingEditProvider(regoPath);
+    const formatter = new RegolitheDocumentFormattingEditProvider(regoPath, outputChannel);
 
     const regoGenFileName = '.regolithe-gen-cmd';
-    const generator = new RegolitheGenerator(regoGenFileName);
+    const generator = new RegolitheGenerator(regoGenFileName, outputChannel);
 
     let lastFormatSuccess = false;
 
