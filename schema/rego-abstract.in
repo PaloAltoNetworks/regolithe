@@ -8,7 +8,7 @@
     "properties": {
         "attributes": {
             "$ref": "#/definitions/attributes"
-        },
+        }
     },
     "definitions": {
         "attributes": {

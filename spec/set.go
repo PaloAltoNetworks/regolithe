@@ -21,7 +21,7 @@ type SpecificationSet struct {
 	ExternalTypes TypeMapping
 	APIInfo       *APIInfo
 
-	specs map[string]*Specification
+	specs map[string]Specification
 }
 
 // LoadSpecificationSetFromGithub loads a set of specs from github.
@@ -113,7 +113,7 @@ func LoadSpecificationSet(
 	var loadedMonolitheINI bool
 
 	set := &SpecificationSet{
-		specs: map[string]*Specification{},
+		specs: map[string]Specification{},
 	}
 
 	filesInfo, err := ioutil.ReadDir(dirname)
@@ -121,7 +121,7 @@ func LoadSpecificationSet(
 		return nil, err
 	}
 
-	baseSpecs := map[string]*Specification{}
+	baseSpecs := map[string]Specification{}
 
 	for _, info := range filesInfo {
 
@@ -168,8 +168,8 @@ func LoadSpecificationSet(
 				return nil, err
 			}
 
-			if targetMap[baseName].Model != nil && targetMap[baseName].Model.RestName != baseName {
-				return nil, fmt.Errorf("%s: declared rest_name '%s' must be identical to filename without extension", info.Name(), targetMap[baseName].Model.RestName)
+			if targetMap[baseName].Model() != nil && targetMap[baseName].Model().RestName != baseName {
+				return nil, fmt.Errorf("%s: declared rest_name '%s' must be identical to filename without extension", info.Name(), targetMap[baseName].Model().RestName)
 			}
 		}
 	}
@@ -182,11 +182,11 @@ func LoadSpecificationSet(
 	for _, spec := range set.specs {
 
 		// Apply base specs.
-		for _, ext := range spec.Model.Extends {
+		for _, ext := range spec.Model().Extends {
 
 			base, ok := baseSpecs[ext]
 			if !ok {
-				return nil, fmt.Errorf("Unable to find base spec '%s' for spec '%s'", ext, spec.Model.RestName)
+				return nil, fmt.Errorf("Unable to find base spec '%s' for spec '%s'", ext, spec.Model().RestName)
 			}
 
 			if err = spec.ApplyBaseSpecifications(base); err != nil {
@@ -195,11 +195,11 @@ func LoadSpecificationSet(
 		}
 
 		// Link the APIs to corresponding specifications
-		for _, rel := range spec.Relations {
+		for _, rel := range spec.Relations() {
 
 			linked, ok := set.specs[rel.RestName]
 			if !ok {
-				return nil, fmt.Errorf("Unable to find related spec '%s' for spec '%s'", rel.RestName, spec.Model.RestName)
+				return nil, fmt.Errorf("Unable to find related spec '%s' for spec '%s'", rel.RestName, spec.Model().RestName)
 			}
 
 			rel.remoteSpecification = linked
@@ -207,31 +207,34 @@ func LoadSpecificationSet(
 
 		if set.ExternalTypes != nil {
 
-			for _, attr := range spec.Attributes {
+			for _, version := range spec.AttributeVersions() {
 
-				if nameConvertFunc != nil {
-					attr.ConvertedName = nameConvertFunc(attr.Name)
-				}
-				if typeConvertFunc != nil {
-					attr.ConvertedType, attr.TypeProvider = typeConvertFunc(attr.Type, attr.SubType)
-				}
+				for _, attr := range spec.Attributes(version) {
 
-				if attr.Type != AttributeTypeExt {
-					continue
-				}
-
-				if typeMappingName != "" {
-					m, err := set.ExternalTypes.Mapping(typeMappingName, attr.SubType)
-					if err != nil {
-						return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
+					if nameConvertFunc != nil {
+						attr.ConvertedName = nameConvertFunc(attr.Name)
+					}
+					if typeConvertFunc != nil {
+						attr.ConvertedType, attr.TypeProvider = typeConvertFunc(attr.Type, attr.SubType)
 					}
 
-					if m != nil {
-						attr.ConvertedType = m.Type
-						attr.Initializer = m.Initializer
-						attr.TypeProvider = m.Import
-					} else {
-						attr.ConvertedType = string(attr.Type)
+					if attr.Type != AttributeTypeExt {
+						continue
+					}
+
+					if typeMappingName != "" {
+						m, err := set.ExternalTypes.Mapping(typeMappingName, attr.SubType)
+						if err != nil {
+							return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
+						}
+
+						if m != nil {
+							attr.ConvertedType = m.Type
+							attr.Initializer = m.Initializer
+							attr.TypeProvider = m.Import
+						} else {
+							attr.ConvertedType = string(attr.Type)
+						}
 					}
 				}
 			}
@@ -253,19 +256,19 @@ func LoadSpecificationSet(
 }
 
 // Specification returns the Specification with the given name.
-func (s *SpecificationSet) Specification(name string) *Specification {
+func (s *SpecificationSet) Specification(name string) Specification {
 	return s.specs[name]
 }
 
 // Specifications returns all Specifications.
-func (s *SpecificationSet) Specifications() (specs []*Specification) {
+func (s *SpecificationSet) Specifications() (specs []Specification) {
 
 	for _, s := range s.specs {
 		specs = append(specs, s)
 	}
 
 	sort.Slice(specs, func(i int, j int) bool {
-		return strings.Compare(specs[i].Model.RestName, specs[j].Model.RestName) == -1
+		return strings.Compare(specs[i].Model().RestName, specs[j].Model().RestName) == -1
 	})
 	return
 }
@@ -281,34 +284,37 @@ func (s *SpecificationSet) Relationships() map[string]*Relationship {
 	relationships := map[string]*Relationship{}
 
 	for _, spec := range s.Specifications() {
-		relationships[spec.Model.EntityName] = NewRelationship()
+		relationships[spec.Model().EntityName] = NewRelationship()
 	}
 
 	for _, spec := range s.Specifications() {
 
-		if !spec.Model.IsRoot {
-			if spec.Model.AllowsUpdate {
-				relationships[spec.Model.EntityName].Set("update", "root")
+		model := spec.Model()
+		if !model.IsRoot {
+			if model.AllowsUpdate {
+				relationships[model.EntityName].Set("update", "root")
 			}
-			if spec.Model.AllowsDelete {
-				relationships[spec.Model.EntityName].Set("delete", "root")
+			if model.AllowsDelete {
+				relationships[model.EntityName].Set("delete", "root")
 			}
-			if spec.Model.AllowsGet {
-				relationships[spec.Model.EntityName].Set("get", "root")
+			if model.AllowsGet {
+				relationships[model.EntityName].Set("get", "root")
 			}
 		}
 
-		for _, rel := range spec.Relations {
+		for _, rel := range spec.Relations() {
 
 			childrenSpec := s.specs[rel.RestName]
 
+			model := spec.Model()
+			relatedModed := childrenSpec.Model()
+
 			if rel.AllowsGet {
-				relationships[childrenSpec.Model.EntityName].Set("getmany", spec.Model.RestName)
+				relationships[relatedModed.EntityName].Set("getmany", model.RestName)
 			}
 			if rel.AllowsCreate {
-				relationships[childrenSpec.Model.EntityName].Set("create", spec.Model.RestName)
+				relationships[relatedModed.EntityName].Set("create", model.RestName)
 			}
-
 		}
 	}
 
@@ -321,30 +327,32 @@ func (s *SpecificationSet) RelationshipsByRestName() map[string]*Relationship {
 	relationships := map[string]*Relationship{}
 
 	for _, spec := range s.Specifications() {
-		relationships[spec.Model.RestName] = NewRelationship()
+		relationships[spec.Model().RestName] = NewRelationship()
 	}
 
 	for _, spec := range s.Specifications() {
 
-		if !spec.Model.IsRoot {
-			if spec.Model.AllowsUpdate {
-				relationships[spec.Model.RestName].Set("update", "root")
+		model := spec.Model()
+
+		if !model.IsRoot {
+			if model.AllowsUpdate {
+				relationships[model.RestName].Set("update", "root")
 			}
-			if spec.Model.AllowsDelete {
-				relationships[spec.Model.RestName].Set("delete", "root")
+			if model.AllowsDelete {
+				relationships[model.RestName].Set("delete", "root")
 			}
-			if spec.Model.AllowsGet {
-				relationships[spec.Model.RestName].Set("get", "root")
+			if model.AllowsGet {
+				relationships[model.RestName].Set("get", "root")
 			}
 		}
 
-		for _, rel := range spec.Relations {
+		for _, rel := range spec.Relations() {
 
 			if rel.AllowsGet {
-				relationships[rel.RestName].Set("getmany", spec.Model.RestName)
+				relationships[rel.RestName].Set("getmany", model.RestName)
 			}
 			if rel.AllowsCreate {
-				relationships[rel.RestName].Set("create", spec.Model.RestName)
+				relationships[rel.RestName].Set("create", model.RestName)
 			}
 
 		}
@@ -359,32 +367,34 @@ func (s *SpecificationSet) RelationshipsByResourceName() map[string]*Relationshi
 	relationships := map[string]*Relationship{}
 
 	for _, spec := range s.Specifications() {
-		relationships[spec.Model.ResourceName] = NewRelationship()
+		relationships[spec.Model().ResourceName] = NewRelationship()
 	}
 
 	for _, spec := range s.Specifications() {
 
-		if !spec.Model.IsRoot {
-			if spec.Model.AllowsUpdate {
-				relationships[spec.Model.ResourceName].Set("update", "root")
+		model := spec.Model()
+
+		if !model.IsRoot {
+			if model.AllowsUpdate {
+				relationships[model.ResourceName].Set("update", "root")
 			}
-			if spec.Model.AllowsDelete {
-				relationships[spec.Model.ResourceName].Set("delete", "root")
+			if model.AllowsDelete {
+				relationships[model.ResourceName].Set("delete", "root")
 			}
-			if spec.Model.AllowsGet {
-				relationships[spec.Model.ResourceName].Set("get", "root")
+			if model.AllowsGet {
+				relationships[model.ResourceName].Set("get", "root")
 			}
 		}
 
-		for _, rel := range spec.Relations {
+		for _, rel := range spec.Relations() {
 
 			childrenSpec := s.specs[rel.RestName]
 
 			if rel.AllowsGet {
-				relationships[childrenSpec.Model.ResourceName].Set("getmany", spec.Model.RestName)
+				relationships[childrenSpec.Model().ResourceName].Set("getmany", model.RestName)
 			}
 			if rel.AllowsCreate {
-				relationships[childrenSpec.Model.ResourceName].Set("create", spec.Model.RestName)
+				relationships[childrenSpec.Model().ResourceName].Set("create", model.RestName)
 			}
 
 		}

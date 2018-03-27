@@ -65,7 +65,9 @@ func writeMarkdownDoc(set *spec.SpecificationSet) error {
 
 	for _, s := range set.Specifications() {
 
-		if s.Model.Private || s.Model.IsRoot {
+		model := s.Model()
+
+		if model.Private || model.IsRoot {
 			continue
 		}
 
@@ -74,7 +76,7 @@ func writeMarkdownDoc(set *spec.SpecificationSet) error {
 			return fmt.Errorf("cannot open spec template: %s", err)
 		}
 
-		temp, err := template.New(s.Model.RestName).Funcs(functions).Parse(string(data[:len(data)-1]))
+		temp, err := template.New(model.RestName).Funcs(functions).Parse(string(data[:len(data)-1]))
 		if err != nil {
 			return fmt.Errorf("cannot parse template: %s", err)
 		}
@@ -82,7 +84,7 @@ func writeMarkdownDoc(set *spec.SpecificationSet) error {
 		buf := &bytes.Buffer{}
 		if err := temp.Execute(buf, struct {
 			Set           *spec.SpecificationSet
-			Spec          *spec.Specification
+			Spec          spec.Specification
 			Relationships map[string]*spec.Relationship
 		}{
 			Set:           set,

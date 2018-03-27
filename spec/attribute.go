@@ -93,7 +93,7 @@ type Attribute struct {
 	TypeProvider  string `yaml:"-" json:"-"`
 	Initializer   string `yaml:"-" json:"-"`
 
-	linkedSpecification *Specification
+	linkedSpecification Specification
 }
 
 // Validate validates the attribute definition.
@@ -102,11 +102,11 @@ func (a *Attribute) Validate() []error {
 	var errs []error
 
 	if a.Required && a.DefaultValue == nil && a.ExampleValue == nil {
-		errs = append(errs, fmt.Errorf("%s.spec: '%s' is required but has no default_value or example_value", a.linkedSpecification.Model.RestName, a.Name))
+		errs = append(errs, fmt.Errorf("%s.spec: '%s' is required but has no default_value or example_value", a.linkedSpecification.Model().RestName, a.Name))
 	}
 
-	if a.Description != "" && a.Description[len(a.Description)-1] != '.' && a.linkedSpecification != nil && a.linkedSpecification.Model != nil {
-		errs = append(errs, fmt.Errorf("%s.spec: description of attribute '%s' must end with a period", a.linkedSpecification.Model.RestName, a.Name))
+	if a.Description != "" && a.Description[len(a.Description)-1] != '.' && a.linkedSpecification != nil && a.linkedSpecification.Model() != nil {
+		errs = append(errs, fmt.Errorf("%s.spec: description of attribute '%s' must end with a period", a.linkedSpecification.Model().RestName, a.Name))
 	}
 
 	return errs

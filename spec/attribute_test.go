@@ -33,8 +33,8 @@ func TestAttribute_Validate(t *testing.T) {
 			Name:     "name",
 			Required: true,
 			Type:     "string",
-			linkedSpecification: &Specification{
-				Model: &Model{
+			linkedSpecification: &specification{
+				RawModel: &Model{
 					RestName: "spec",
 				},
 			},
@@ -57,8 +57,8 @@ func TestAttribute_Validate(t *testing.T) {
 			Name:        "name",
 			Type:        "string",
 			Description: "coucou",
-			linkedSpecification: &Specification{
-				Model: &Model{
+			linkedSpecification: &specification{
+				RawModel: &Model{
 					RestName: "spec",
 				},
 			},

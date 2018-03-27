@@ -38,10 +38,10 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 
 		Convey("Then calling Specifications should return the sorted list", func() {
 			ss := set.Specifications()
-			So(ss[0].Model.RestName, ShouldEqual, "list")
-			So(ss[1].Model.RestName, ShouldEqual, "root")
-			So(ss[2].Model.RestName, ShouldEqual, "task")
-			So(ss[3].Model.RestName, ShouldEqual, "user")
+			So(ss[0].Model().RestName, ShouldEqual, "list")
+			So(ss[1].Model().RestName, ShouldEqual, "root")
+			So(ss[2].Model().RestName, ShouldEqual, "task")
+			So(ss[3].Model().RestName, ShouldEqual, "user")
 		})
 
 		Convey("Then the relationships should be correct", func() {
@@ -63,10 +63,10 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		})
 
 		Convey("Then the specification set should be correct", func() {
-			So(len(set.Specification("task").Attributes), ShouldEqual, 6)
-			So(len(set.Specification("root").Attributes), ShouldEqual, 0)
-			So(len(set.Specification("list").Attributes), ShouldEqual, 10)
-			So(len(set.Specification("user").Attributes), ShouldEqual, 6)
+			So(len(set.Specification("task").Attributes("v1")), ShouldEqual, 6)
+			So(len(set.Specification("root").Attributes("v1")), ShouldEqual, 0)
+			So(len(set.Specification("list").Attributes("v1")), ShouldEqual, 10)
+			So(len(set.Specification("user").Attributes("v1")), ShouldEqual, 6)
 		})
 
 		Convey("Then the API linking should be correct", func() {
@@ -85,14 +85,14 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		})
 
 		Convey("Then the type conversion should have worked", func() {
-			So(set.Specification("list").Attribute("name").ConvertedName, ShouldEqual, "NAME")
-			So(set.Specification("list").Attribute("name").TypeProvider, ShouldEqual, "")
+			So(set.Specification("list").Attribute("name", "v1").ConvertedName, ShouldEqual, "NAME")
+			So(set.Specification("list").Attribute("name", "v1").TypeProvider, ShouldEqual, "")
 
-			So(set.Specification("list").Attribute("name").ConvertedType, ShouldEqual, "String")
-			So(set.Specification("list").Attribute("name").TypeProvider, ShouldEqual, "")
+			So(set.Specification("list").Attribute("name", "v1").ConvertedType, ShouldEqual, "String")
+			So(set.Specification("list").Attribute("name", "v1").TypeProvider, ShouldEqual, "")
 
-			So(set.Specification("list").Attribute("date").ConvertedType, ShouldEqual, "time.Time")
-			So(set.Specification("list").Attribute("date").TypeProvider, ShouldEqual, "time")
+			So(set.Specification("list").Attribute("date", "v1").ConvertedType, ShouldEqual, "time.Time")
+			So(set.Specification("list").Attribute("date", "v1").TypeProvider, ShouldEqual, "time")
 		})
 	})
 }

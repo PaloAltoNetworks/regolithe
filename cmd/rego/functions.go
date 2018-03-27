@@ -13,7 +13,7 @@ import (
 
 const rootSpecRestName = "root"
 
-func toc(specs []*spec.Specification) string {
+func toc(specs []spec.Specification) string {
 
 	buf := &bytes.Buffer{}
 	w := &tabwriter.Writer{}
@@ -23,7 +23,10 @@ func toc(specs []*spec.Specification) string {
 	fmt.Fprintln(w, "| - \t|\t - \t|")
 
 	for _, spec := range specs {
-		if spec.Model.Private {
+
+		model := spec.Model()
+
+		if model.Private {
 			continue
 		}
 
@@ -31,9 +34,9 @@ func toc(specs []*spec.Specification) string {
 			w,
 			fmt.Sprintf(
 				"| [%s](#%s) \t|\t %s \t|",
-				spec.Model.EntityName,
-				strings.ToLower(spec.Model.EntityName),
-				shortString(spec.Model.Description, 80),
+				model.EntityName,
+				strings.ToLower(model.EntityName),
+				shortString(model.Description, 80),
 			),
 		)
 	}
@@ -52,44 +55,46 @@ func (o operation) String() string {
 	return fmt.Sprintf("| `%s` \t|\t `%s` \t|\t %s \t|", o.method, o.url, o.doc)
 }
 
-func operations(spec *spec.Specification, relationships map[string]*spec.Relationship, set *spec.SpecificationSet) string {
+func operations(spec spec.Specification, relationships map[string]*spec.Relationship, set *spec.SpecificationSet) string {
 
 	var rootOps []operation
 	var parentOps []operation
 	var childOps []operation
 
-	if spec.Model.AllowsUpdate {
+	model := spec.Model()
+
+	if model.AllowsUpdate {
 		rootOps = append(rootOps, operation{
 			method: "PUT",
-			url:    fmt.Sprintf("/%s/:id", spec.Model.ResourceName),
-			doc:    fmt.Sprintf("Updates the `%s` with the given `:id`.", spec.Model.RestName),
+			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
+			doc:    fmt.Sprintf("Updates the `%s` with the given `:id`.", model.RestName),
 		})
 	}
 
-	if spec.Model.AllowsDelete {
+	if model.AllowsDelete {
 		rootOps = append(rootOps, operation{
 			method: "DELETE",
-			url:    fmt.Sprintf("/%s/:id", spec.Model.ResourceName),
-			doc:    fmt.Sprintf("Deletes the `%s` with the given `:id`.", spec.Model.RestName),
+			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
+			doc:    fmt.Sprintf("Deletes the `%s` with the given `:id`.", model.RestName),
 		})
 	}
 
-	if spec.Model.AllowsGet {
+	if model.AllowsGet {
 		rootOps = append(rootOps, operation{
 			method: "GET",
-			url:    fmt.Sprintf("/%s/:id", spec.Model.ResourceName),
-			doc:    fmt.Sprintf("Retrieve the `%s` with the given `:id`.", spec.Model.RestName),
+			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
+			doc:    fmt.Sprintf("Retrieve the `%s` with the given `:id`.", model.RestName),
 		})
 	}
 
-	for k := range relationships[spec.Model.RestName].AllowsGetMany {
+	for k := range relationships[model.RestName].AllowsGetMany {
 		if k == rootSpecRestName {
 			if k == rootSpecRestName {
 				childSpec := set.Specification(rootSpecRestName)
 				rootOps = append(rootOps, operation{
 					method: "GET",
-					url:    fmt.Sprintf("/%s", spec.Model.ResourceName),
-					doc:    childSpec.Relation(spec.Model.RestName).Descriptions["get"],
+					url:    fmt.Sprintf("/%s", model.ResourceName),
+					doc:    childSpec.Relation(model.RestName).Descriptions["get"],
 				})
 				continue
 			}
@@ -97,19 +102,19 @@ func operations(spec *spec.Specification, relationships map[string]*spec.Relatio
 		childSpec := set.Specification(k)
 		parentOps = append(parentOps, operation{
 			method: "GET",
-			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model.ResourceName, spec.Model.ResourceName),
-			doc:    childSpec.Relation(spec.Model.RestName).Descriptions["get"],
+			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
+			doc:    childSpec.Relation(model.RestName).Descriptions["get"],
 		})
 	}
 
-	for k := range relationships[spec.Model.RestName].AllowsCreate {
+	for k := range relationships[model.RestName].AllowsCreate {
 		if k == rootSpecRestName {
 			if k == rootSpecRestName {
 				childSpec := set.Specification(rootSpecRestName)
 				rootOps = append(rootOps, operation{
 					method: "POST",
-					url:    fmt.Sprintf("/%s", spec.Model.ResourceName),
-					doc:    childSpec.Relation(spec.Model.RestName).Descriptions["create"],
+					url:    fmt.Sprintf("/%s", model.ResourceName),
+					doc:    childSpec.Relation(model.RestName).Descriptions["create"],
 				})
 				continue
 			}
@@ -117,39 +122,41 @@ func operations(spec *spec.Specification, relationships map[string]*spec.Relatio
 		childSpec := set.Specification(k)
 		parentOps = append(parentOps, operation{
 			method: "POST",
-			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model.ResourceName, spec.Model.ResourceName),
-			doc:    childSpec.Relation(spec.Model.RestName).Descriptions["create"],
+			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
+			doc:    childSpec.Relation(model.RestName).Descriptions["create"],
 		})
 	}
 
-	for _, rel := range spec.Relations {
+	for _, rel := range spec.Relations() {
+
 		childSpec := set.Specification(rel.RestName)
+		childModel := childSpec.Model()
 
 		if rel.AllowsCreate {
 			childOps = append(childOps, operation{
 				method: "POST",
-				url:    fmt.Sprintf("/%s/:id/%s", spec.Model.ResourceName, childSpec.Model.ResourceName),
+				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Descriptions["create"],
 			})
 		}
 		if rel.AllowsUpdate {
 			childOps = append(childOps, operation{
 				method: "PUT",
-				url:    fmt.Sprintf("/%s/:id/%s", spec.Model.ResourceName, childSpec.Model.ResourceName),
+				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Descriptions["update"],
 			})
 		}
 		if rel.AllowsGet {
 			childOps = append(childOps, operation{
 				method: "GET",
-				url:    fmt.Sprintf("/%s/:id/%s", spec.Model.ResourceName, childSpec.Model.ResourceName),
+				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Descriptions["get"],
 			})
 		}
 		if rel.AllowsDelete {
 			childOps = append(childOps, operation{
 				method: "DELETE",
-				url:    fmt.Sprintf("/%s/:id/%s", spec.Model.ResourceName, childSpec.Model.ResourceName),
+				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Descriptions["delete"],
 			})
 		}
@@ -267,11 +274,11 @@ func characteristics(attr *spec.Attribute) string {
 	return str + "\n"
 }
 
-func makeExample(s *spec.Specification) string {
+func makeExample(s spec.Specification, version string) string {
 
 	data := map[string]interface{}{}
 
-	for _, attr := range s.SortedAttributes() {
+	for _, attr := range s.Attributes(version) {
 
 		if attr.DefaultValue != nil {
 			continue

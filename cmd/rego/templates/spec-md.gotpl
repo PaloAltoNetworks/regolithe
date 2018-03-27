@@ -1,8 +1,8 @@
 ## {{ .Spec.Model.EntityName }}
-
+{{ $latestVersion := .Spec.LatestVersion }}
 {{ trimspace .Spec.Model.Description }}
 
-{{ $example := example .Spec }}
+{{ $example := example .Spec $latestVersion }}
 {{ if $example }}
 ### Example
 
@@ -18,11 +18,12 @@
 {{ $ops }}
 {{ end }}
 
-{{- if .Spec.ExposedAttributes }}
+{{ $attributes := .Spec.ExposedAttributes $latestVersion }}
+{{- if $attributes }}
 
 ### Attributes
 
-{{ range .Spec.ExposedAttributes -}}
+{{ range $attributes -}}
 #### `{{ .Name }} ({{ if eq .Type "external" }}{{ .Type }}:{{ .SubType }}{{ else }}{{ .Type }}{{ end }})`
 {{ if .Deprecated }}
 > This attribute is deprecated

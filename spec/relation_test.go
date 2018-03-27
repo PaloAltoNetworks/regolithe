@@ -15,15 +15,15 @@ func TestRelation_Getters(t *testing.T) {
 			AllowsCreate: true,
 			AllowsUpdate: true,
 			AllowsDelete: true,
-			remoteSpecification: &Specification{
-				Model: &Model{
+			remoteSpecification: &specification{
+				RawModel: &Model{
 					EntityName: "test2",
 				},
 			},
 		}
 
 		Convey("Then the getters should work", func() {
-			So(rel.Specification().Model.EntityName, ShouldEqual, rel.remoteSpecification.Model.EntityName)
+			So(rel.Specification().Model().EntityName, ShouldEqual, rel.remoteSpecification.Model().EntityName)
 		})
 	})
 }
@@ -64,13 +64,13 @@ func TestRelation_Validate(t *testing.T) {
 			AllowsUpdate: true,
 			AllowsDelete: true,
 			RestName:     "remote",
-			currentSpecification: &Specification{
-				Model: &Model{
+			currentSpecification: &specification{
+				RawModel: &Model{
 					RestName: "currentSpec",
 				},
 			},
-			remoteSpecification: &Specification{
-				Model: &Model{
+			remoteSpecification: &specification{
+				RawModel: &Model{
 					RestName: "remoteSpec",
 				},
 			},
@@ -104,13 +104,13 @@ func TestRelation_Validate(t *testing.T) {
 				"update": "hello",
 				"delete": "hello",
 			},
-			currentSpecification: &Specification{
-				Model: &Model{
+			currentSpecification: &specification{
+				RawModel: &Model{
 					RestName: "currentSpec",
 				},
 			},
-			remoteSpecification: &Specification{
-				Model: &Model{
+			remoteSpecification: &specification{
+				RawModel: &Model{
 					RestName: "remoteSpec",
 				},
 			},

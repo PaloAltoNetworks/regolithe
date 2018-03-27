@@ -26,7 +26,6 @@ attributes:
     filterable: true
     format: free
     orderable: true
-
   - name: lastName
     description: The last name.
     type: string
@@ -37,7 +36,6 @@ attributes:
     filterable: true
     format: free
     orderable: true
-
   - name: userName
     description: the login.
     type: string

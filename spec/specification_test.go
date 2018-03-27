@@ -22,19 +22,21 @@ func TestSpecification_Validate(t *testing.T) {
 
 	Convey("Given I have a specification with no validation error", t, func() {
 
-		s := &Specification{
-			Model: &Model{
+		s := &specification{
+			RawModel: &Model{
 				ResourceName: "things",
 				RestName:     "thing",
 				Description:  "desc.",
 				EntityName:   "toto",
 				Package:      "package",
 			},
-			Attributes: []*Attribute{
-				&Attribute{
-					Name:        "attr1",
-					Description: "desc.",
-					Type:        "string",
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:        "attr1",
+						Description: "desc.",
+						Type:        "string",
+					},
 				},
 			},
 		}
@@ -51,22 +53,24 @@ func TestSpecification_Validate(t *testing.T) {
 
 	Convey("Given I have a specification with validation error", t, func() {
 
-		s := &Specification{
-			Model: &Model{
+		s := &specification{
+			RawModel: &Model{
 				ResourceName: "things",
 				RestName:     "thing",
 				Description:  "desc.",
 				EntityName:   "toto",
 			},
-			Attributes: []*Attribute{
-				&Attribute{
-					Identifier: false,
-					Name:       "not-id",
-				},
-				&Attribute{
-					Name:        "id",
-					Type:        "coucou",
-					Description: "wala",
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Identifier: false,
+						Name:       "not-id",
+					},
+					&Attribute{
+						Name:        "id",
+						Type:        "coucou",
+						Description: "wala",
+					},
 				},
 			},
 		}
@@ -77,22 +81,25 @@ func TestSpecification_Validate(t *testing.T) {
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)
-				So(err.Error(), ShouldEqual, `thing.spec: schema error: attributes.1.type: attributes.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"
+				So(err.Error(), ShouldEqual, `thing.spec: schema error: attributes.v1.1.type: attributes.v1.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"
 thing.spec: schema error: description: description is required
 thing.spec: schema error: package: package is required
-thing.spec: schema error: type: type is required`)
+thing.spec: schema error: type: type is required
+thing.spec: schema error: v1: Additional property v1 is not allowed`)
 			})
 		})
 	})
 
 	Convey("Given I have an abstract with no validation error", t, func() {
 
-		s := &Specification{
-			Attributes: []*Attribute{
-				&Attribute{
-					Name:        "attr1",
-					Description: "desc.",
-					Type:        "string",
+		s := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:        "attr1",
+						Description: "desc.",
+						Type:        "string",
+					},
 				},
 			},
 		}
@@ -109,15 +116,17 @@ thing.spec: schema error: type: type is required`)
 
 	Convey("Given I have an abstract with validation error", t, func() {
 
-		s := &Specification{
-			Attributes: []*Attribute{
-				&Attribute{
-					Name:        "attr1",
-					Description: "desc.",
-					Type:        "string",
+		s := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:        "attr1",
+						Description: "desc.",
+						Type:        "string",
+					},
 				},
 			},
-			Relations: []*Relation{
+			RawRelations: []*Relation{
 				&Relation{
 					RestName: "a",
 				},
@@ -140,8 +149,8 @@ func TestSpecification_Getters(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {
 
-		s := &Specification{
-			Model: &Model{
+		s := &specification{
+			RawModel: &Model{
 				EntityName:   "Test",
 				ResourceName: "tests",
 				RestName:     "test",
@@ -150,14 +159,16 @@ func TestSpecification_Getters(t *testing.T) {
 				AllowsGet:    true,
 				AllowsUpdate: true,
 			},
-			Attributes: []*Attribute{
-				&Attribute{
-					Identifier: false,
-					Name:       "not-id",
-				},
-				&Attribute{
-					Identifier: true,
-					Name:       "id",
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Identifier: false,
+						Name:       "not-id",
+					},
+					&Attribute{
+						Identifier: true,
+						Name:       "id",
+					},
 				},
 			},
 		}
@@ -174,22 +185,24 @@ func TestSpecification_TypeProviders(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {
 
-		s := &Specification{
-			Attributes: []*Attribute{
-				&Attribute{
-					Name:          "not-id",
-					ConvertedName: "not-id",
-					TypeProvider:  "toto",
+		s := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:          "not-id",
+						ConvertedName: "not-id",
+						TypeProvider:  "toto",
+					},
+					&Attribute{
+						ConvertedName: "id",
+						TypeProvider:  "titi",
+					},
+					&Attribute{
+						ConvertedName: "id2",
+						TypeProvider:  "titi",
+					},
+					&Attribute{},
 				},
-				&Attribute{
-					ConvertedName: "id",
-					TypeProvider:  "titi",
-				},
-				&Attribute{
-					ConvertedName: "id2",
-					TypeProvider:  "titi",
-				},
-				&Attribute{},
 			},
 		}
 
@@ -210,20 +223,22 @@ func TestSpecification_AttributeInitializers(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {
 
-		s := &Specification{
-			Attributes: []*Attribute{
-				&Attribute{
-					Identifier:    false,
-					Name:          "not-id",
-					ConvertedName: "not-id",
-					DefaultValue:  "default1",
-					Type:          AttributeTypeString,
-				},
-				&Attribute{
-					Identifier:    true,
-					Name:          "id",
-					ConvertedName: "id",
-					Initializer:   "init",
+		s := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Identifier:    false,
+						Name:          "not-id",
+						ConvertedName: "not-id",
+						DefaultValue:  "default1",
+						Type:          AttributeTypeString,
+					},
+					&Attribute{
+						Identifier:    true,
+						Name:          "id",
+						ConvertedName: "id",
+						Initializer:   "init",
+					},
 				},
 			},
 		}
@@ -232,7 +247,7 @@ func TestSpecification_AttributeInitializers(t *testing.T) {
 
 		Convey("When I call AttributeInitializers", func() {
 
-			inits := s.AttributeInitializers()
+			inits := s.AttributeInitializers("v1")
 
 			Convey("Then the initializers should be correct", func() {
 				So(inits["id"], ShouldEqual, "init")
@@ -247,18 +262,21 @@ func TestSpecification_OrderingAttributes(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {
 
-		s := &Specification{
-			Attributes: []*Attribute{
-				&Attribute{
-					DefaultOrder: true,
-					Name:         "a1",
-				},
-				&Attribute{
-					DefaultOrder: true,
-					Name:         "a2",
-				},
-				&Attribute{
-					Name: "a3",
+		s := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+
+					&Attribute{
+						DefaultOrder: true,
+						Name:         "a1",
+					},
+					&Attribute{
+						DefaultOrder: true,
+						Name:         "a2",
+					},
+					&Attribute{
+						Name: "a3",
+					},
 				},
 			},
 		}
@@ -267,7 +285,7 @@ func TestSpecification_OrderingAttributes(t *testing.T) {
 
 		Convey("When I call OrderingAttributes", func() {
 
-			o := s.OrderingAttributes()
+			o := s.OrderingAttributes("v1")
 
 			Convey("Then the orderingAttributes should be correct", func() {
 				So(len(o), ShouldEqual, 2)
@@ -289,10 +307,10 @@ func TestSpecification_AttributeMap(t *testing.T) {
 		})
 
 		Convey("Then the attribute map should be correctly built", func() {
-			So(len(spec.Attributes), ShouldEqual, 3)
-			So(spec.Attribute("name").Name, ShouldEqual, "name")
-			So(spec.Attribute("description").Name, ShouldEqual, "description")
-			So(spec.Attribute("status").Name, ShouldEqual, "status")
+			So(len(spec.Attributes("v1")), ShouldEqual, 3)
+			So(spec.Attribute("name", "v1").Name, ShouldEqual, "name")
+			So(spec.Attribute("description", "v1").Name, ShouldEqual, "description")
+			So(spec.Attribute("status", "v1").Name, ShouldEqual, "status")
 		})
 	})
 }
@@ -301,13 +319,16 @@ func TestSpecification_BuildAttributeNames(t *testing.T) {
 
 	Convey("Given I create a specification with the same attribute twice.", t, func() {
 
-		spec := &Specification{
-			Attributes: []*Attribute{
-				&Attribute{
-					Name: "a",
-				},
-				&Attribute{
-					Name: "a",
+		spec := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+
+					&Attribute{
+						Name: "a",
+					},
+					&Attribute{
+						Name: "a",
+					},
 				},
 			},
 		}
@@ -334,7 +355,7 @@ func TestSpecification_APIMap(t *testing.T) {
 		})
 
 		Convey("Then the relation map should be correctly built", func() {
-			So(len(spec.Relations), ShouldEqual, 2)
+			So(len(spec.Relations()), ShouldEqual, 2)
 			So(spec.Relation("list").RestName, ShouldEqual, "list")
 			So(spec.Relation("user").RestName, ShouldEqual, "user")
 		})
@@ -345,8 +366,8 @@ func TestSpecification_buildRelationssInfo(t *testing.T) {
 
 	Convey("Given I create a specification with the same relation twice.", t, func() {
 
-		spec := &Specification{
-			Relations: []*Relation{
+		spec := &specification{
+			RawRelations: []*Relation{
 				&Relation{
 					RestName: "a",
 				},
@@ -390,29 +411,32 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 	Convey("Given I load the root specification file", t, func() {
 
 		spec, err := LoadSpecification("./tests/root.spec", true)
-		rels := spec.Relations
+		rels := spec.Relations()
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
 		})
 
 		Convey("Then the spec should be correctly initialized", func() {
-			So(spec.Model.AllowsGet, ShouldBeTrue)
-			So(spec.Model.AllowsCreate, ShouldBeFalse)
-			So(spec.Model.AllowsDelete, ShouldBeFalse)
-			So(spec.Model.AllowsUpdate, ShouldBeFalse)
-			So(spec.Model.Description, ShouldEqual, "Root object of the API.")
-			So(spec.Model.EntityName, ShouldEqual, "Root")
-			So(spec.Model.Package, ShouldEqual, "todo-list")
-			So(spec.Model.ResourceName, ShouldEqual, "root")
-			So(spec.Model.RestName, ShouldEqual, "root")
-			So(spec.Model.Extends, ShouldBeNil)
-			So(spec.Model.IsRoot, ShouldBeTrue)
-			So(spec.Model.Aliases, ShouldBeNil)
+
+			model := spec.Model()
+
+			So(model.AllowsGet, ShouldBeTrue)
+			So(model.AllowsCreate, ShouldBeFalse)
+			So(model.AllowsDelete, ShouldBeFalse)
+			So(model.AllowsUpdate, ShouldBeFalse)
+			So(model.Description, ShouldEqual, "Root object of the API.")
+			So(model.EntityName, ShouldEqual, "Root")
+			So(model.Package, ShouldEqual, "todo-list")
+			So(model.ResourceName, ShouldEqual, "root")
+			So(model.RestName, ShouldEqual, "root")
+			So(model.Extends, ShouldBeNil)
+			So(model.IsRoot, ShouldBeTrue)
+			So(model.Aliases, ShouldBeNil)
 		})
 
 		Convey("Then the number of relations should be correct", func() {
-			So(len(spec.Relations), ShouldEqual, 2)
+			So(len(rels), ShouldEqual, 2)
 		})
 
 		Convey("Then the list of relations should be correct", func() {
@@ -438,29 +462,30 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 	Convey("Given I load the task specification file", t, func() {
 
 		spec, err := LoadSpecification("./tests/task.spec", true)
-		attrs := spec.Attributes
+		attrs := spec.Attributes("v1")
+		model := spec.Model()
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
 		})
 
 		Convey("Then the spec should be correctly initialized", func() {
-			So(spec.Model.AllowsGet, ShouldBeTrue)
-			So(spec.Model.AllowsCreate, ShouldBeFalse)
-			So(spec.Model.AllowsDelete, ShouldBeTrue)
-			So(spec.Model.AllowsUpdate, ShouldBeTrue)
-			So(spec.Model.Description, ShouldEqual, "Represent a task to do in a listd.")
-			So(spec.Model.EntityName, ShouldEqual, "Task")
-			So(spec.Model.Package, ShouldEqual, "todo-list")
-			So(spec.Model.ResourceName, ShouldEqual, "tasks")
-			So(spec.Model.RestName, ShouldEqual, "task")
-			So(spec.Model.Extends, ShouldResemble, []string{"@base"})
-			So(spec.Model.IsRoot, ShouldBeFalse)
-			So(spec.Model.Aliases, ShouldResemble, []string{"tsk"})
+			So(model.AllowsGet, ShouldBeTrue)
+			So(model.AllowsCreate, ShouldBeFalse)
+			So(model.AllowsDelete, ShouldBeTrue)
+			So(model.AllowsUpdate, ShouldBeTrue)
+			So(model.Description, ShouldEqual, "Represent a task to do in a listd.")
+			So(model.EntityName, ShouldEqual, "Task")
+			So(model.Package, ShouldEqual, "todo-list")
+			So(model.ResourceName, ShouldEqual, "tasks")
+			So(model.RestName, ShouldEqual, "task")
+			So(model.Extends, ShouldResemble, []string{"@base"})
+			So(model.IsRoot, ShouldBeFalse)
+			So(model.Aliases, ShouldResemble, []string{"tsk"})
 		})
 
 		Convey("Then the number of attributes should be correct", func() {
-			So(len(spec.Attributes), ShouldEqual, 3)
+			So(len(spec.Attributes("v1")), ShouldEqual, 3)
 		})
 
 		Convey("Then the spec attribute description be correctly initialized", func() {
@@ -575,24 +600,24 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			})
 
 			Convey("Then the number of attributes should be correct", func() {
-				So(len(spec.Attributes), ShouldEqual, 6)
+				So(len(spec.Attributes("v1")), ShouldEqual, 6)
 			})
 
 			Convey("Then the additional attributes should have been applied", func() {
-				So(spec.Attribute("ID").Name, ShouldEqual, "ID")
-				So(spec.Attribute("ID").Autogenerated, ShouldBeTrue)
-				So(spec.Attribute("ID").Description, ShouldEqual, "The identifier.")
-				So(spec.Attribute("ID").Identifier, ShouldBeTrue)
-				So(spec.Attribute("ID").PrimaryKey, ShouldBeTrue)
-				So(spec.Attribute("ID").ReadOnly, ShouldBeTrue)
+				So(spec.Attribute("ID", "v1").Name, ShouldEqual, "ID")
+				So(spec.Attribute("ID", "v1").Autogenerated, ShouldBeTrue)
+				So(spec.Attribute("ID", "v1").Description, ShouldEqual, "The identifier.")
+				So(spec.Attribute("ID", "v1").Identifier, ShouldBeTrue)
+				So(spec.Attribute("ID", "v1").PrimaryKey, ShouldBeTrue)
+				So(spec.Attribute("ID", "v1").ReadOnly, ShouldBeTrue)
 
-				So(spec.Attribute("parentID").Name, ShouldEqual, "parentID")
-				So(spec.Attribute("parentID").Autogenerated, ShouldBeTrue)
-				So(spec.Attribute("parentID").Description, ShouldEqual, "The identifier of the parent of the object.")
-				So(spec.Attribute("parentID").ForeignKey, ShouldBeTrue)
-				So(spec.Attribute("parentID").Identifier, ShouldBeFalse)
-				So(spec.Attribute("parentID").PrimaryKey, ShouldBeFalse)
-				So(spec.Attribute("parentID").ReadOnly, ShouldBeTrue)
+				So(spec.Attribute("parentID", "v1").Name, ShouldEqual, "parentID")
+				So(spec.Attribute("parentID", "v1").Autogenerated, ShouldBeTrue)
+				So(spec.Attribute("parentID", "v1").Description, ShouldEqual, "The identifier of the parent of the object.")
+				So(spec.Attribute("parentID", "v1").ForeignKey, ShouldBeTrue)
+				So(spec.Attribute("parentID", "v1").Identifier, ShouldBeFalse)
+				So(spec.Attribute("parentID", "v1").PrimaryKey, ShouldBeFalse)
+				So(spec.Attribute("parentID", "v1").ReadOnly, ShouldBeTrue)
 			})
 		})
 	})

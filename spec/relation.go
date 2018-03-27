@@ -16,12 +16,12 @@ type Relation struct {
 	AllowsDelete bool              `yaml:"delete,omitempty"         json:"delete,omitempty"`
 	Deprecated   bool              `yaml:"deprecated,omitempty"     json:"deprecated,omitempty"`
 
-	currentSpecification *Specification
-	remoteSpecification  *Specification
+	currentSpecification Specification
+	remoteSpecification  Specification
 }
 
 // Specification returns the Specification the API links to.
-func (a *Relation) Specification() *Specification {
+func (a *Relation) Specification() Specification {
 	return a.remoteSpecification
 }
 
@@ -35,11 +35,11 @@ func (a *Relation) Validate() []error {
 		d := a.Descriptions[k]
 
 		if d == "" {
-			return fmt.Errorf("%s.spec: relation '%s' to '%s' must have a description", a.currentSpecification.Model.RestName, k, a.RestName)
+			return fmt.Errorf("%s.spec: relation '%s' to '%s' must have a description", a.currentSpecification.Model().RestName, k, a.RestName)
 		}
 
 		if d[len(d)-1] != '.' {
-			return fmt.Errorf("%s.spec: relation '%s' to '%s' description must end with a period", a.currentSpecification.Model.RestName, k, a.RestName)
+			return fmt.Errorf("%s.spec: relation '%s' to '%s' description must end with a period", a.currentSpecification.Model().RestName, k, a.RestName)
 		}
 
 		return nil
