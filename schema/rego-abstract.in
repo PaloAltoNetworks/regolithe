@@ -7,15 +7,11 @@
 
     "properties": {
         "attributes": {
-            "type": "array",
-            "description": "List of attributes of the represented object",
-            "items": {
-                "$ref": "#/definitions/attribute"
-            }
-        }
+            "$ref": "#/definitions/attributes"
+        },
     },
     "definitions": {
-        "attribute": {
+        "attributes": {
 __ATTRIBUTE__
         }
     }

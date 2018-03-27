@@ -15,83 +15,84 @@ model:
 
 # Attributes
 attributes:
-- name: creationOnly
-  description: This attribute is creation only.
-  type: string
-  exposed: true
-  stored: true
-  creation_only: true
-  filterable: true
-  format: free
-  orderable: true
+  v1:
+  - name: creationOnly
+    description: This attribute is creation only.
+    type: string
+    exposed: true
+    stored: true
+    creation_only: true
+    filterable: true
+    format: free
+    orderable: true
 
-- name: date
-  description: The date.
-  type: time
-  exposed: true
-  stored: true
-  filterable: true
-  orderable: true
+  - name: date
+    description: The date.
+    type: time
+    exposed: true
+    stored: true
+    filterable: true
+    orderable: true
 
-- name: description
-  description: The description.
-  type: string
-  exposed: true
-  stored: true
-  filterable: true
-  format: free
-  orderable: true
+  - name: description
+    description: The description.
+    type: string
+    exposed: true
+    stored: true
+    filterable: true
+    format: free
+    orderable: true
 
-- name: name
-  description: The name.
-  type: string
-  exposed: true
-  stored: true
-  required: true
-  example_value: the name
-  filterable: true
-  format: free
-  getter: true
-  setter: true
-  orderable: true
+  - name: name
+    description: The name.
+    type: string
+    exposed: true
+    stored: true
+    required: true
+    example_value: the name
+    filterable: true
+    format: free
+    getter: true
+    setter: true
+    orderable: true
 
-- name: readOnly
-  description: This attribute is readonly.
-  type: string
-  exposed: true
-  stored: true
-  read_only: true
-  filterable: true
-  format: free
-  orderable: true
+  - name: readOnly
+    description: This attribute is readonly.
+    type: string
+    exposed: true
+    stored: true
+    read_only: true
+    filterable: true
+    format: free
+    orderable: true
 
-- name: slice
-  description: this is a slice.
-  type: list
-  exposed: true
-  subtype: string
-  stored: true
-  filterable: true
-  orderable: true
+  - name: slice
+    description: this is a slice.
+    type: list
+    exposed: true
+    subtype: string
+    stored: true
+    filterable: true
+    orderable: true
 
-- name: unexposed
-  description: This attribute is not exposed.
-  type: string
-  stored: true
-  filterable: true
-  format: free
-  orderable: true
+  - name: unexposed
+    description: This attribute is not exposed.
+    type: string
+    stored: true
+    filterable: true
+    format: free
+    orderable: true
 
-# Relations
-relations:
-- rest_name: task
-  descriptions:
-    create: yoyo.
-    get: yeye.
-  get: true
-  create: true
+  # Relations
+  relations:
+  - rest_name: task
+    descriptions:
+      create: yoyo.
+      get: yeye.
+    get: true
+    create: true
 
-- rest_name: user
-  descriptions:
-    get: yeye.
-  get: true
+  - rest_name: user
+    descriptions:
+      get: yeye.
+    get: true

@@ -9,11 +9,7 @@
     ],
     "properties": {
         "attributes": {
-            "type": "array",
-            "description": "List of attributes of the represented object.",
-            "items": {
-                "$ref": "#/definitions/attribute"
-            }
+            "$ref": "#/definitions/attributes"
         },
         "relations": {
             "type": "array",
@@ -101,7 +97,7 @@
                 }
             }
         },
-        "attribute": {
+        "attributes": {
 __ATTRIBUTE__
         },
         "relation": {
