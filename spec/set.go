@@ -82,6 +82,10 @@ func NewSpecificationSet(
 			if err != nil {
 				return nil, err
 			}
+
+			if targetMap[baseName].Model != nil && targetMap[baseName].Model.RestName != baseName {
+				return nil, fmt.Errorf("%s: declared rest_name '%s' must be identical to filename without extension", info.Name(), targetMap[baseName].Model.RestName)
+			}
 		}
 	}
 

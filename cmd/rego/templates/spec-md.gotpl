@@ -7,7 +7,7 @@
 ### Example
 
 ```json
-{{ example .Spec}}
+{{ $example }}
 ```
 {{ end }}
 
@@ -24,7 +24,9 @@
 
 {{ range .Spec.ExposedAttributes -}}
 #### `{{ .Name }} ({{ if eq .Type "external" }}{{ .Type }}:{{ .SubType }}{{ else }}{{ .Type }}{{ end }})`
-{{ if .Deprecated}}> This attribute is deprecated{{ end }}
+{{ if .Deprecated }}
+> This attribute is deprecated
+{{ end }}
 {{ trimspace .Description }}
 {{ characteristics . }}
 {{- end }}

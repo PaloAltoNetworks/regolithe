@@ -2,30 +2,35 @@
     "Regolithe: New Spec File": {
         "prefix": "spec",
         "body": [
-            "attributes:",
-            "children:",
+            "# Model",
             "model:",
-            "   description: ${1:description}",
+            "   rest_name: ${5:myspec}",
+            "   resource_name: ${4:myspecs}",
             "   entity_name: ${2:MySpec}",
             "   package: ${3:package}",
-            "   resource_name: ${4:myspecs}",
-            "   rest_name: ${5:myspec}"
+            "   description: ${1:description}.",
+            "attributes:",
+            "relations:"
+
         ]
     },
     "Regolithe: New Attribute": {
         "prefix": "attr",
         "body": [
-            "- description: ${1:description}",
+            "- name: ${2:name}",
+            "  description: ${1:description}.",
+            "  type: ${3:string}",
             "  exposed: true",
-            "  name: ${2:name}",
-            "  stored: true",
-            "  type: ${3:string}"
+            "  stored: true"
         ]
     },
     "Regolithe: New Relation": {
         "prefix": "rel",
         "body": [
-            "- rest_name: ${1:restname}"
+            "- rest_name: ${1:restname}",
+            "  get: true",
+            "  descriptions:",
+            "   get: documentation for get."
         ]
     }
 }
