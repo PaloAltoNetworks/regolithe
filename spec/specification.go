@@ -27,32 +27,6 @@ type versionedAttributes map[string][]*Attribute
 type attributeMapping map[string]map[string]*Attribute
 type relationMapping map[string]*Relation
 
-// A Specification is the interface representing a Regolithe Specification.
-type Specification interface {
-	Read(reader io.Reader, validate bool) error
-	Write(writer io.Writer) error
-	Validate() []error
-
-	Model() *Model
-	Relations() []*Relation
-
-	Attribute(name string, version string) *Attribute
-	Attributes(version string) []*Attribute
-	ExposedAttributes(version string) []*Attribute
-	OrderingAttributes(version string) []*Attribute
-	AttributeInitializers(version string) map[string]interface{}
-
-	AttributeVersions() []string
-	LatestVersion() string
-
-	Relation(restName string) *Relation
-	Identifier() *Attribute
-
-	TypeProviders() []string
-
-	ApplyBaseSpecifications(specs ...Specification) error
-}
-
 type specification struct {
 	RawAttributes versionedAttributes `yaml:"attributes,omitempty"    json:"attributes,omitempty"`
 	RawRelations  []*Relation         `yaml:"relations,omitempty"     json:"relations,omitempty"`
@@ -67,6 +41,7 @@ type specification struct {
 
 // NewSpecification returns a new specification.
 func NewSpecification() Specification {
+
 	return &specification{}
 }
 
@@ -309,8 +284,8 @@ func (s *specification) AttributeVersions() []string {
 	return out
 }
 
-// LatestVersion returns the latest version
-func (s *specification) LatestVersion() string {
+// LatestAttributeVersion returns the latest version
+func (s *specification) LatestAttributeVersion() string {
 
 	var max int
 	var latest string

@@ -18,7 +18,7 @@ func NewCommand(
 	nameConvertFunc spec.AttributeNameConverterFunc,
 	typeConvertFunc spec.AttributeTypeConverterFunc,
 	typeMappingName string,
-	generatorFunc func([]*spec.SpecificationSet, string) error,
+	generatorFunc func([]spec.SpecificationSet, string) error,
 ) *cobra.Command {
 
 	cobra.OnInitialize(func() {
@@ -56,7 +56,7 @@ func NewCommand(
 				return errors.New("--dir is required")
 			}
 
-			var specSets []*spec.SpecificationSet
+			var specSets []spec.SpecificationSet
 
 			for _, dir := range viper.GetStringSlice("dir") {
 				set, err := spec.LoadSpecificationSet(
@@ -100,7 +100,7 @@ func NewCommand(
 				return err
 			}
 
-			return generatorFunc([]*spec.SpecificationSet{specSet}, viper.GetString("out"))
+			return generatorFunc([]spec.SpecificationSet{specSet}, viper.GetString("out"))
 		},
 	}
 	githubGen.Flags().StringP("repo", "r", "", "Endpoint for the github api.")

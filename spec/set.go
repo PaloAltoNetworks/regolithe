@@ -15,11 +15,11 @@ import (
 	git "gopkg.in/src-d/go-git.v4"
 )
 
-// A SpecificationSet represents a compete set of Specification
-type SpecificationSet struct {
-	Configuration *Config
-	ExternalTypes TypeMapping
-	APIInfo       *APIInfo
+// A specificationSet represents a compete set of Specification
+type specificationSet struct {
+	configuration *Config
+	externalTypes TypeMapping
+	apiInfo       *APIInfo
 
 	specs map[string]Specification
 }
@@ -33,7 +33,7 @@ func LoadSpecificationSetFromGithub(
 	nameConvertFunc AttributeNameConverterFunc,
 	typeConvertFunc AttributeTypeConverterFunc,
 	typeMappingName string,
-) (*SpecificationSet, error) {
+) (SpecificationSet, error) {
 
 	var auth transport.AuthMethod
 	if token != "" {
@@ -108,11 +108,11 @@ func LoadSpecificationSet(
 	nameConvertFunc AttributeNameConverterFunc,
 	typeConvertFunc AttributeTypeConverterFunc,
 	typeMappingName string,
-) (*SpecificationSet, error) {
+) (SpecificationSet, error) {
 
 	var loadedMonolitheINI bool
 
-	set := &SpecificationSet{
+	set := &specificationSet{
 		specs: map[string]Specification{},
 	}
 
@@ -129,7 +129,7 @@ func LoadSpecificationSet(
 
 		case "monolithe.ini":
 
-			set.Configuration, err = LoadConfig(path.Join(dirname, info.Name()))
+			set.configuration, err = LoadConfig(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err
 			}
@@ -138,13 +138,13 @@ func LoadSpecificationSet(
 
 		case "_type.mapping":
 
-			set.ExternalTypes, err = LoadTypeMapping(path.Join(dirname, info.Name()))
+			set.externalTypes, err = LoadTypeMapping(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err
 			}
 
 		case "_api.info":
-			set.APIInfo, err = LoadAPIInfo(path.Join(dirname, info.Name()))
+			set.apiInfo, err = LoadAPIInfo(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err
 			}
@@ -205,7 +205,7 @@ func LoadSpecificationSet(
 			rel.remoteSpecification = linked
 		}
 
-		if set.ExternalTypes != nil {
+		if set.externalTypes != nil {
 
 			for _, version := range spec.AttributeVersions() {
 
@@ -226,7 +226,7 @@ func LoadSpecificationSet(
 					}
 
 					if typeMappingName != "" {
-						m, err := set.ExternalTypes.Mapping(typeMappingName, attr.SubType)
+						m, err := set.externalTypes.Mapping(typeMappingName, attr.SubType)
 						if err != nil {
 							return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
 						}
@@ -258,13 +258,29 @@ func LoadSpecificationSet(
 	return set, nil
 }
 
+func (s *specificationSet) Configuration() *Config {
+
+	return s.configuration
+}
+
+func (s *specificationSet) ExternalTypes() TypeMapping {
+
+	return s.externalTypes
+}
+
+func (s *specificationSet) APIInfo() *APIInfo {
+
+	return s.apiInfo
+}
+
 // Specification returns the Specification with the given name.
-func (s *SpecificationSet) Specification(name string) Specification {
+func (s *specificationSet) Specification(name string) Specification {
+
 	return s.specs[name]
 }
 
 // Specifications returns all Specifications.
-func (s *SpecificationSet) Specifications() (specs []Specification) {
+func (s *specificationSet) Specifications() (specs []Specification) {
 
 	for _, s := range s.specs {
 		specs = append(specs, s)
@@ -277,12 +293,13 @@ func (s *SpecificationSet) Specifications() (specs []Specification) {
 }
 
 // Len returns the number of specifications in the set.
-func (s *SpecificationSet) Len() int {
+func (s *specificationSet) Len() int {
+
 	return len(s.specs)
 }
 
 // Relationships is better
-func (s *SpecificationSet) Relationships() map[string]*Relationship {
+func (s *specificationSet) Relationships() map[string]*Relationship {
 
 	relationships := map[string]*Relationship{}
 
@@ -325,7 +342,7 @@ func (s *SpecificationSet) Relationships() map[string]*Relationship {
 }
 
 // RelationshipsByRestName returns the relationships indexed by rest name.
-func (s *SpecificationSet) RelationshipsByRestName() map[string]*Relationship {
+func (s *specificationSet) RelationshipsByRestName() map[string]*Relationship {
 
 	relationships := map[string]*Relationship{}
 
@@ -365,7 +382,7 @@ func (s *SpecificationSet) RelationshipsByRestName() map[string]*Relationship {
 }
 
 // RelationshipsByResourceName returns the relationships indexed by resource name.
-func (s *SpecificationSet) RelationshipsByResourceName() map[string]*Relationship {
+func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationship {
 
 	relationships := map[string]*Relationship{}
 

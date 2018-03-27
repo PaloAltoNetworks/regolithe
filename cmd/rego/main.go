@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/aporeto-inc/regolithe/cmd/rego/doc"
+
 	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -71,7 +73,7 @@ func main() {
 				return err
 			}
 
-			return writeDoc(s, viper.GetString("format"))
+			return doc.Write(s, viper.GetString("format"))
 		},
 	}
 

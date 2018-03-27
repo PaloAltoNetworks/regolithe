@@ -1,4 +1,4 @@
-package main
+package doc
 
 import (
 	"bytes"
@@ -55,7 +55,7 @@ func (o operation) String() string {
 	return fmt.Sprintf("| `%s` \t|\t `%s` \t|\t %s \t|", o.method, o.url, o.doc)
 }
 
-func operations(spec spec.Specification, relationships map[string]*spec.Relationship, set *spec.SpecificationSet) string {
+func operations(spec spec.Specification, relationships map[string]*spec.Relationship, set spec.SpecificationSet) string {
 
 	var rootOps []operation
 	var parentOps []operation

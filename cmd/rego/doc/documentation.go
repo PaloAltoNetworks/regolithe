@@ -1,4 +1,4 @@
-package main
+package doc
 
 import (
 	"bytes"
@@ -29,7 +29,8 @@ var functions = template.FuncMap{
 	"example":         makeExample,
 }
 
-func writeDoc(set *spec.SpecificationSet, format string) error {
+// Write writes the documentation for the given spec.SpecificationSet.
+func Write(set spec.SpecificationSet, format string) error {
 
 	switch format {
 	case "markdown":
@@ -39,7 +40,7 @@ func writeDoc(set *spec.SpecificationSet, format string) error {
 	}
 }
 
-func writeMarkdownDoc(set *spec.SpecificationSet) error {
+func writeMarkdownDoc(set spec.SpecificationSet) error {
 
 	data, err := static.Asset("templates/toc-md.gotpl")
 	if err != nil {
@@ -83,7 +84,7 @@ func writeMarkdownDoc(set *spec.SpecificationSet) error {
 
 		buf := &bytes.Buffer{}
 		if err := temp.Execute(buf, struct {
-			Set           *spec.SpecificationSet
+			Set           spec.SpecificationSet
 			Spec          spec.Specification
 			Relationships map[string]*spec.Relationship
 		}{
