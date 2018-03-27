@@ -158,8 +158,9 @@ func NewCommand(
 					if err != nil {
 						return err
 					}
+				} else {
+					return err
 				}
-				return err
 			}
 
 			if needsCheckout {
