@@ -77,11 +77,11 @@ func TestSpecification_Validate(t *testing.T) {
 
 		Convey("When I call validate", func() {
 
-			err := s.Validate()
+			errs := s.Validate()
 
 			Convey("Then err should not be nil", func() {
-				So(err, ShouldNotBeNil)
-				So(err.Error(), ShouldEqual, `thing.spec: schema error: attributes.v1.1.type: attributes.v1.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"
+				So(errs, ShouldNotBeNil)
+				So(formatValidationErrors(errs).Error(), ShouldEqual, `thing.spec: schema error: attributes.v1.1.type: attributes.v1.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"
 thing.spec: schema error: description: description is required
 thing.spec: schema error: package: package is required
 thing.spec: schema error: type: type is required
@@ -138,8 +138,8 @@ thing.spec: schema error: v1: Additional property v1 is not allowed`)
 			err := s.Validate()
 
 			Convey("Then err should not be nil", func() {
-				So(err, ShouldNotBeNil)
-				So(err.Error(), ShouldEqual, ".: schema error: relations: Additional property relations is not allowed")
+				So(len(err), ShouldEqual, 1)
+				So(err[0].Error(), ShouldEqual, ".: schema error: relations: Additional property relations is not allowed")
 			})
 		})
 	})
@@ -173,7 +173,7 @@ func TestSpecification_Getters(t *testing.T) {
 			},
 		}
 
-		s.buildAttributesInfo() // nolint: errcheck
+		s.buildAttributesMapping() // nolint: errcheck
 
 		Convey("Then the getters should work", func() {
 			So(s.Identifier().Name, ShouldEqual, "id")
@@ -206,7 +206,7 @@ func TestSpecification_TypeProviders(t *testing.T) {
 			},
 		}
 
-		s.buildAttributesInfo() // nolint: errcheck
+		s.buildAttributesMapping() // nolint: errcheck
 
 		Convey("When I call TypeProviders", func() {
 
@@ -243,7 +243,7 @@ func TestSpecification_AttributeInitializers(t *testing.T) {
 			},
 		}
 
-		s.buildAttributesInfo() // nolint: errcheck
+		s.buildAttributesMapping() // nolint: errcheck
 
 		Convey("When I call AttributeInitializers", func() {
 
@@ -281,7 +281,7 @@ func TestSpecification_OrderingAttributes(t *testing.T) {
 			},
 		}
 
-		s.buildAttributesInfo() // nolint: errcheck
+		s.buildAttributesMapping() // nolint: errcheck
 
 		Convey("When I call OrderingAttributes", func() {
 
@@ -315,14 +315,13 @@ func TestSpecification_AttributeMap(t *testing.T) {
 	})
 }
 
-func TestSpecification_BuildAttributeNames(t *testing.T) {
+func TestSpecification_buildAttributesMapping(t *testing.T) {
 
 	Convey("Given I create a specification with the same attribute twice.", t, func() {
 
 		spec := &specification{
 			RawAttributes: map[string][]*Attribute{
 				"v1": []*Attribute{
-
 					&Attribute{
 						Name: "a",
 					},
@@ -333,9 +332,9 @@ func TestSpecification_BuildAttributeNames(t *testing.T) {
 			},
 		}
 
-		Convey("When I call BuildAttributeNames", func() {
+		Convey("When I call buildAttributesMapping", func() {
 
-			err := spec.buildAttributesInfo()
+			err := spec.buildAttributesMapping()
 
 			Convey("Then err Should Not be nil", func() {
 				So(err, ShouldNotBeNil)
@@ -362,7 +361,7 @@ func TestSpecification_APIMap(t *testing.T) {
 	})
 }
 
-func TestSpecification_buildRelationssInfo(t *testing.T) {
+func TestSpecification_buildRelationsMapping(t *testing.T) {
 
 	Convey("Given I create a specification with the same relation twice.", t, func() {
 
@@ -377,9 +376,9 @@ func TestSpecification_buildRelationssInfo(t *testing.T) {
 			},
 		}
 
-		Convey("When I call buildRelationssInfo", func() {
+		Convey("When I call buildRelationsMapping", func() {
 
-			err := spec.buildRelationssInfo()
+			err := spec.buildRelationsMapping()
 
 			Convey("Then err should not be nil", func() {
 				So(err, ShouldNotBeNil)
@@ -618,6 +617,102 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 				So(spec.Attribute("parentID", "v1").Identifier, ShouldBeFalse)
 				So(spec.Attribute("parentID", "v1").PrimaryKey, ShouldBeFalse)
 				So(spec.Attribute("parentID", "v1").ReadOnly, ShouldBeTrue)
+			})
+		})
+	})
+}
+
+func TestSpecification_ApplyBaseSpecifications(t *testing.T) {
+
+	Convey("Given I have a spec and an abstract", t, func() {
+
+		s1 := &specification{
+			RawModel: &Model{
+				ResourceName: "things",
+				RestName:     "thing",
+				Description:  "desc.",
+				EntityName:   "toto",
+				Package:      "package",
+			},
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:        "attr1",
+						Description: "desc.",
+						Type:        "string",
+					},
+				},
+			},
+		}
+
+		abs := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:        "attr1",
+						Description: "desc from abs.",
+						Type:        "string",
+					},
+					&Attribute{
+						Name:        "attr2",
+						Description: "desc2",
+						Type:        "string",
+					},
+				},
+			},
+		}
+
+		Convey("When I call ApplyBaseSpecifications", func() {
+
+			err := s1.ApplyBaseSpecifications(abs)
+
+			Convey("Then err should be nil", func() {
+				So(err, ShouldBeNil)
+			})
+
+			Convey("Then the extends should be applied", func() {
+				So(len(s1.Attributes("v1")), ShouldEqual, 2)
+				So(s1.Attribute("attr1", "v1").Name, ShouldEqual, "attr1")
+				So(s1.Attribute("attr2", "v1").Name, ShouldEqual, "attr2")
+			})
+		})
+	})
+
+	Convey("Given I have a spec with no attributes and an abstract", t, func() {
+
+		s1 := &specification{
+			RawModel: &Model{
+				ResourceName: "things",
+				RestName:     "thing",
+				Description:  "desc.",
+				EntityName:   "toto",
+				Package:      "package",
+			},
+		}
+
+		abs := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:        "attr2",
+						Description: "desc2",
+						Type:        "string",
+					},
+				},
+			},
+		}
+
+		Convey("When I call ApplyBaseSpecifications", func() {
+
+			err := s1.ApplyBaseSpecifications(abs)
+
+			Convey("Then err should be nil", func() {
+				So(err, ShouldBeNil)
+			})
+
+			Convey("Then the extends should be applied", func() {
+				So(len(s1.Attributes("v1")), ShouldEqual, 1)
+				So(s1.Attribute("attr2", "v1").Name, ShouldEqual, "attr2")
 			})
 		})
 	})

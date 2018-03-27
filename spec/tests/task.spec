@@ -24,6 +24,7 @@ attributes:
     filterable: true
     format: free
     orderable: true
+
   - name: name
     description: The name.
     type: string
@@ -36,6 +37,7 @@ attributes:
     getter: true
     setter: true
     orderable: true
+
   - name: status
     description: The status of the task.
     type: enum

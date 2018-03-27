@@ -13,7 +13,6 @@ attributes:
     identifier: true
     orderable: true
     primary_key: true
-
   - name: parentID
     description: The identifier of the parent of the object.
     type: string
@@ -25,7 +24,6 @@ attributes:
     foreign_key: true
     format: free
     orderable: true
-
   - name: parentType
     description: The type of the parent of the object.
     type: string

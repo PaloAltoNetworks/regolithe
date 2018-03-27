@@ -25,6 +25,7 @@ attributes:
     filterable: true
     format: free
     orderable: true
+
   - name: date
     description: The date.
     type: time
@@ -32,6 +33,7 @@ attributes:
     stored: true
     filterable: true
     orderable: true
+
   - name: description
     description: The description.
     type: string
@@ -40,6 +42,7 @@ attributes:
     filterable: true
     format: free
     orderable: true
+
   - name: name
     description: The name.
     type: string
@@ -52,6 +55,7 @@ attributes:
     getter: true
     setter: true
     orderable: true
+
   - name: readOnly
     description: This attribute is readonly.
     type: string
@@ -61,6 +65,7 @@ attributes:
     filterable: true
     format: free
     orderable: true
+
   - name: slice
     description: this is a slice.
     type: list
@@ -69,6 +74,7 @@ attributes:
     stored: true
     filterable: true
     orderable: true
+
   - name: unexposed
     description: This attribute is not exposed.
     type: string

@@ -213,7 +213,10 @@ func LoadSpecificationSet(
 
 					if nameConvertFunc != nil {
 						attr.ConvertedName = nameConvertFunc(attr.Name)
+					} else {
+						attr.ConvertedName = attr.Name
 					}
+
 					if typeConvertFunc != nil {
 						attr.ConvertedType, attr.TypeProvider = typeConvertFunc(attr.Type, attr.SubType)
 					}
@@ -243,8 +246,8 @@ func LoadSpecificationSet(
 
 	var errs []error
 	for _, spec := range set.Specifications() {
-		if err := spec.Validate(); err != nil {
-			errs = append(errs, err)
+		if es := spec.Validate(); es != nil {
+			errs = append(errs, es...)
 		}
 	}
 

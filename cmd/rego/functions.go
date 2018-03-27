@@ -298,5 +298,5 @@ func makeExample(s spec.Specification, version string) string {
 		return ""
 	}
 
-	return string(d)
+	return strings.Replace(string(d), "\n", "\\n", -1)
 }

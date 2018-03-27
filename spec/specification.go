@@ -23,34 +23,44 @@ const (
 	rootRelationsKey  = "relations"
 )
 
+type versionedAttributes map[string][]*Attribute
+type attributeMapping map[string]map[string]*Attribute
+type relationMapping map[string]*Relation
+
 // A Specification is the interface representing a Regolithe Specification.
 type Specification interface {
 	Read(reader io.Reader, validate bool) error
 	Write(writer io.Writer) error
-	Validate() error
-	Attribute(name string, version string) *Attribute
-	AttributeVersions() []string
-	LatestVersion() string
-	Attributes(version string) []*Attribute
-	ExposedAttributes(version string) []*Attribute
-	Relation(restName string) *Relation
-	Identifier() *Attribute
-	OrderingAttributes(version string) []*Attribute
-	TypeProviders() []string
-	AttributeInitializers(version string) map[string]interface{}
+	Validate() []error
+
 	Model() *Model
 	Relations() []*Relation
+
+	Attribute(name string, version string) *Attribute
+	Attributes(version string) []*Attribute
+	ExposedAttributes(version string) []*Attribute
+	OrderingAttributes(version string) []*Attribute
+	AttributeInitializers(version string) map[string]interface{}
+
+	AttributeVersions() []string
+	LatestVersion() string
+
+	Relation(restName string) *Relation
+	Identifier() *Attribute
+
+	TypeProviders() []string
+
 	ApplyBaseSpecifications(specs ...Specification) error
 }
 
 type specification struct {
-	RawAttributes map[string][]*Attribute `yaml:"attributes,omitempty"    json:"attributes,omitempty"`
-	RawRelations  []*Relation             `yaml:"relations,omitempty"     json:"relations,omitempty"`
-	RawModel      *Model                  `yaml:"model,omitempty"         json:"model,omitempty"`
+	RawAttributes versionedAttributes `yaml:"attributes,omitempty"    json:"attributes,omitempty"`
+	RawRelations  []*Relation         `yaml:"relations,omitempty"     json:"relations,omitempty"`
+	RawModel      *Model              `yaml:"model,omitempty"         json:"model,omitempty"`
 
-	attributeMap       map[string]map[string]*Attribute
-	relationsMap       map[string]*Relation
-	orderingAttributes map[string][]*Attribute
+	attributeMap       attributeMapping
+	relationsMap       relationMapping
+	orderingAttributes versionedAttributes
 	identifier         *Attribute
 	path               string
 }
@@ -89,11 +99,11 @@ func (s *specification) Read(reader io.Reader, validate bool) (err error) {
 		return err
 	}
 
-	if err = s.buildAttributesInfo(); err != nil {
+	if err = s.buildAttributesMapping(); err != nil {
 		return err
 	}
 
-	if err = s.buildRelationssInfo(); err != nil {
+	if err = s.buildRelationsMapping(); err != nil {
 		return err
 	}
 
@@ -102,8 +112,8 @@ func (s *specification) Read(reader io.Reader, validate bool) (err error) {
 	}
 
 	if validate {
-		if err = s.Validate(); err != nil {
-			return err
+		if errs := s.Validate(); len(errs) != 0 {
+			return formatValidationErrors(errs)
 		}
 	}
 
@@ -125,7 +135,7 @@ func (s *specification) Write(writer io.Writer) error {
 
 		for _, version := range s.AttributeVersions() {
 
-			currentAttributes := s.RawAttributes[version]
+			currentAttributes := s.Attributes(version)
 			attrs := make([]yaml.MapSlice, len(currentAttributes))
 
 			versionedAttrs = append(versionedAttrs, yaml.MapItem{
@@ -163,6 +173,8 @@ func (s *specification) Write(writer io.Writer) error {
 	var previousLine []byte
 	buf := &bytes.Buffer{}
 	prfx1 := []byte("- ")
+	prfx2 := []byte("  - name")
+	sufx1 := []byte(":")
 	yamlModelKey := []byte(rootModelKey + ":")
 	yamlAttrKey := []byte(rootAttributesKey + ":")
 	yamlAttrRelation := []byte(rootRelationsKey + ":")
@@ -174,7 +186,7 @@ func (s *specification) Write(writer io.Writer) error {
 
 		condFirstLine := i == 0
 		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
-		condPrefixed := bytes.HasPrefix(line, prfx1)
+		condPrefixed := bytes.HasPrefix(line, prfx1) || (bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1))
 
 		if !condFirstLine && !condFirstIn && condPrefixed {
 			buf.WriteRune('\n')
@@ -212,7 +224,7 @@ func (s *specification) Write(writer io.Writer) error {
 }
 
 // Validate validates the spec against the schema.
-func (s *specification) Validate() error {
+func (s *specification) Validate() []error {
 
 	var schemaData []byte
 	var err error
@@ -224,7 +236,7 @@ func (s *specification) Validate() error {
 	}
 
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	schemaLoader := gojsonschema.NewBytesLoader(schemaData)
@@ -232,7 +244,7 @@ func (s *specification) Validate() error {
 
 	res, err := gojsonschema.Validate(schemaLoader, specLoader)
 	if err != nil {
-		return err
+		return []error{err}
 	}
 
 	var errs []error
@@ -264,7 +276,7 @@ func (s *specification) Validate() error {
 		}
 	}
 
-	return formatValidationErrors(errs)
+	return errs
 }
 
 func (s *specification) Model() *Model {
@@ -278,7 +290,12 @@ func (s *specification) Relations() []*Relation {
 // Attribute returns the Attributes with the given name.
 func (s *specification) Attribute(name string, version string) *Attribute {
 
-	return s.attributeMap[version][name]
+	versioned, ok := s.attributeMap[version]
+	if !ok {
+		return nil
+	}
+
+	return versioned[name]
 }
 
 // AttributeVersions returns the list of all attribute versions.
@@ -349,16 +366,27 @@ func (s *specification) Relation(restName string) *Relation {
 
 // Identifier returns all the identifier attribute.
 func (s *specification) Identifier() *Attribute {
+
 	return s.identifier
 }
 
 // OrderingAttributes returns all the ordering attribute.
 func (s *specification) OrderingAttributes(version string) []*Attribute {
+
 	return append([]*Attribute{}, s.orderingAttributes[version]...)
 }
 
 // ApplyBaseSpecifications applies attributes of the given *Specifications to the receiver.
 func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
+
+	// The spec has been initialized manually.
+	// This should not happen, but let's just be sure we are
+	// done with the attr map, or attributes will be duplicated.
+	if s.attributeMap == nil {
+		if err := s.buildAttributesMapping(); err != nil {
+			return err
+		}
+	}
 
 	for _, candidate := range specs {
 
@@ -372,6 +400,12 @@ func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
 		}
 
 		for version := range spec.RawAttributes {
+
+			// The spec may have no attributes at all.
+			if s.RawAttributes == nil {
+				s.RawAttributes = versionedAttributes{}
+			}
+
 			for _, attr := range spec.RawAttributes[version] {
 				if _, ok := s.attributeMap[version][attr.Name]; !ok {
 					s.RawAttributes[version] = append(s.RawAttributes[version], attr)
@@ -380,7 +414,7 @@ func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
 		}
 	}
 
-	if err := s.buildAttributesInfo(); err != nil {
+	if err := s.buildAttributesMapping(); err != nil {
 		return err
 	}
 
@@ -436,11 +470,11 @@ func (s *specification) AttributeInitializers(version string) map[string]interfa
 	return out
 }
 
-// buildAttributesInfo builds the attributes map.
-func (s *specification) buildAttributesInfo() error {
+// buildAttributesMapping builds the attributes map.
+func (s *specification) buildAttributesMapping() error {
 
-	s.attributeMap = map[string]map[string]*Attribute{}
-	s.orderingAttributes = map[string][]*Attribute{}
+	s.attributeMap = attributeMapping{}
+	s.orderingAttributes = versionedAttributes{}
 	s.identifier = nil
 
 	for version, attrs := range s.RawAttributes {
@@ -483,10 +517,10 @@ func (s *specification) buildAttributesInfo() error {
 	return nil
 }
 
-// buildRelationssInfo builds the relations map.
-func (s *specification) buildRelationssInfo() error {
+// buildRelationsMapping builds the relations map.
+func (s *specification) buildRelationsMapping() error {
 
-	s.relationsMap = map[string]*Relation{}
+	s.relationsMap = relationMapping{}
 	for _, rel := range s.RawRelations {
 
 		rel.currentSpecification = s
