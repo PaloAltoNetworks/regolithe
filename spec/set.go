@@ -3,9 +3,16 @@ package spec
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 	"sort"
 	"strings"
+
+	"gopkg.in/src-d/go-git.v4/plumbing"
+	"gopkg.in/src-d/go-git.v4/plumbing/transport"
+	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
+
+	git "gopkg.in/src-d/go-git.v4"
 )
 
 // A SpecificationSet represents a compete set of Specification
@@ -17,8 +24,86 @@ type SpecificationSet struct {
 	specs map[string]*Specification
 }
 
-// NewSpecificationSet loads and parses all specification in a folder.
-func NewSpecificationSet(
+// LoadSpecificationSetFromGithub loads a set of specs from github.
+func LoadSpecificationSetFromGithub(
+	token string,
+	repoURL string,
+	refName string,
+	internalPath string,
+	nameConvertFunc AttributeNameConverterFunc,
+	typeConvertFunc AttributeTypeConverterFunc,
+	typeMappingName string,
+) (*SpecificationSet, error) {
+
+	var auth transport.AuthMethod
+	if token != "" {
+		auth = &http.BasicAuth{
+			Username: "Bearer",
+			Password: token,
+		}
+	}
+
+	tmpFolder, err := ioutil.TempDir("", "")
+	if err != nil {
+		return nil, err
+	}
+	defer os.RemoveAll(tmpFolder) // nolint: errcheck
+
+	var (
+		ref           plumbing.ReferenceName
+		needsCheckout bool
+	)
+
+	givenHash := plumbing.NewHash(refName)
+	if !givenHash.IsZero() {
+		ref = plumbing.NewReferenceFromStrings("refs/heads/master", "").Name()
+		needsCheckout = true
+	} else {
+		ref = plumbing.NewReferenceFromStrings("refs/heads/"+refName, "").Name()
+	}
+
+	repo, err := git.PlainClone(
+		tmpFolder,
+		false,
+		&git.CloneOptions{
+			URL:           repoURL,
+			Progress:      nil,
+			ReferenceName: ref,
+			Auth:          auth,
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	if needsCheckout {
+		wt, e := repo.Worktree()
+		if e != nil {
+			return nil, e
+		}
+
+		if err = wt.Checkout(
+			&git.CheckoutOptions{
+				Hash: givenHash,
+			}); err != nil {
+			return nil, err
+		}
+	}
+
+	set, err := LoadSpecificationSet(
+		path.Join(tmpFolder, internalPath),
+		nameConvertFunc,
+		typeConvertFunc,
+		typeMappingName,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return set, nil
+}
+
+// LoadSpecificationSet loads and parses all specification in a folder.
+func LoadSpecificationSet(
 	dirname string,
 	nameConvertFunc AttributeNameConverterFunc,
 	typeConvertFunc AttributeTypeConverterFunc,

@@ -61,7 +61,7 @@ func main() {
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			s, err := spec.NewSpecificationSet(
+			s, err := spec.LoadSpecificationSet(
 				viper.GetString("dir"),
 				nil,
 				nil,

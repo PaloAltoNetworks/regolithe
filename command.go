@@ -3,20 +3,11 @@ package regolithe
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"os"
-	"path"
 	"strings"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/src-d/go-git.v4/plumbing"
-	"gopkg.in/src-d/go-git.v4/plumbing/transport"
-	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
-
-	git "gopkg.in/src-d/go-git.v4"
 )
 
 // NewCommand generates a new CLI for regolith
@@ -68,7 +59,7 @@ func NewCommand(
 			var specSets []*spec.SpecificationSet
 
 			for _, dir := range viper.GetStringSlice("dir") {
-				set, err := spec.NewSpecificationSet(
+				set, err := spec.LoadSpecificationSet(
 					dir,
 					nameConvertFunc,
 					typeConvertFunc,
@@ -96,68 +87,11 @@ func NewCommand(
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			var auth transport.AuthMethod
-			if viper.GetString("token") != "" {
-				auth = &http.BasicAuth{
-					Username: "Bearer",
-					Password: viper.GetString("token"),
-				}
-			}
-
-			tmpFolder, err := ioutil.TempDir("", "")
-			if err != nil {
-				return err
-			}
-			defer os.RemoveAll(tmpFolder) // nolint: errcheck
-
-			var (
-				ref           plumbing.ReferenceName
-				needsCheckout bool
-			)
-
-			givenHash := plumbing.NewHash(viper.GetString("ref"))
-			if !givenHash.IsZero() {
-				ref = plumbing.NewReferenceFromStrings("refs/heads/master", "").Name()
-				needsCheckout = true
-			} else {
-				ref = plumbing.NewReferenceFromStrings("refs/heads/"+viper.GetString("ref"), "").Name()
-			}
-
-			logrus.WithFields(logrus.Fields{
-				"ref":  viper.GetString("ref"),
-				"repo": viper.GetString("repo"),
-				"path": viper.GetString("path"),
-			}).Info("Retrieving repository")
-
-			repo, err := git.PlainClone(
-				tmpFolder,
-				false,
-				&git.CloneOptions{
-					URL:           viper.GetString("repo"),
-					Progress:      nil,
-					ReferenceName: ref,
-					Auth:          auth,
-				})
-			if err != nil {
-				return err
-			}
-
-			if needsCheckout {
-				wt, e := repo.Worktree()
-				if e != nil {
-					return e
-				}
-
-				if err = wt.Checkout(
-					&git.CheckoutOptions{
-						Hash: givenHash,
-					}); err != nil {
-					return err
-				}
-			}
-
-			specSet, err := spec.NewSpecificationSet(
-				path.Join(tmpFolder, viper.GetString("path")),
+			specSet, err := spec.LoadSpecificationSetFromGithub(
+				viper.GetString("token"),
+				viper.GetString("repo"),
+				viper.GetString("ref"),
+				viper.GetString("path"),
 				nameConvertFunc,
 				typeConvertFunc,
 				typeMappingName,
