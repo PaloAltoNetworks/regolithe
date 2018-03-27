@@ -129,16 +129,36 @@ func NewCommand(
 				"path": viper.GetString("path"),
 			}).Info("Retrieving repository")
 
-			repo, err := git.PlainClone(
-				tmpFolder,
-				false,
-				&git.CloneOptions{
-					URL:           viper.GetString("repo"),
-					Progress:      nil,
-					ReferenceName: ref,
-					Auth:          auth,
-				})
+			cloneFunc := func(ref plumbing.ReferenceName) (*git.Repository, error) {
+				return git.PlainClone(
+					tmpFolder,
+					false,
+					&git.CloneOptions{
+						URL:           viper.GetString("repo"),
+						Progress:      nil,
+						ReferenceName: ref,
+						Auth:          auth,
+					})
+			}
+
+			repo, err := cloneFunc(ref)
+
 			if err != nil {
+				if err == plumbing.ErrReferenceNotFound {
+					logrus.WithFields(logrus.Fields{
+						"err":  err,
+						"ref":  viper.GetString("ref"),
+						"repo": viper.GetString("repo"),
+						"path": viper.GetString("path"),
+					}).Warn("Trying to clone with refs/tags - failed to clone with refs/heads")
+
+					ref = plumbing.NewReferenceFromStrings("refs/tags/"+viper.GetString("ref"), "").Name()
+					repo, err = cloneFunc(ref)
+
+					if err != nil {
+						return err
+					}
+				}
 				return err
 			}
 
