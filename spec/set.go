@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
@@ -43,11 +44,11 @@ func LoadSpecificationSetFromGithub(
 		}
 	}
 
-	tmpFolder, err := ioutil.TempDir("", "")
+	tmpFolder, err := ioutil.TempDir("", "regolithe-refs-head")
 	if err != nil {
 		return nil, err
 	}
-	defer os.RemoveAll(tmpFolder) // nolint: errcheck
+	defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
 
 	var (
 		ref           plumbing.ReferenceName
@@ -62,17 +63,52 @@ func LoadSpecificationSetFromGithub(
 		ref = plumbing.NewReferenceFromStrings("refs/heads/"+refName, "").Name()
 	}
 
-	repo, err := git.PlainClone(
-		tmpFolder,
-		false,
-		&git.CloneOptions{
-			URL:           repoURL,
-			Progress:      nil,
-			ReferenceName: ref,
-			Auth:          auth,
-		})
+	logrus.WithFields(logrus.Fields{
+		"ref":  refName,
+		"repo": repoURL,
+		"path": internalPath,
+	}).Info("Retrieving repository")
+
+	cloneFunc := func(folder string, ref plumbing.ReferenceName) (*git.Repository, error) {
+		return git.PlainClone(
+			folder,
+			false,
+			&git.CloneOptions{
+				URL:           repoURL,
+				Progress:      nil,
+				ReferenceName: ref,
+				Auth:          auth,
+			})
+	}
+
+	repo, err := cloneFunc(tmpFolder, ref)
+
 	if err != nil {
-		return nil, err
+		if err == plumbing.ErrReferenceNotFound {
+			logrus.WithFields(logrus.Fields{
+				"err":  err,
+				"ref":  refName,
+				"repo": repoURL,
+				"path": internalPath,
+			}).Warn("Trying to clone with refs/tags - failed to clone with refs/heads")
+
+			// Need to recreate a folder, get error repository already created otherwise
+			// Happened even if old tmp folder is deleted...
+			tmpFolder, err = ioutil.TempDir("", "regolithe-refs-tags")
+			if err != nil {
+				return nil, err
+			}
+			defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
+
+			ref = plumbing.NewReferenceFromStrings("refs/tags/"+refName, "").Name()
+			repo, err = cloneFunc(tmpFolder, ref)
+
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, err
+		}
 	}
 
 	if needsCheckout {
