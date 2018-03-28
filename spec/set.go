@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/spf13/viper"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
@@ -56,18 +55,18 @@ func LoadSpecificationSetFromGithub(
 		needsCheckout bool
 	)
 
-	givenHash := plumbing.NewHash(viper.GetString("ref"))
+	givenHash := plumbing.NewHash(refName)
 	if !givenHash.IsZero() {
 		ref = plumbing.NewReferenceFromStrings("refs/heads/master", "").Name()
 		needsCheckout = true
 	} else {
-		ref = plumbing.NewReferenceFromStrings("refs/heads/"+viper.GetString("ref"), "").Name()
+		ref = plumbing.NewReferenceFromStrings("refs/heads/"+refName, "").Name()
 	}
 
 	logrus.WithFields(logrus.Fields{
-		"ref":  viper.GetString("ref"),
-		"repo": viper.GetString("repo"),
-		"path": viper.GetString("path"),
+		"ref":  refName,
+		"repo": repoURL,
+		"path": internalPath,
 	}).Info("Retrieving repository")
 
 	cloneFunc := func(folder string, ref plumbing.ReferenceName) (*git.Repository, error) {
@@ -75,7 +74,7 @@ func LoadSpecificationSetFromGithub(
 			folder,
 			false,
 			&git.CloneOptions{
-				URL:           viper.GetString("repo"),
+				URL:           repoURL,
 				Progress:      nil,
 				ReferenceName: ref,
 				Auth:          auth,
@@ -88,9 +87,9 @@ func LoadSpecificationSetFromGithub(
 		if err == plumbing.ErrReferenceNotFound {
 			logrus.WithFields(logrus.Fields{
 				"err":  err,
-				"ref":  viper.GetString("ref"),
-				"repo": viper.GetString("repo"),
-				"path": viper.GetString("path"),
+				"ref":  refName,
+				"repo": repoURL,
+				"path": internalPath,
 			}).Warn("Trying to clone with refs/tags - failed to clone with refs/heads")
 
 			// Need to recreate a folder, get error repository already created otherwise
@@ -101,7 +100,7 @@ func LoadSpecificationSetFromGithub(
 			}
 			defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
 
-			ref = plumbing.NewReferenceFromStrings("refs/tags/"+viper.GetString("ref"), "").Name()
+			ref = plumbing.NewReferenceFromStrings("refs/tags/"+refName, "").Name()
 			repo, err = cloneFunc(tmpFolder, ref)
 
 			if err != nil {
