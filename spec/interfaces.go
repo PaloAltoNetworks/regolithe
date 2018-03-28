@@ -68,8 +68,8 @@ type Specification interface {
 	// AttributeVersions returns all the versions of attributes.
 	AttributeVersions() []string
 
-	// LatestAttributeVersion returns the latest version of the attributes.
-	LatestAttributeVersion() string
+	// LatestAttributesVersion returns the latest version of the attributes.
+	LatestAttributesVersion() string
 
 	// Relations returns the Specification relations.
 	Relations() []*Relation

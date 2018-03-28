@@ -287,8 +287,8 @@ func (s *specification) AttributeVersions() []string {
 	return out
 }
 
-// LatestAttributeVersion returns the latest version
-func (s *specification) LatestAttributeVersion() string {
+// LatestAttributesVersion returns the latest version
+func (s *specification) LatestAttributesVersion() string {
 
 	var max int
 	var latest string

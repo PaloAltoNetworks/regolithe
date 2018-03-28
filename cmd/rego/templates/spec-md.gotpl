@@ -1,5 +1,5 @@
 ## {{ .Spec.Model.EntityName }}
-{{ $latestVersion := .Spec.LatestAttributeVersion }}
+{{ $latestVersion := .Spec.LatestAttributesVersion }}
 {{ trimspace .Spec.Model.Description }}
 
 {{ $example := example .Spec $latestVersion }}
