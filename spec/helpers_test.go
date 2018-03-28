@@ -208,3 +208,50 @@ func TestHelpers_formatValidationErrors(t *testing.T) {
 		})
 	})
 }
+
+func TestHelpers_sortVersionString(t *testing.T) {
+
+	Convey("Given I have a version array", t, func() {
+
+		v := []string{"v1", "v4", "v3", "v2"}
+
+		Convey("When I Call sortVersionString", func() {
+
+			sorted := sortVersionStrings(v)
+
+			Convey("Then the version should be sorted", func() {
+				So(sorted, ShouldResemble, []string{"v1", "v2", "v3", "v4"})
+			})
+		})
+	})
+}
+
+func TestHelpers_sortAttributes(t *testing.T) {
+
+	Convey("Given I have a some attribbutes", t, func() {
+
+		v := []*Attribute{
+			&Attribute{
+				Name: "c",
+			},
+			&Attribute{
+				Name: "a",
+			},
+			&Attribute{
+				Name: "b",
+			},
+		}
+
+		Convey("When I Call sortAttributes", func() {
+
+			sortAttributes(v)
+
+			Convey("Then the attribbutes should be sorted", func() {
+				So(len(v), ShouldEqual, 3)
+				So(v[0].Name, ShouldEqual, "a")
+				So(v[1].Name, ShouldEqual, "b")
+				So(v[2].Name, ShouldEqual, "c")
+			})
+		})
+	})
+}

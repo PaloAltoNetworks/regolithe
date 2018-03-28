@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/xeipuuv/gojsonschema"
@@ -62,4 +63,40 @@ func formatValidationErrors(errs []error) error {
 	sort.Strings(out)
 
 	return errors.New(strings.Join(out, "\n"))
+}
+
+func sortVersionStrings(versions []string) []string {
+
+	var vs []int
+
+	for _, v := range versions {
+
+		currentVersion, err := versionToInt(v)
+		if err != nil {
+			panic(fmt.Sprintf("Invalid version '%s'", v))
+		}
+
+		vs = append(vs, currentVersion)
+	}
+
+	sort.Ints(vs)
+
+	var out []string
+	for _, v := range vs {
+		out = append(out, fmt.Sprintf("v%d", v))
+	}
+
+	return out
+}
+
+func sortAttributes(attrs []*Attribute) {
+
+	sort.Slice(attrs, func(i int, j int) bool {
+		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
+	})
+}
+
+func versionToInt(version string) (int, error) {
+
+	return strconv.Atoi(strings.TrimPrefix(version, "v"))
 }

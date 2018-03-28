@@ -7,8 +7,6 @@ import (
 	"os"
 	"path"
 	"sort"
-	"strconv"
-	"strings"
 
 	"github.com/aporeto-inc/regolithe/schema"
 	"github.com/xeipuuv/gojsonschema"
@@ -108,7 +106,7 @@ func (s *specification) Write(writer io.Writer) error {
 
 		versionedAttrs := yaml.MapSlice{}
 
-		for _, version := range sortVersionsString(s.AttributeVersions()) {
+		for _, version := range sortVersionStrings(s.AttributeVersions()) {
 
 			currentAttributes := s.RawAttributes[version]
 			sortAttributes(currentAttributes)
@@ -560,40 +558,4 @@ func (s *specification) versionsFrom(version string) []string {
 	}
 
 	return out
-}
-
-func sortVersionsString(versions []string) []string {
-
-	var vs []int
-
-	for _, v := range versions {
-
-		currentVersion, err := versionToInt(v)
-		if err != nil {
-			panic(fmt.Sprintf("Invalid version '%s'", v))
-		}
-
-		vs = append(vs, currentVersion)
-	}
-
-	sort.Ints(vs)
-
-	var out []string
-	for _, v := range vs {
-		out = append(out, fmt.Sprintf("v%d", v))
-	}
-
-	return out
-}
-
-func sortAttributes(attrs []*Attribute) {
-
-	sort.Slice(attrs, func(i int, j int) bool {
-		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
-	})
-}
-
-func versionToInt(version string) (int, error) {
-
-	return strconv.Atoi(strings.TrimPrefix(version, "v"))
 }
