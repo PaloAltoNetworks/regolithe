@@ -108,9 +108,11 @@ func (s *specification) Write(writer io.Writer) error {
 
 		versionedAttrs := yaml.MapSlice{}
 
-		for _, version := range s.AttributeVersions() {
+		for _, version := range sortVersionsString(s.AttributeVersions()) {
 
-			currentAttributes := s.Attributes(version)
+			currentAttributes := s.RawAttributes[version]
+			sortAttributes(currentAttributes)
+
 			attrs := make([]yaml.MapSlice, len(currentAttributes))
 
 			versionedAttrs = append(versionedAttrs, yaml.MapItem{
@@ -149,6 +151,7 @@ func (s *specification) Write(writer io.Writer) error {
 	buf := &bytes.Buffer{}
 	prfx1 := []byte("- ")
 	prfx2 := []byte("  - name")
+	prfx3 := []byte("  v")
 	sufx1 := []byte(":")
 	yamlModelKey := []byte(rootModelKey + ":")
 	yamlAttrKey := []byte(rootAttributesKey + ":")
@@ -161,7 +164,7 @@ func (s *specification) Write(writer io.Writer) error {
 
 		condFirstLine := i == 0
 		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
-		condPrefixed := bytes.HasPrefix(line, prfx1) || (bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1))
+		condPrefixed := bytes.HasPrefix(line, prfx1) || bytes.HasPrefix(line, prfx3) || (bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1))
 
 		if !condFirstLine && !condFirstIn && condPrefixed {
 			buf.WriteRune('\n')
@@ -292,13 +295,12 @@ func (s *specification) LatestAttributeVersion() string {
 
 	for v := range s.RawAttributes {
 
-		vs := strings.TrimPrefix(v, "v")
-		vi, err := strconv.Atoi(vs)
+		vi, err := versionToInt(v)
 		if err != nil {
 			panic(fmt.Sprintf("Invalid version '%s'", v))
 		}
 
-		if vi > max {
+		if vi >= max {
 			latest = v
 		}
 	}
@@ -309,11 +311,20 @@ func (s *specification) LatestAttributeVersion() string {
 // Attributes returns the list of attribute sorted by names.
 func (s *specification) Attributes(version string) []*Attribute {
 
-	attrs := append([]*Attribute{}, s.RawAttributes[version]...)
+	attrMap := map[string]*Attribute{}
 
-	sort.Slice(attrs, func(i int, j int) bool {
-		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
-	})
+	for _, v := range s.versionsFrom(version) {
+		for _, attr := range s.RawAttributes[v] {
+			attrMap[attr.Name] = attr
+		}
+	}
+
+	var attrs []*Attribute
+	for _, attr := range attrMap {
+		attrs = append(attrs, attr)
+	}
+
+	sortAttributes(attrs)
 
 	return attrs
 }
@@ -348,7 +359,14 @@ func (s *specification) Identifier() *Attribute {
 // OrderingAttributes returns all the ordering attribute.
 func (s *specification) OrderingAttributes(version string) []*Attribute {
 
-	return append([]*Attribute{}, s.orderingAttributes[version]...)
+	var out []*Attribute
+	versions := s.versionsFrom(version)
+
+	for _, v := range versions {
+		out = append(out, s.orderingAttributes[v]...)
+	}
+
+	return out
 }
 
 // ApplyBaseSpecifications applies attributes of the given *Specifications to the receiver.
@@ -426,7 +444,7 @@ func (s *specification) AttributeInitializers(version string) map[string]interfa
 
 	out := map[string]interface{}{}
 
-	for _, attr := range s.RawAttributes[version] {
+	for _, attr := range s.Attributes(version) {
 
 		if attr.Initializer != "" {
 			out[attr.ConvertedName] = attr.Initializer
@@ -445,7 +463,6 @@ func (s *specification) AttributeInitializers(version string) map[string]interfa
 	return out
 }
 
-// buildAttributesMapping builds the attributes map.
 func (s *specification) buildAttributesMapping() error {
 
 	s.attributeMap = attributeMapping{}
@@ -492,7 +509,6 @@ func (s *specification) buildAttributesMapping() error {
 	return nil
 }
 
-// buildRelationsMapping builds the relations map.
 func (s *specification) buildRelationsMapping() error {
 
 	s.relationsMap = relationMapping{}
@@ -508,4 +524,76 @@ func (s *specification) buildRelationsMapping() error {
 	}
 
 	return nil
+}
+
+func (s *specification) versionsFrom(version string) []string {
+
+	if version == "" {
+		return []string{"v1"}
+	}
+
+	initialVersion, err := versionToInt(version)
+	if err != nil {
+		panic(fmt.Sprintf("Invalid version '%s'", version))
+	}
+
+	var versions []int
+
+	for v := range s.RawAttributes {
+
+		currentVersion, err := versionToInt(v)
+		if err != nil {
+			panic(fmt.Sprintf("Invalid version '%s'", v))
+		}
+
+		if currentVersion <= initialVersion {
+			versions = append(versions, currentVersion)
+		}
+
+	}
+
+	sort.Ints(versions)
+
+	var out []string
+	for _, v := range versions {
+		out = append(out, fmt.Sprintf("v%d", v))
+	}
+
+	return out
+}
+
+func sortVersionsString(versions []string) []string {
+
+	var vs []int
+
+	for _, v := range versions {
+
+		currentVersion, err := versionToInt(v)
+		if err != nil {
+			panic(fmt.Sprintf("Invalid version '%s'", v))
+		}
+
+		vs = append(vs, currentVersion)
+	}
+
+	sort.Ints(vs)
+
+	var out []string
+	for _, v := range vs {
+		out = append(out, fmt.Sprintf("v%d", v))
+	}
+
+	return out
+}
+
+func sortAttributes(attrs []*Attribute) {
+
+	sort.Slice(attrs, func(i int, j int) bool {
+		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
+	})
+}
+
+func versionToInt(version string) (int, error) {
+
+	return strconv.Atoi(strings.TrimPrefix(version, "v"))
 }

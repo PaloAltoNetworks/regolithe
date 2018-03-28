@@ -717,3 +717,128 @@ func TestSpecification_ApplyBaseSpecifications(t *testing.T) {
 		})
 	})
 }
+
+func TestSpecifications_Versionning(t *testing.T) {
+
+	Convey("Given I have a specification", t, func() {
+
+		s := &specification{
+			RawModel: &Model{
+				ResourceName: "things",
+				RestName:     "thing",
+				Description:  "desc.",
+				EntityName:   "toto",
+				Package:      "package",
+			},
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:        "1.1",
+						Description: "desc.",
+						Type:        "string",
+					},
+					&Attribute{
+						Name:        "1.2",
+						Description: "desc.",
+						Type:        "string",
+					},
+				},
+				"v2": []*Attribute{
+					&Attribute{
+						Name:        "2.1",
+						Description: "desc.",
+						Type:        "string",
+					},
+				},
+				"v3": []*Attribute{
+					&Attribute{
+						Name:        "3.1",
+						Description: "desc.",
+						Type:        "string",
+					},
+					&Attribute{
+						Name:        "3.2",
+						Description: "desc.",
+						Type:        "string",
+					},
+					&Attribute{
+						Name:        "1.1",
+						Description: "desc.",
+						Type:        "string",
+					},
+				},
+			},
+		}
+
+		Convey("When I versionsFrom with v1", func() {
+
+			versions := s.versionsFrom("v1")
+
+			Convey("Then versions should be correct", func() {
+				So(versions, ShouldResemble, []string{"v1"})
+			})
+		})
+
+		Convey("When I versionsFrom with v2", func() {
+
+			versions := s.versionsFrom("v2")
+
+			Convey("Then versions should be correct", func() {
+				So(versions, ShouldResemble, []string{"v1", "v2"})
+			})
+		})
+
+		Convey("When I versionsFrom with v3", func() {
+
+			versions := s.versionsFrom("v3")
+
+			Convey("Then versions should be correct", func() {
+				So(versions, ShouldResemble, []string{"v1", "v2", "v3"})
+			})
+		})
+
+		Convey("When I versionsFrom with vNope", func() {
+
+			Convey("Then it should panic", func() {
+				So(func() { s.versionsFrom("vNope") }, ShouldPanicWith, "Invalid version 'vNope'")
+			})
+		})
+
+		Convey("When I call Attributes on v1", func() {
+
+			attrs := s.Attributes("v1")
+
+			Convey("Then attributes should be correct", func() {
+				So(len(attrs), ShouldEqual, 2)
+				So(attrs[0].Name, ShouldEqual, "1.1")
+				So(attrs[1].Name, ShouldEqual, "1.2")
+			})
+		})
+
+		Convey("When I call Attributes on v2", func() {
+
+			attrs := s.Attributes("v2")
+
+			Convey("Then attributes should be correct", func() {
+				So(len(attrs), ShouldEqual, 3)
+				So(attrs[0].Name, ShouldEqual, "1.1")
+				So(attrs[1].Name, ShouldEqual, "1.2")
+				So(attrs[2].Name, ShouldEqual, "2.1")
+			})
+		})
+
+		Convey("When I call Attributes on v3", func() {
+
+			attrs := s.Attributes("v3")
+
+			Convey("Then attributes should be correct", func() {
+				So(len(attrs), ShouldEqual, 5)
+				So(attrs[0].Name, ShouldEqual, "1.1")
+				So(attrs[1].Name, ShouldEqual, "1.2")
+				So(attrs[2].Name, ShouldEqual, "2.1")
+				So(attrs[3].Name, ShouldEqual, "3.1")
+				So(attrs[4].Name, ShouldEqual, "3.2")
+			})
+		})
+	})
+}
