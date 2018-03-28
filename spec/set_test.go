@@ -11,7 +11,7 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 
 	Convey("Given I load a spec folder", t, func() {
 
-		set, err := NewSpecificationSet(
+		set, err := LoadSpecificationSet(
 			"./tests",
 			func(n string) string {
 				return strings.ToUpper(n)

@@ -3,20 +3,11 @@ package regolithe
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"os"
-	"path"
 	"strings"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/src-d/go-git.v4/plumbing"
-	"gopkg.in/src-d/go-git.v4/plumbing/transport"
-	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
-
-	git "gopkg.in/src-d/go-git.v4"
 )
 
 // NewCommand generates a new CLI for regolith
@@ -68,7 +59,7 @@ func NewCommand(
 			var specSets []*spec.SpecificationSet
 
 			for _, dir := range viper.GetStringSlice("dir") {
-				set, err := spec.NewSpecificationSet(
+				set, err := spec.LoadSpecificationSet(
 					dir,
 					nameConvertFunc,
 					typeConvertFunc,
@@ -96,97 +87,11 @@ func NewCommand(
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			var auth transport.AuthMethod
-			if viper.GetString("token") != "" {
-				auth = &http.BasicAuth{
-					Username: "Bearer",
-					Password: viper.GetString("token"),
-				}
-			}
-
-			tmpFolder, err := ioutil.TempDir("", "regolithe-refs-head")
-			if err != nil {
-				return err
-			}
-			defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
-
-			var (
-				ref           plumbing.ReferenceName
-				needsCheckout bool
-			)
-
-			givenHash := plumbing.NewHash(viper.GetString("ref"))
-			if !givenHash.IsZero() {
-				ref = plumbing.NewReferenceFromStrings("refs/heads/master", "").Name()
-				needsCheckout = true
-			} else {
-				ref = plumbing.NewReferenceFromStrings("refs/heads/"+viper.GetString("ref"), "").Name()
-			}
-
-			logrus.WithFields(logrus.Fields{
-				"ref":  viper.GetString("ref"),
-				"repo": viper.GetString("repo"),
-				"path": viper.GetString("path"),
-			}).Info("Retrieving repository")
-
-			cloneFunc := func(folder string, ref plumbing.ReferenceName) (*git.Repository, error) {
-				return git.PlainClone(
-					folder,
-					false,
-					&git.CloneOptions{
-						URL:           viper.GetString("repo"),
-						Progress:      nil,
-						ReferenceName: ref,
-						Auth:          auth,
-					})
-			}
-
-			repo, err := cloneFunc(tmpFolder, ref)
-
-			if err != nil {
-				if err == plumbing.ErrReferenceNotFound {
-					logrus.WithFields(logrus.Fields{
-						"err":  err,
-						"ref":  viper.GetString("ref"),
-						"repo": viper.GetString("repo"),
-						"path": viper.GetString("path"),
-					}).Warn("Trying to clone with refs/tags - failed to clone with refs/heads")
-
-					// Need to recreate a folder, get error repository already created otherwise
-					// Happened even if old tmp folder is deleted...
-					tmpFolder, err = ioutil.TempDir("", "regolithe-refs-tags")
-					if err != nil {
-						return err
-					}
-					defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
-
-					ref = plumbing.NewReferenceFromStrings("refs/tags/"+viper.GetString("ref"), "").Name()
-					repo, err = cloneFunc(tmpFolder, ref)
-
-					if err != nil {
-						return err
-					}
-				} else {
-					return err
-				}
-			}
-
-			if needsCheckout {
-				wt, e := repo.Worktree()
-				if e != nil {
-					return e
-				}
-
-				if err = wt.Checkout(
-					&git.CheckoutOptions{
-						Hash: givenHash,
-					}); err != nil {
-					return err
-				}
-			}
-
-			specSet, err := spec.NewSpecificationSet(
-				path.Join(tmpFolder, viper.GetString("path")),
+			specSet, err := spec.LoadSpecificationSetFromGithub(
+				viper.GetString("token"),
+				viper.GetString("repo"),
+				viper.GetString("ref"),
+				viper.GetString("path"),
 				nameConvertFunc,
 				typeConvertFunc,
 				typeMappingName,
