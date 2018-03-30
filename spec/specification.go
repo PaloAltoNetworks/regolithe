@@ -405,11 +405,7 @@ func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
 		}
 	}
 
-	if err := s.buildAttributesMapping(); err != nil {
-		return err
-	}
-
-	return nil
+	return s.buildAttributesMapping()
 }
 
 // TypeProviders returns the unique list of all attributes type providers.
