@@ -16,6 +16,10 @@ export class RegolitheDocumentFormattingEditProvider {
         this.outputChannel = outputChannel;
     }
 
+    public provideDocumentFormattingEdits(doc: vscode.TextDocument, options: vscode.FormattingOptions, token: vscode.CancellationToken): Thenable<vscode.TextEdit[]> {
+        return this.format(doc)
+    }
+
     public format(doc: vscode.TextDocument): Thenable<vscode.TextEdit[]> {
 
         if (!shouldConsiderDocument(doc)) {

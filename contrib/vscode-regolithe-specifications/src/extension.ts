@@ -17,10 +17,22 @@ export function activate(ctx: vscode.ExtensionContext) {
 
     let lastFormatSuccess = false;
 
+    // This is the correct way to do it but it never triggers...
+    // ctx.subscriptions.push(
+    //     vscode.languages.registerDocumentFormattingEditProvider(
+    //         {language: 'yaml', pattern: "**/*.{spec,abs}"},
+    //         formatter,
+    //     ),
+    // );
+
     ctx.subscriptions.push(
         vscode.workspace.onWillSaveTextDocument(
             (e: vscode.TextDocumentWillSaveEvent): void => {
-                e.waitUntil(formatter.format(e.document).then(
+                const res = formatter.format(e.document)
+                if (res == null) {
+                    return
+                }
+                e.waitUntil(res.then(
                     edits => {
                         lastFormatSuccess = true;
                         return edits
