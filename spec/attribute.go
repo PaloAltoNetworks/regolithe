@@ -87,6 +87,7 @@ type Attribute struct {
 	PrimaryKey     bool            `yaml:"primary_key,omitempty"        json:"primary_key,omitempty"`
 	Secret         bool            `yaml:"secret,omitempty"             json:"secret,omitempty"`
 	Transient      bool            `yaml:"transient,omitempty"          json:"transient,omitempty"`
+	OmitEmpty      bool            `yaml:"omit_empty,omitempty"         json:"omit_empty,omitempty"`
 
 	ConvertedName string `yaml:"-" json:"-"`
 	ConvertedType string `yaml:"-" json:"-"`

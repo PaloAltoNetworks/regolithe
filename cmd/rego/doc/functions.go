@@ -263,6 +263,10 @@ func characteristics(attr *spec.Attribute) string {
 		fmt.Fprintln(w, "| Filterable \t|\t `true` \t|")
 	}
 
+	if attr.OmitEmpty {
+		fmt.Fprintln(w, "| Omit if empty \t|\t `true` \t|")
+	}
+
 	w.Flush() // nolint: errcheck
 
 	str := buf.String()

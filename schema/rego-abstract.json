@@ -127,6 +127,10 @@
                                 "description": "The name of the attribute",
                                 "type": "string"
                             },
+                            "omit_empty": {
+                                "description": "If true, the attribute can be dropped if empty or null",
+                                "type": "boolean"
+                            },
                             "orderable": {
                                 "description": "The attribute can be used for ordering purposes",
                                 "type": "boolean"
