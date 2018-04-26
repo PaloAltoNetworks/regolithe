@@ -110,5 +110,9 @@ func (a *Attribute) Validate() []error {
 		errs = append(errs, fmt.Errorf("%s.spec: description of attribute '%s' must end with a period", a.linkedSpecification.Model().RestName, a.Name))
 	}
 
+	if a.Required && a.DefaultValue != nil {
+		errs = append(errs, fmt.Errorf("%s.spec: attribute '%s' is required while it has a default value", a.linkedSpecification.Model().RestName, a.Name))
+	}
+
 	return errs
 }
