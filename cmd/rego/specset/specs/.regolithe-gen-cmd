@@ -1,0 +1,11 @@
+#!/bin/bash
+mkdir -p ../doc
+data=$(rego doc -d . || exit 1)
+echo "$data" > ../doc/documentation.md
+cd .. || exit 1
+elegen folder -d specs -o codegen || exit 1
+
+mkdir -p golang
+rm -rf ./golang/*.go
+mv codegen/elemental/*.go ./golang
+rm -rf codegen
