@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.aporeto.io/regolithe/spec"
 )
 
 // NewCommand generates a new CLI for regolith

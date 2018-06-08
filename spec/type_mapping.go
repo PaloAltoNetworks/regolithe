@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aporeto-inc/regolithe/schema"
 	"github.com/xeipuuv/gojsonschema"
+	"go.aporeto.io/regolithe/schema"
 	"gopkg.in/yaml.v2"
 )
 

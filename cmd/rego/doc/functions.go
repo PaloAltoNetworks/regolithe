@@ -8,7 +8,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/aporeto-inc/regolithe/spec"
+	"go.aporeto.io/regolithe/spec"
 )
 
 const rootSpecRestName = "root"

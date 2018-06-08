@@ -7,8 +7,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/aporeto-inc/regolithe/cmd/rego/static"
-	"github.com/aporeto-inc/regolithe/spec"
+	"go.aporeto.io/regolithe/cmd/rego/static"
+	"go.aporeto.io/regolithe/spec"
 )
 
 func shortString(s string, max int) string {

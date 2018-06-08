@@ -9,11 +9,11 @@ import (
 	"path"
 	"strings"
 
-	"github.com/aporeto-inc/regolithe/cmd/rego/doc"
-	"github.com/aporeto-inc/regolithe/cmd/rego/static"
-	"github.com/aporeto-inc/regolithe/spec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.aporeto.io/regolithe/cmd/rego/doc"
+	"go.aporeto.io/regolithe/cmd/rego/static"
+	"go.aporeto.io/regolithe/spec"
 )
 
 const (
