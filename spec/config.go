@@ -9,7 +9,6 @@ type Config struct {
 	Description string
 	Email       string
 	Name        string
-	Output      string
 	ProductName string
 	URL         string
 	Version     string
@@ -68,11 +67,6 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 	c.Name = nameKey.String()
-
-	outputKey, err := transformerSection.GetKey("output")
-	if err == nil {
-		c.Output = outputKey.String()
-	}
 
 	urlKey, err := transformerSection.GetKey("url")
 	if err == nil {

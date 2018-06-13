@@ -22,7 +22,6 @@ func TestConfog_LoadConfig(t *testing.T) {
 			So(cfg.Description, ShouldEqual, "basic test model")
 			So(cfg.Email, ShouldEqual, "contact@aporeto.com")
 			So(cfg.Name, ShouldEqual, "testmodel")
-			So(cfg.Output, ShouldEqual, "codegen")
 			So(cfg.ProductName, ShouldEqual, "Fixture")
 			So(cfg.URL, ShouldEqual, "aporeto.com")
 			So(cfg.Version, ShouldEqual, "1.0")
