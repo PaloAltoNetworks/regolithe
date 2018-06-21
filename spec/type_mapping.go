@@ -53,14 +53,14 @@ func LoadTypeMapping(path string) (TypeMapping, error) {
 // Mapping returns the TypeMap for the given external type.
 func (t TypeMapping) Mapping(mode string, externalType string) (mapping *TypeMap, err error) {
 
-	m, ok := t[mode]
-	if !ok {
-		return nil, fmt.Errorf("no mode '%s' found in type mapping", mode)
-	}
-
-	tm, ok := m[externalType]
+	m, ok := t[externalType]
 	if !ok {
 		return nil, fmt.Errorf("no type '%s' found in type mapping mode %s", externalType, mode)
+	}
+
+	tm, ok := m[mode]
+	if !ok {
+		return nil, fmt.Errorf("no mode '%s' found in type mapping", mode)
 	}
 
 	return tm, nil

@@ -13,6 +13,7 @@ cp ../../schema/*.json ./schemas
 (
     cd ../../cmd/rego/
     go generate
+    go install
     go build
 )
 
