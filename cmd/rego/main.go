@@ -78,6 +78,9 @@ func main() {
 			return doc.Write(s, viper.GetString("format"))
 		},
 	}
+	docCmd.Flags().StringP("dir", "d", "", "Path of the specifications folder.")
+	docCmd.Flags().String("format", "markdown", "Path of the specifications folder.")
+	// docCmd.Flags().StringP("category", "c", nil, "Category.")
 
 	var initCmd = &cobra.Command{
 		Use:           "init <dest>",
