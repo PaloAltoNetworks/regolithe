@@ -121,7 +121,7 @@ func main() {
 	)
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprint(os.Stderr, err.Error())
+		fmt.Fprint(os.Stderr, err.Error()) // nolint: errcheck
 		os.Exit(1)
 	}
 }
