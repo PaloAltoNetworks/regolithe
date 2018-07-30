@@ -1,5 +1,7 @@
 package spec
 
+import "fmt"
+
 // A Model holds generic information about a specification.
 type Model struct {
 
@@ -23,4 +25,16 @@ type Model struct {
 	IsRoot  bool     `yaml:"root,omitempty"     json:"root,omitempty"`
 
 	EntityNamePlural string `yaml:"-" json:"-"`
+}
+
+// Validate validates the Model.
+func (m *Model) Validate() []error {
+
+	var errs []error
+
+	if m.Description != "" && m.Description[len(m.Description)-1] != '.' {
+		errs = append(errs, fmt.Errorf("%s.spec: model description must end with a period", m.RestName))
+	}
+
+	return errs
 }

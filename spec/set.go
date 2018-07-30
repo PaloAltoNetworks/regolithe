@@ -365,10 +365,10 @@ func (s *specificationSet) Relationships() map[string]*Relationship {
 			model := spec.Model()
 			relatedModed := childrenSpec.Model()
 
-			if rel.AllowsGet {
+			if rel.Get != nil {
 				relationships[relatedModed.EntityName].Set("getmany", model.RestName)
 			}
-			if rel.AllowsCreate {
+			if rel.Create != nil {
 				relationships[relatedModed.EntityName].Set("create", model.RestName)
 			}
 		}
@@ -404,13 +404,13 @@ func (s *specificationSet) RelationshipsByRestName() map[string]*Relationship {
 
 		for _, rel := range spec.Relations() {
 
-			if rel.AllowsGet {
+			if rel.Get != nil {
 				relationships[rel.RestName].Set("getmany", model.RestName)
 			}
-			if rel.AllowsCreate {
+
+			if rel.Create != nil {
 				relationships[rel.RestName].Set("create", model.RestName)
 			}
-
 		}
 	}
 
@@ -446,10 +446,10 @@ func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationshi
 
 			childrenSpec := s.specs[rel.RestName]
 
-			if rel.AllowsGet {
+			if rel.Get != nil {
 				relationships[childrenSpec.Model().ResourceName].Set("getmany", model.RestName)
 			}
-			if rel.AllowsCreate {
+			if rel.Create != nil {
 				relationships[childrenSpec.Model().ResourceName].Set("create", model.RestName)
 			}
 

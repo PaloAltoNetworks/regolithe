@@ -58,7 +58,7 @@ func (o operation) String() string {
 func operations(spec spec.Specification, relationships map[string]*spec.Relationship, set spec.SpecificationSet) string {
 
 	var rootOps []operation
-	var parentOps []operation
+	var parentOps []operation // nolint
 	var childOps []operation
 
 	model := spec.Model()
@@ -94,7 +94,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				rootOps = append(rootOps, operation{
 					method: "GET",
 					url:    fmt.Sprintf("/%s", model.ResourceName),
-					doc:    childSpec.Relation(model.RestName).Descriptions["get"],
+					doc:    childSpec.Relation(model.RestName).Get.Description,
 				})
 				continue
 			}
@@ -103,7 +103,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 		parentOps = append(parentOps, operation{
 			method: "GET",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
-			doc:    childSpec.Relation(model.RestName).Descriptions["get"],
+			doc:    childSpec.Relation(model.RestName).Get.Description,
 		})
 	}
 
@@ -114,7 +114,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				rootOps = append(rootOps, operation{
 					method: "POST",
 					url:    fmt.Sprintf("/%s", model.ResourceName),
-					doc:    childSpec.Relation(model.RestName).Descriptions["create"],
+					doc:    childSpec.Relation(model.RestName).Create.Description,
 				})
 				continue
 			}
@@ -123,7 +123,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 		parentOps = append(parentOps, operation{
 			method: "POST",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
-			doc:    childSpec.Relation(model.RestName).Descriptions["create"],
+			doc:    childSpec.Relation(model.RestName).Create.Description,
 		})
 	}
 
@@ -132,32 +132,32 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 		childSpec := set.Specification(rel.RestName)
 		childModel := childSpec.Model()
 
-		if rel.AllowsCreate {
+		if rel.Create != nil {
 			childOps = append(childOps, operation{
 				method: "POST",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["create"],
+				doc:    rel.Create.Description,
 			})
 		}
-		if rel.AllowsUpdate {
+		if rel.Update != nil {
 			childOps = append(childOps, operation{
 				method: "PUT",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["update"],
+				doc:    rel.Update.Description,
 			})
 		}
-		if rel.AllowsGet {
+		if rel.Get != nil {
 			childOps = append(childOps, operation{
 				method: "GET",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["get"],
+				doc:    rel.Get.Description,
 			})
 		}
-		if rel.AllowsDelete {
+		if rel.Delete != nil {
 			childOps = append(childOps, operation{
 				method: "DELETE",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["delete"],
+				doc:    rel.Delete.Description,
 			})
 		}
 	}

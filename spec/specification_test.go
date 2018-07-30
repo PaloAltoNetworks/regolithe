@@ -439,21 +439,19 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 		})
 
 		Convey("Then the list of relations should be correct", func() {
-			So(rels[0].AllowsCreate, ShouldBeTrue)
-			So(rels[0].AllowsDelete, ShouldBeFalse)
-			So(rels[0].Deprecated, ShouldBeFalse)
-			So(rels[0].AllowsGet, ShouldBeTrue)
+			So(rels[0].Create, ShouldNotBeNil)
+			So(rels[0].Delete, ShouldBeNil)
+			So(rels[0].Update, ShouldBeNil)
+			So(rels[0].Get, ShouldNotBeNil)
 			So(rels[0].RestName, ShouldEqual, "list")
-			So(rels[0].AllowsUpdate, ShouldBeFalse)
 		})
 
 		Convey("Then the user relation should be correct", func() {
-			So(rels[1].AllowsCreate, ShouldBeTrue)
-			So(rels[1].AllowsDelete, ShouldBeFalse)
-			So(rels[1].Deprecated, ShouldBeFalse)
-			So(rels[1].AllowsGet, ShouldBeTrue)
+			So(rels[1].Create, ShouldNotBeNil)
+			So(rels[1].Delete, ShouldBeNil)
+			So(rels[1].Update, ShouldBeNil)
+			So(rels[1].Get, ShouldNotBeNil)
 			So(rels[1].RestName, ShouldEqual, "user")
-			So(rels[1].AllowsUpdate, ShouldBeFalse)
 		})
 
 	})

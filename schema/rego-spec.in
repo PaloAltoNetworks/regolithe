@@ -97,6 +97,38 @@
                 }
             }
         },
+        "parameter": {
+            "title": "Parameter",
+            "description": "Document a parameters that can be sent with the query.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "description": "Name of the parameter.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description of the parameter.",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "The type of parameter.",
+                    "type": "string",
+                    "enum": [
+                        "string",
+                        "integer",
+                        "float",
+                        "boolean",
+                        "enum",
+                        "time"
+                    ]
+                },
+                "multiple": {
+                    "description": "Defines if the parameter can be sent multiple times.",
+                    "type": "boolean"
+                }
+            }
+        },
         "attributes": {
 __ATTRIBUTE__
         },
@@ -106,61 +138,48 @@ __ATTRIBUTE__
             "type": "object",
             "additionalProperties": false,
             "required": [
-                "rest_name",
-                "descriptions"
+                "rest_name"
             ],
 
             "properties": {
-                "create": {
-                    "description": "The related objects can be created from the current represented object",
-                    "type": "boolean"
-                },
-                "delete": {
-                    "description": "The related objects can be deleted from the current represented object",
-                    "type": "boolean"
-                },
-                "deprecated": {
-                    "description": "The relation is deprecated",
-                    "type": "boolean"
-                },
-                "descriptions": {
-                    "$ref": "#/definitions/descriptions"
-                },
-                "get": {
-                    "description": "The related objects can be retrieved from the current represented object",
-                    "type": "boolean"
-                },
                 "rest_name": {
                     "description": "rest_name used as a link to the related object",
                     "type": "string"
                 },
+                "create": {
+                    "$ref": "#/definitions/relationAction"
+                },
+                "delete": {
+                    "$ref": "#/definitions/relationAction"
+                },
+                "get": {
+                    "$ref": "#/definitions/relationAction"
+                },
                 "update": {
-                    "description": "The related objects can be updated from the current represented object",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationAction"
                 }
             }
         },
-        "descriptions": {
-            "title": "Relation descriptions per action",
-            "description": "Documentation of the relation.",
+        "relationAction": {
+            "title": "Relation Action",
+            "description": "Specification of a action of a relation.",
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "create": {
-                    "description": "Documentation for the create operation.",
+                "description": {
+                    "description": "Description of the relation.",
                     "type": "string"
                 },
-                "delete": {
-                    "description": "Documentation for the delete operation",
+                "deprecated": {
+                    "description": "Tells if the relation is deprecated",
                     "type": "string"
                 },
-                "get": {
-                    "description": "Documentation for the get operation",
-                    "type": "string"
-                },
-                "update": {
-                    "description": "Documentation for the update operation",
-                    "type": "string"
+                "parameters": {
+                    "description": "List of parameters for the relation.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/parameter"
+                    }
                 }
             }
         }

@@ -11,15 +11,13 @@ model:
 # Relations
 relations:
 - rest_name: list
-  descriptions:
-    create: you.
-    get: yey.
-  get: true
-  create: true
+  get:
+    description: yey.
+  create:
+    description: you.
 
 - rest_name: user
-  descriptions:
-    create: you.
-    get: yey.
-  get: true
-  create: true
+  get:
+    description: yey.
+  create:
+    description: you.
