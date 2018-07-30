@@ -46,20 +46,79 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 
 		Convey("Then the relationships should be correct", func() {
 			rs := set.Relationships()
-			So(rs["List"].Get("get"), ShouldResemble, []string{"root"})
-			So(rs["List"].Get("create"), ShouldResemble, []string{"root"})
-			So(rs["List"].Get("update"), ShouldResemble, []string{"root"})
-			So(rs["List"].Get("delete"), ShouldResemble, []string{"root"})
-			So(rs["Task"].Get("get"), ShouldResemble, []string{"root"})
-			So(rs["Task"].Get("getmany"), ShouldResemble, []string{"list"})
-			So(rs["Task"].Get("create"), ShouldResemble, []string{"list"})
-			So(rs["Task"].Get("update"), ShouldResemble, []string{"root"})
-			So(rs["Task"].Get("delete"), ShouldResemble, []string{"root"})
-			So(rs["User"].Get("get"), ShouldResemble, []string{"root"})
-			So(rs["User"].Get("getmany"), ShouldResemble, []string{"list", "root"})
-			So(rs["User"].Get("create"), ShouldResemble, []string{"root"})
-			So(rs["User"].Get("update"), ShouldResemble, []string{"root"})
-			So(rs["User"].Get("delete"), ShouldResemble, []string{"root"})
+			So(rs["List"].Get, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Retrieves the list with the given ID.",
+				},
+			})
+			So(rs["List"].Create, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "you.",
+				},
+			})
+			So(rs["List"].Update, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Updates the list with the given ID.",
+				},
+			})
+			So(rs["List"].Delete, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Deletes the list with the given ID.",
+				},
+			})
+			So(rs["Task"].Get, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Retrieve the task with the given ID.",
+				},
+			})
+			So(rs["Task"].GetMany, ShouldResemble, map[string]*RelationAction{
+				"list": &RelationAction{
+					Description: "yeye.",
+				},
+			})
+			So(rs["Task"].Create, ShouldResemble, map[string]*RelationAction{
+				"list": &RelationAction{
+					Description: "yoyo.",
+				},
+			})
+			So(rs["Task"].Update, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Updates the task with the given ID.",
+				},
+			})
+			So(rs["Task"].Delete, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Deletes the task with the given ID.",
+				},
+			})
+			So(rs["User"].Get, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Retrieves the user with the given ID.",
+				},
+			})
+			So(rs["User"].GetMany, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "yey.",
+				},
+				"list": &RelationAction{
+					Description: "yeye.",
+				},
+			})
+			So(rs["User"].Create, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "you.",
+				},
+			})
+			So(rs["User"].Update, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Updates the user with the given ID.",
+				},
+			})
+			So(rs["User"].Delete, ShouldResemble, map[string]*RelationAction{
+				"root": &RelationAction{
+					Description: "Deletes the user with the given ID.",
+				},
+			})
 		})
 
 		Convey("Then the specification set should be correct", func() {

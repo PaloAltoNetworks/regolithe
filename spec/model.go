@@ -37,19 +37,19 @@ func (m *Model) Validate() []error {
 
 	if m.Get != nil {
 		if err := m.Get.Validate(m.RestName, m.RestName, "get"); err != nil {
-			errs = append(errs, err)
+			errs = append(errs, err...)
 		}
 	}
 
 	if m.Update != nil {
 		if err := m.Update.Validate(m.RestName, m.RestName, "update"); err != nil {
-			errs = append(errs, err)
+			errs = append(errs, err...)
 		}
 	}
 
 	if m.Delete != nil {
-		if err := m.Update.Validate(m.RestName, m.RestName, "delete"); err != nil {
-			errs = append(errs, err)
+		if err := m.Delete.Validate(m.RestName, m.RestName, "delete"); err != nil {
+			errs = append(errs, err...)
 		}
 	}
 

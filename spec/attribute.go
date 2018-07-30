@@ -114,5 +114,9 @@ func (a *Attribute) Validate() []error {
 		errs = append(errs, fmt.Errorf("%s.spec: attribute '%s' is required while it has a default value", a.linkedSpecification.Model().RestName, a.Name))
 	}
 
+	if a.Type == AttributeTypeEnum && len(a.AllowedChoices) == 0 {
+		errs = append(errs, fmt.Errorf("%s.spec: enum attribute '%s' must define allowed_choices", a.linkedSpecification.Model().RestName, a.Name))
+	}
+
 	return errs
 }

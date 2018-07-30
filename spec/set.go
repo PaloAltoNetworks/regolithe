@@ -348,13 +348,13 @@ func (s *specificationSet) Relationships() map[string]*Relationship {
 		model := spec.Model()
 		if !model.IsRoot {
 			if model.Update != nil {
-				relationships[model.EntityName].Set("update", "root")
+				relationships[model.EntityName].Set("update", "root", model.Update)
 			}
 			if model.Delete != nil {
-				relationships[model.EntityName].Set("delete", "root")
+				relationships[model.EntityName].Set("delete", "root", model.Delete)
 			}
 			if model.Get != nil {
-				relationships[model.EntityName].Set("get", "root")
+				relationships[model.EntityName].Set("get", "root", model.Get)
 			}
 		}
 
@@ -366,10 +366,10 @@ func (s *specificationSet) Relationships() map[string]*Relationship {
 			relatedModed := childrenSpec.Model()
 
 			if rel.Get != nil {
-				relationships[relatedModed.EntityName].Set("getmany", model.RestName)
+				relationships[relatedModed.EntityName].Set("getmany", model.RestName, rel.Get)
 			}
 			if rel.Create != nil {
-				relationships[relatedModed.EntityName].Set("create", model.RestName)
+				relationships[relatedModed.EntityName].Set("create", model.RestName, rel.Create)
 			}
 		}
 	}
@@ -392,24 +392,24 @@ func (s *specificationSet) RelationshipsByRestName() map[string]*Relationship {
 
 		if !model.IsRoot {
 			if model.Update != nil {
-				relationships[model.RestName].Set("update", "root")
+				relationships[model.RestName].Set("update", "root", model.Update)
 			}
 			if model.Delete != nil {
-				relationships[model.RestName].Set("delete", "root")
+				relationships[model.RestName].Set("delete", "root", model.Delete)
 			}
 			if model.Get != nil {
-				relationships[model.RestName].Set("get", "root")
+				relationships[model.RestName].Set("get", "root", model.Get)
 			}
 		}
 
 		for _, rel := range spec.Relations() {
 
 			if rel.Get != nil {
-				relationships[rel.RestName].Set("getmany", model.RestName)
+				relationships[rel.RestName].Set("getmany", model.RestName, rel.Get)
 			}
 
 			if rel.Create != nil {
-				relationships[rel.RestName].Set("create", model.RestName)
+				relationships[rel.RestName].Set("create", model.RestName, rel.Create)
 			}
 		}
 	}
@@ -432,13 +432,13 @@ func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationshi
 
 		if !model.IsRoot {
 			if model.Update != nil {
-				relationships[model.ResourceName].Set("update", "root")
+				relationships[model.ResourceName].Set("update", "root", model.Update)
 			}
 			if model.Delete != nil {
-				relationships[model.ResourceName].Set("delete", "root")
+				relationships[model.ResourceName].Set("delete", "root", model.Delete)
 			}
 			if model.Get != nil {
-				relationships[model.ResourceName].Set("get", "root")
+				relationships[model.ResourceName].Set("get", "root", model.Get)
 			}
 		}
 
@@ -447,10 +447,10 @@ func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationshi
 			childrenSpec := s.specs[rel.RestName]
 
 			if rel.Get != nil {
-				relationships[childrenSpec.Model().ResourceName].Set("getmany", model.RestName)
+				relationships[childrenSpec.Model().ResourceName].Set("getmany", model.RestName, rel.Get)
 			}
 			if rel.Create != nil {
-				relationships[childrenSpec.Model().ResourceName].Set("create", model.RestName)
+				relationships[childrenSpec.Model().ResourceName].Set("create", model.RestName, rel.Create)
 			}
 
 		}

@@ -87,43 +87,37 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 		})
 	}
 
-	for k := range relationships[model.RestName].AllowsGetMany {
+	for k, ra := range relationships[model.RestName].GetMany {
 		if k == rootSpecRestName {
-			if k == rootSpecRestName {
-				childSpec := set.Specification(rootSpecRestName)
-				rootOps = append(rootOps, operation{
-					method: "GET",
-					url:    fmt.Sprintf("/%s", model.ResourceName),
-					doc:    childSpec.Relation(model.RestName).Get.Description,
-				})
-				continue
-			}
+			rootOps = append(rootOps, operation{
+				method: "GET",
+				url:    fmt.Sprintf("/%s", model.ResourceName),
+				doc:    ra.Description,
+			})
+			continue
 		}
 		childSpec := set.Specification(k)
 		parentOps = append(parentOps, operation{
 			method: "GET",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
-			doc:    childSpec.Relation(model.RestName).Get.Description,
+			doc:    ra.Description,
 		})
 	}
 
-	for k := range relationships[model.RestName].AllowsCreate {
+	for k, ra := range relationships[model.RestName].Create {
 		if k == rootSpecRestName {
-			if k == rootSpecRestName {
-				childSpec := set.Specification(rootSpecRestName)
-				rootOps = append(rootOps, operation{
-					method: "POST",
-					url:    fmt.Sprintf("/%s", model.ResourceName),
-					doc:    childSpec.Relation(model.RestName).Create.Description,
-				})
-				continue
-			}
+			rootOps = append(rootOps, operation{
+				method: "POST",
+				url:    fmt.Sprintf("/%s", model.ResourceName),
+				doc:    ra.Description,
+			})
+			continue
 		}
 		childSpec := set.Specification(k)
 		parentOps = append(parentOps, operation{
 			method: "POST",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
-			doc:    childSpec.Relation(model.RestName).Create.Description,
+			doc:    ra.Description,
 		})
 	}
 

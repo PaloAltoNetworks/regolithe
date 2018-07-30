@@ -95,6 +95,11 @@
             "description": "Document a parameters that can be sent with the query.",
             "type": "object",
             "additionalProperties": false,
+            "required": [
+                "name",
+                "description",
+                "type"
+            ],
             "properties": {
                 "name": {
                     "description": "Name of the parameter.",
@@ -113,12 +118,32 @@
                         "float",
                         "boolean",
                         "enum",
+                        "duration",
                         "time"
                     ]
                 },
                 "multiple": {
                     "description": "Defines if the parameter can be sent multiple times.",
                     "type": "boolean"
+                },
+                "required": {
+                    "description": "Defines if the is required.",
+                    "type": "boolean"
+                },
+                "allowed_choices": {
+                    "description": "If the type is enum, lists all the possible values",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "default_value": {
+                    "description": "Default value of the parameter if omitted",
+                    "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                },
+                "example_value": {
+                    "description": "Example value of the parameter",
+                    "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
                 }
             }
         },
@@ -168,7 +193,6 @@ __ATTRIBUTE__
                     "type": "string"
                 },
                 "parameters": {
-                    "description": "List of parameters for the relation.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/parameter"
