@@ -7,9 +7,12 @@ model:
   description: Represent a a list of task to do.
   aliases:
   - lst
-  get: true
-  update: true
-  delete: true
+  get:
+    description: Retrieves the list with the given ID.
+  update:
+    description: Updates the list with the given ID.
+  delete:
+    description: Deletes the list with the given ID.
   extends:
   - '@base'
 

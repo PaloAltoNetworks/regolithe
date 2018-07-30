@@ -38,6 +38,16 @@ func TestRelation_Validate(t *testing.T) {
 			Update:   &RelationAction{Description: "hello update."},
 			Delete:   &RelationAction{Description: "hello delete."},
 			RestName: "remote",
+			currentSpecification: &specification{
+				RawModel: &Model{
+					EntityName: "current",
+				},
+			},
+			remoteSpecification: &specification{
+				RawModel: &Model{
+					EntityName: "remote",
+				},
+			},
 		}
 
 		Convey("When I call validate", func() {

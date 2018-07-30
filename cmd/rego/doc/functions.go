@@ -63,27 +63,27 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 
 	model := spec.Model()
 
-	if model.AllowsUpdate {
+	if model.Update != nil {
 		rootOps = append(rootOps, operation{
 			method: "PUT",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
-			doc:    fmt.Sprintf("Updates the `%s` with the given `:id`.", model.RestName),
+			doc:    model.Update.Description,
 		})
 	}
 
-	if model.AllowsDelete {
+	if model.Delete != nil {
 		rootOps = append(rootOps, operation{
 			method: "DELETE",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
-			doc:    fmt.Sprintf("Deletes the `%s` with the given `:id`.", model.RestName),
+			doc:    model.Delete.Description,
 		})
 	}
 
-	if model.AllowsGet {
+	if model.Get != nil {
 		rootOps = append(rootOps, operation{
 			method: "GET",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
-			doc:    fmt.Sprintf("Retrieve the `%s` with the given `:id`.", model.RestName),
+			doc:    model.Get.Description,
 		})
 	}
 

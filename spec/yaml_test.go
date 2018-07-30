@@ -12,12 +12,12 @@ func TestModel_orderedKeys(t *testing.T) {
 
 	Convey("Given I have a mode", t, func() {
 
+		ra := &RelationAction{}
 		m := &Model{
 			Aliases:      []string{"alias1", "alias2"},
-			AllowsCreate: false,
-			AllowsDelete: true,
-			AllowsGet:    true,
-			AllowsUpdate: true,
+			Delete:       ra,
+			Get:          ra,
+			Update:       ra,
 			Description:  "desc",
 			EntityName:   "entity name",
 			Extends:      []string{"ext1", "ext2"},
@@ -45,9 +45,9 @@ func TestModel_orderedKeys(t *testing.T) {
 				So(fmt.Sprintf("%#v", ms[4]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "description", Value: "desc"}))
 				So(fmt.Sprintf("%#v", ms[5]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "aliases", Value: []string{"alias1", "alias2"}}))
 				So(fmt.Sprintf("%#v", ms[6]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "private", Value: true}))
-				So(fmt.Sprintf("%#v", ms[7]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "get", Value: true}))
-				So(fmt.Sprintf("%#v", ms[8]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "update", Value: true}))
-				So(fmt.Sprintf("%#v", ms[9]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "delete", Value: true}))
+				So(fmt.Sprintf("%#v", ms[7]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "get", Value: ra}))
+				So(fmt.Sprintf("%#v", ms[8]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "update", Value: ra}))
+				So(fmt.Sprintf("%#v", ms[9]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "delete", Value: ra}))
 				So(fmt.Sprintf("%#v", ms[10]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "extends", Value: []string{"ext1", "ext2"}}))
 				So(fmt.Sprintf("%#v", ms[11]), ShouldResemble, fmt.Sprintf("%#v", yaml.MapItem{Key: "root", Value: true}))
 			})

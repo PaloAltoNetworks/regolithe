@@ -5,7 +5,8 @@ model:
   entity_name: Root
   package: todo-list
   description: Root object of the API.
-  get: true
+  get:
+    description: Retrieve the root object.
   root: true
 
 # Relations

@@ -154,10 +154,9 @@ func TestSpecification_Getters(t *testing.T) {
 				EntityName:   "Test",
 				ResourceName: "tests",
 				RestName:     "test",
-				AllowsCreate: true,
-				AllowsDelete: true,
-				AllowsGet:    true,
-				AllowsUpdate: true,
+				Delete:       &RelationAction{},
+				Get:          &RelationAction{},
+				Update:       &RelationAction{},
 			},
 			RawAttributes: map[string][]*Attribute{
 				"v1": []*Attribute{
@@ -420,10 +419,9 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 
 			model := spec.Model()
 
-			So(model.AllowsGet, ShouldBeTrue)
-			So(model.AllowsCreate, ShouldBeFalse)
-			So(model.AllowsDelete, ShouldBeFalse)
-			So(model.AllowsUpdate, ShouldBeFalse)
+			So(model.Get, ShouldNotBeNil)
+			So(model.Delete, ShouldBeNil)
+			So(model.Update, ShouldBeNil)
 			So(model.Description, ShouldEqual, "Root object of the API.")
 			So(model.EntityName, ShouldEqual, "Root")
 			So(model.Package, ShouldEqual, "todo-list")
@@ -467,10 +465,9 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 		})
 
 		Convey("Then the spec should be correctly initialized", func() {
-			So(model.AllowsGet, ShouldBeTrue)
-			So(model.AllowsCreate, ShouldBeFalse)
-			So(model.AllowsDelete, ShouldBeTrue)
-			So(model.AllowsUpdate, ShouldBeTrue)
+			So(model.Get, ShouldNotBeNil)
+			So(model.Delete, ShouldNotBeNil)
+			So(model.Update, ShouldNotBeNil)
 			So(model.Description, ShouldEqual, "Represent a task to do in a listd.")
 			So(model.EntityName, ShouldEqual, "Task")
 			So(model.Package, ShouldEqual, "todo-list")

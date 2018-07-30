@@ -10,20 +10,20 @@ type RelationAction struct {
 }
 
 // Validate validates the relation action.
-func (ra *RelationAction) Validate(spec Specification, remotespec Specification, k string) error {
+func (ra *RelationAction) Validate(currentRestName string, remoteRestName string, k string) error {
 
 	if ra.Description == "" {
-		return fmt.Errorf("%s.spec: relation '%s' to '%s' must have a description", spec.Model().RestName, k, remotespec.Model().RestName)
+		return fmt.Errorf("%s.spec: relation '%s' to '%s' must have a description", currentRestName, k, remoteRestName)
 	}
 
 	if ra.Description[len(ra.Description)-1] != '.' {
-		return fmt.Errorf("%s.spec: relation '%s' to '%s' description must end with a period", spec.Model().RestName, k, remotespec.Model().RestName)
+		return fmt.Errorf("%s.spec: relation '%s' to '%s' description must end with a period", currentRestName, k, remoteRestName)
 	}
 
 	var errs []error
 
 	for _, p := range ra.RawParameters {
-		if err := p.Validate(spec.Model().RestName); err != nil {
+		if err := p.Validate(currentRestName); err != nil {
 			errs = append(errs, err...)
 		}
 	}

@@ -27,25 +27,25 @@ func (r *Relation) Validate() []error {
 	var errs []error
 
 	if r.Get != nil {
-		if err := r.Get.Validate(r.currentSpecification, r.remoteSpecification, "get"); err != nil {
+		if err := r.Get.Validate(r.currentSpecification.Model().RestName, r.RestName, "get"); err != nil {
 			errs = append(errs, err)
 		}
 	}
 
 	if r.Create != nil {
-		if err := r.Create.Validate(r.currentSpecification, r.remoteSpecification, "create"); err != nil {
+		if err := r.Create.Validate(r.currentSpecification.Model().RestName, r.RestName, "create"); err != nil {
 			errs = append(errs, err)
 		}
 	}
 
 	if r.Update != nil {
-		if err := r.Update.Validate(r.currentSpecification, r.remoteSpecification, "update"); err != nil {
+		if err := r.Update.Validate(r.currentSpecification.Model().RestName, r.RestName, "update"); err != nil {
 			errs = append(errs, err)
 		}
 	}
 
 	if r.Delete != nil {
-		if err := r.Update.Validate(r.currentSpecification, r.remoteSpecification, "delete"); err != nil {
+		if err := r.Update.Validate(r.currentSpecification.Model().RestName, r.RestName, "delete"); err != nil {
 			errs = append(errs, err)
 		}
 	}

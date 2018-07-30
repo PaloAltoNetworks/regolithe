@@ -44,13 +44,11 @@
                         "type": "string"
                     }
                 },
-                "create": {
-                    "description": "The represented object can be created.",
-                    "type": "boolean"
+                "update": {
+                    "$ref": "#/definitions/relationAction"
                 },
                 "delete": {
-                    "description": "Therepresented object can be deleted.",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationAction"
                 },
                 "description": {
                     "description": "The description of the represented object.",
@@ -68,8 +66,7 @@
                     }
                 },
                 "get": {
-                    "description": "The represented object can be retrieved.",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationAction"
                 },
                 "package": {
                     "description": "The name of the package of the represented object.",
@@ -89,10 +86,6 @@
                 },
                 "root": {
                     "description": "The represented object acts as the root specification.",
-                    "type": "boolean"
-                },
-                "update": {
-                    "description": "The represented object can be updated.",
                     "type": "boolean"
                 }
             }

@@ -347,13 +347,13 @@ func (s *specificationSet) Relationships() map[string]*Relationship {
 
 		model := spec.Model()
 		if !model.IsRoot {
-			if model.AllowsUpdate {
+			if model.Update != nil {
 				relationships[model.EntityName].Set("update", "root")
 			}
-			if model.AllowsDelete {
+			if model.Delete != nil {
 				relationships[model.EntityName].Set("delete", "root")
 			}
-			if model.AllowsGet {
+			if model.Get != nil {
 				relationships[model.EntityName].Set("get", "root")
 			}
 		}
@@ -391,13 +391,13 @@ func (s *specificationSet) RelationshipsByRestName() map[string]*Relationship {
 		model := spec.Model()
 
 		if !model.IsRoot {
-			if model.AllowsUpdate {
+			if model.Update != nil {
 				relationships[model.RestName].Set("update", "root")
 			}
-			if model.AllowsDelete {
+			if model.Delete != nil {
 				relationships[model.RestName].Set("delete", "root")
 			}
-			if model.AllowsGet {
+			if model.Get != nil {
 				relationships[model.RestName].Set("get", "root")
 			}
 		}
@@ -431,13 +431,13 @@ func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationshi
 		model := spec.Model()
 
 		if !model.IsRoot {
-			if model.AllowsUpdate {
+			if model.Update != nil {
 				relationships[model.ResourceName].Set("update", "root")
 			}
-			if model.AllowsDelete {
+			if model.Delete != nil {
 				relationships[model.ResourceName].Set("delete", "root")
 			}
-			if model.AllowsGet {
+			if model.Get != nil {
 				relationships[model.ResourceName].Set("get", "root")
 			}
 		}
