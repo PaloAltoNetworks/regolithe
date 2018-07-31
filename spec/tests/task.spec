@@ -16,7 +16,6 @@ model:
   extends:
   - '@base'
 
-
 # Attributes
 attributes:
   v1:

@@ -4,9 +4,10 @@ import "fmt"
 
 // A RelationAction represents one the the possible action
 type RelationAction struct {
-	Description   string       `yaml:"description,omitempty"  json:"description,omitempty"`
-	RawParameters []*Parameter `yaml:"parameters,omitempty"   json:"parameters,omitempty"`
-	Deprecated    bool         `yaml:"deprecated,omitempty"   json:"deprecated,omitempty"`
+	Description        string       `yaml:"description,omitempty"           json:"description,omitempty"`
+	RawParameters      []*Parameter `yaml:"parameters,omitempty"            json:"parameters,omitempty"`
+	RequiredParameters [][][]string `yaml:"requiredParameters,omitempty"    json:"requiredParameters,omitempty"`
+	Deprecated         bool         `yaml:"deprecated,omitempty"            json:"deprecated,omitempty"`
 }
 
 // Validate validates the relation action.

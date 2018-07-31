@@ -126,10 +126,6 @@
                     "description": "Defines if the parameter can be sent multiple times.",
                     "type": "boolean"
                 },
-                "required": {
-                    "description": "Defines if the is required.",
-                    "type": "boolean"
-                },
                 "allowed_choices": {
                     "description": "If the type is enum, lists all the possible values",
                     "type": "array",
@@ -357,6 +353,9 @@
             "description": "Specification of a action of a relation.",
             "type": "object",
             "additionalProperties": false,
+            "required": [
+                "description"
+            ],
             "properties": {
                 "description": {
                     "description": "Description of the relation.",
@@ -365,6 +364,19 @@
                 "deprecated": {
                     "description": "Tells if the relation is deprecated",
                     "type": "string"
+                },
+                "requiredParameters": {
+                    "description": "Required parameters expressions. It will be treated as a list of ors of ands",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 },
                 "parameters": {
                     "type": "array",

@@ -25,7 +25,6 @@ type Parameter struct {
 	AllowedChoices []string      `yaml:"allowed_choices,omitempty"   json:"allowed_choices,omitempty"`
 	DefaultValue   interface{}   `yaml:"default_value,omitempty"     json:"default_value,omitempty"`
 	ExampleValue   interface{}   `yaml:"example_value,omitempty"     json:"example_value,omitempty"`
-	Required       bool          `yaml:"required,omitempty"          json:"required,omitempty"`
 	Multiple       bool          `yaml:"multiple,omitempty"          json:"multiple,omitempty"`
 }
 
@@ -56,12 +55,8 @@ func (p *Parameter) Validate(relatedReSTName string) []error {
 		errs = append(errs, fmt.Errorf("%s.spec: enum parameter '%s' must define allowed_choices", relatedReSTName, p.Name))
 	}
 
-	if p.Required && p.DefaultValue == nil && p.ExampleValue == nil {
-		errs = append(errs, fmt.Errorf("%s.spec: parameter '%s' must provide an example value", relatedReSTName, p.Name))
-	}
-
-	if p.Required && p.DefaultValue != nil {
-		errs = append(errs, fmt.Errorf("%s.spec: parameter '%s' is required while it has a default value", relatedReSTName, p.Name))
+	if p.DefaultValue == nil && p.ExampleValue == nil {
+		errs = append(errs, fmt.Errorf("%s.spec: parameter '%s' must provide an example value as it doesn't have a default", relatedReSTName, p.Name))
 	}
 
 	return errs
