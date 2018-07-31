@@ -6,6 +6,7 @@ import "fmt"
 type RelationAction struct {
 	Description         string               `yaml:"description,omitempty"           json:"description,omitempty"`
 	ParameterDefinition *ParameterDefinition `yaml:"parameters,omitempty"            json:"parameters,omitempty"`
+	ParameterReferences []string             `yaml:"globalParameters,omitempty"      json:"globalParameters,omitempty"`
 	Deprecated          bool                 `yaml:"deprecated,omitempty"            json:"deprecated,omitempty"`
 }
 

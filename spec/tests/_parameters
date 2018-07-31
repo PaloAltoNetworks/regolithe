@@ -1,0 +1,23 @@
+sharedParameterA:
+  entries:
+  - name: sAp1
+    description: this is sAp1.
+    type: string
+    example_value: sAp1
+
+  - name: sAp2
+    description: this is sAp2.
+    type: boolean
+    example_value: "true"
+
+sharedParameterB:
+  entries:
+  - name: sBp1
+    description: this is sBp1.
+    type: string
+    example_value: sBp1
+
+  - name: sBp2
+    description: this is sBp2.
+    type: boolean
+    example_value: "true"

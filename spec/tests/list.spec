@@ -19,6 +19,9 @@ model:
         description: this is lgp2.
         type: boolean
         example_value: "true"
+    globalParameters:
+    - sharedParameterA
+    - sharedParameterB
   update:
     description: Updates the list with the given ID.
     parameters:

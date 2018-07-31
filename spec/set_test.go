@@ -49,6 +49,10 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["List"].Get, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "Retrieves the list with the given ID.",
+					ParameterReferences: []string{
+						"sharedParameterA",
+						"sharedParameterB",
+					},
 					ParameterDefinition: &ParameterDefinition{
 						Entries: []*Parameter{
 							&Parameter{
@@ -60,6 +64,30 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 							&Parameter{
 								Name:         "lgp2",
 								Description:  "this is lgp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+							&Parameter{
+								Name:         "sAp1",
+								Description:  "this is sAp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "sAp1",
+							},
+							&Parameter{
+								Name:         "sAp2",
+								Description:  "this is sAp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+							&Parameter{
+								Name:         "sBp1",
+								Description:  "this is sBp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "sBp1",
+							},
+							&Parameter{
+								Name:         "sBp2",
+								Description:  "this is sBp2.",
 								Type:         ParameterTypeBool,
 								ExampleValue: "true",
 							},

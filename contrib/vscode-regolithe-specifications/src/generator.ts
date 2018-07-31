@@ -23,6 +23,7 @@ export class RegolitheGenerator {
         if (!shouldConsiderDocument(doc)
             && !doc.fileName.endsWith('_type.mapping')
             && !doc.fileName.endsWith('_api.info')
+            && !doc.fileName.endsWith('_parameters')
         ) {
             return;
         }

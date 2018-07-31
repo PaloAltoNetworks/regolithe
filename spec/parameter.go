@@ -1,6 +1,11 @@
 package spec
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+
+	"gopkg.in/yaml.v2"
+)
 
 // ParameterType represents the various type for a parameter.
 type ParameterType string
@@ -16,10 +21,42 @@ const (
 	ParameterTypeDuration ParameterType = "duration"
 )
 
+// LoadGlobalParameters loads the global parameters file.
+func LoadGlobalParameters(path string) (map[string]*ParameterDefinition, error) {
+
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close() // nolint: errcheck
+
+	pm := map[string]*ParameterDefinition{}
+
+	decoder := yaml.NewDecoder(file)
+	decoder.SetStrict(true)
+
+	if err := decoder.Decode(pm); err != nil {
+		return nil, err
+	}
+
+	for _, v := range pm {
+		if err := v.Validate("_parameters"); err != nil {
+			return nil, formatValidationErrors(err)
+		}
+	}
+
+	return pm, nil
+}
+
 // ParameterDefinition represents a parameter definition.
 type ParameterDefinition struct {
 	Required [][][]string `yaml:"required,omitempty"    json:"required,omitempty"`
 	Entries  []*Parameter `yaml:"entries,omitempty"     json:"entries,omitempty"`
+}
+
+func (p *ParameterDefinition) extend(additional *ParameterDefinition) {
+	p.Required = append(p.Required, additional.Required...)
+	p.Entries = append(p.Entries, additional.Entries...)
 }
 
 // Validate validates the parameter definition.

@@ -1,0 +1,84 @@
+            "title": "Parameter Set",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "required": {
+                    "title": "Parameters Requirements Expressions",
+                    "description": "Define what combinations of parameters are required.",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "entries": {
+                    "title": "List of Parameters",
+                    "description": "Describe the list of available parameters.",
+                    "type": "array",
+                    "items": {
+                        "title": "Parameter",
+                        "description": "Describe a single parameter",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "name",
+                            "description",
+                            "type"
+                        ],
+                        "properties": {
+                            "name": {
+                                "title": "Parameter Name",
+                                "description": "Name of the parameter.",
+                                "type": "string"
+                            },
+                            "description": {
+                                "title": "Parameter Description",
+                                "description": "Description of the parameter.",
+                                "type": "string"
+                            },
+                            "type": {
+                                "title": "Parameter Type",
+                                "description": "The type of parameter.",
+                                "type": "string",
+                                "enum": [
+                                    "string",
+                                    "integer",
+                                    "float",
+                                    "boolean",
+                                    "enum",
+                                    "duration",
+                                    "time"
+                                ]
+                            },
+                            "multiple": {
+                                "title": "Parameter Multiplicity",
+                                "description": "Defines if the parameter can be sent multiple times.",
+                                "type": "boolean"
+                            },
+                            "allowed_choices": {
+                                "title": "Parameter Possile Values",
+                                "description": "If the type is enum, lists all the possible values",
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "default_value": {
+                                "title": "Parameter Default Value",
+                                "description": "Default value of the parameter if omitted",
+                                "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                            },
+                            "example_value": {
+                                "title": "Parameter Example Value",
+                                "description": "Example value of the parameter",
+                                "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                            }
+                        }
+                    }
+                }
+            }

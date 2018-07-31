@@ -91,12 +91,13 @@
             }
         },
         "parameters": {
-            "title": "Parameter Definition",
+            "title": "Parameter Set",
             "type": "object",
             "additionalProperties": false,
             "properties": {
                 "required": {
-                    "description": "Required parameters expressions. It will be treated as a list of ors of ands",
+                    "title": "Parameters Requirements Expressions",
+                    "description": "Define what combinations of parameters are required.",
                     "type": "array",
                     "items": {
                         "type": "array",
@@ -109,55 +110,67 @@
                     }
                 },
                 "entries": {
-                    "title": "Parameter",
-                    "description": "Document a parameters that can be sent with the query.",
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "name",
-                        "description",
-                        "type"
-                    ],
-                    "properties": {
-                        "name": {
-                            "description": "Name of the parameter.",
-                            "type": "string"
-                        },
-                        "description": {
-                            "description": "Description of the parameter.",
-                            "type": "string"
-                        },
-                        "type": {
-                            "description": "The type of parameter.",
-                            "type": "string",
-                            "enum": [
-                                "string",
-                                "integer",
-                                "float",
-                                "boolean",
-                                "enum",
-                                "duration",
-                                "time"
-                            ]
-                        },
-                        "multiple": {
-                            "description": "Defines if the parameter can be sent multiple times.",
-                            "type": "boolean"
-                        },
-                        "allowed_choices": {
-                            "description": "If the type is enum, lists all the possible values",
-                            "type": "array",
-                            "items": {
+                    "title": "List of Parameters",
+                    "description": "Describe the list of available parameters.",
+                    "type": "array",
+                    "items": {
+                        "title": "Parameter",
+                        "description": "Describe a single parameter",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "name",
+                            "description",
+                            "type"
+                        ],
+                        "properties": {
+                            "name": {
+                                "title": "Parameter Name",
+                                "description": "Name of the parameter.",
                                 "type": "string"
+                            },
+                            "description": {
+                                "title": "Parameter Description",
+                                "description": "Description of the parameter.",
+                                "type": "string"
+                            },
+                            "type": {
+                                "title": "Parameter Type",
+                                "description": "The type of parameter.",
+                                "type": "string",
+                                "enum": [
+                                    "string",
+                                    "integer",
+                                    "float",
+                                    "boolean",
+                                    "enum",
+                                    "duration",
+                                    "time"
+                                ]
+                            },
+                            "multiple": {
+                                "title": "Parameter Multiplicity",
+                                "description": "Defines if the parameter can be sent multiple times.",
+                                "type": "boolean"
+                            },
+                            "allowed_choices": {
+                                "title": "Parameter Possile Values",
+                                "description": "If the type is enum, lists all the possible values",
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "default_value": {
+                                "title": "Parameter Default Value",
+                                "description": "Default value of the parameter if omitted",
+                                "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                            },
+                            "example_value": {
+                                "title": "Parameter Example Value",
+                                "description": "Example value of the parameter",
+                                "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
                             }
-                        },
-                        "default_value": {
-                            "description": "Default value of the parameter if omitted",
-                            "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
-                        },
-                        "example_value": {
-                            "description": "Example value of the parameter",
-                            "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
                         }
                     }
                 }
@@ -378,18 +391,25 @@
             ],
             "properties": {
                 "description": {
+                    "title": "Relation Description",
                     "description": "Description of the relation.",
                     "type": "string"
                 },
                 "deprecated": {
+                    "title": "Relation Depreciation",
                     "description": "Tells if the relation is deprecated",
-                    "type": "string"
+                    "type": "boolean"
+                },
+                "globalParameters": {
+                    "title": "Global Parameters References",
+                    "description": "Reference to global parameters defined in the _parameters file",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "parameters": {
-                    "type": "object",
-                    "items": {
-                        "$ref": "#/definitions/parameters"
-                    }
+                    "$ref": "#/definitions/parameters"
                 }
             }
         }
