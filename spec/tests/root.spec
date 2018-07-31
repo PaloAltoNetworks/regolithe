@@ -15,46 +15,50 @@ relations:
   get:
     description: yey.
     parameters:
-    - name: rlgmp1
-      description: this is rlgmp1.
-      type: string
-      example_value: rlgmp1
-    - name: rlgmp2
-      description: this is rlgmp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: rlgmp1
+        description: this is rlgmp1.
+        type: string
+        example_value: rlgmp1
+      - name: rlgmp2
+        description: this is rlgmp2.
+        type: boolean
+        example_value: "true"
   create:
     description: you.
     parameters:
-    - name: rlcp1
-      description: this is rlcp1.
-      type: string
-      example_value: rlcp1
-    - name: rlcp2
-      description: this is rlcp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: rlcp1
+        description: this is rlcp1.
+        type: string
+        example_value: rlcp1
+      - name: rlcp2
+        description: this is rlcp2.
+        type: boolean
+        example_value: "true"
 
 - rest_name: user
   get:
     description: yey.
     parameters:
-    - name: rugmp1
-      description: this is rugmp1.
-      type: string
-      example_value: rugmp1
-    - name: rugmp2
-      description: this is rugmp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: rugmp1
+        description: this is rugmp1.
+        type: string
+        example_value: rugmp1
+      - name: rugmp2
+        description: this is rugmp2.
+        type: boolean
+        example_value: "true"
   create:
     description: you.
     parameters:
-    - name: rucp1
-      description: this is rucp1.
-      type: string
-      example_value: rucp1
-    - name: rucp2
-      description: this is rucp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: rucp1
+        description: this is rucp1.
+        type: string
+        example_value: rucp1
+      - name: rucp2
+        description: this is rucp2.
+        type: boolean
+        example_value: "true"

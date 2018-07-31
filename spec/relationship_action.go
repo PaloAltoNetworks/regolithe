@@ -4,10 +4,9 @@ import "fmt"
 
 // A RelationAction represents one the the possible action
 type RelationAction struct {
-	Description        string       `yaml:"description,omitempty"           json:"description,omitempty"`
-	RawParameters      []*Parameter `yaml:"parameters,omitempty"            json:"parameters,omitempty"`
-	RequiredParameters [][][]string `yaml:"requiredParameters,omitempty"    json:"requiredParameters,omitempty"`
-	Deprecated         bool         `yaml:"deprecated,omitempty"            json:"deprecated,omitempty"`
+	Description         string               `yaml:"description,omitempty"           json:"description,omitempty"`
+	ParameterDefinition *ParameterDefinition `yaml:"parameters,omitempty"            json:"parameters,omitempty"`
+	Deprecated          bool                 `yaml:"deprecated,omitempty"            json:"deprecated,omitempty"`
 }
 
 // Validate validates the relation action.
@@ -23,28 +22,11 @@ func (ra *RelationAction) Validate(currentRestName string, remoteRestName string
 		errs = append(errs, fmt.Errorf("%s.spec: relation '%s' to '%s' description must end with a period", currentRestName, k, remoteRestName))
 	}
 
-	for _, p := range ra.RawParameters {
-		if err := p.Validate(currentRestName); err != nil {
+	if ra.ParameterDefinition != nil {
+		if err := ra.ParameterDefinition.Validate(currentRestName); err != nil {
 			errs = append(errs, err...)
 		}
 	}
 
 	return errs
-}
-
-// Parameters returns the parameters list.
-func (ra *RelationAction) Parameters() []*Parameter {
-	return ra.RawParameters
-}
-
-// Parameter returns the Parameter with the given name.
-func (ra *RelationAction) Parameter(name string) *Parameter {
-
-	for _, p := range ra.RawParameters {
-		if p.Name == name {
-			return p
-		}
-	}
-
-	return nil
 }

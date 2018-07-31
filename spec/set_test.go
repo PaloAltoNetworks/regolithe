@@ -49,21 +49,85 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["List"].Get, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "Retrieves the list with the given ID.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "lgp1",
+								Description:  "this is lgp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "lgp1",
+							},
+							&Parameter{
+								Name:         "lgp2",
+								Description:  "this is lgp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 			})
 			So(rs["List"].Create, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "you.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "rlcp1",
+								Description:  "this is rlcp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "rlcp1",
+							},
+							&Parameter{
+								Name:         "rlcp2",
+								Description:  "this is rlcp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 			})
 			So(rs["List"].Update, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "Updates the list with the given ID.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "lup1",
+								Description:  "this is lup1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "lup1",
+							},
+							&Parameter{
+								Name:         "lup2",
+								Description:  "this is lup2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 			})
 			So(rs["List"].Delete, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "Deletes the list with the given ID.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "ldp1",
+								Description:  "this is ldp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "ldp1",
+							},
+							&Parameter{
+								Name:         "ldp2",
+								Description:  "this is ldp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 			})
 			So(rs["Task"].Get, ShouldResemble, map[string]*RelationAction{
@@ -74,11 +138,43 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["Task"].GetMany, ShouldResemble, map[string]*RelationAction{
 				"list": &RelationAction{
 					Description: "yeye.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "ltgp1",
+								Description:  "this is ltgp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "ltgp1",
+							},
+							&Parameter{
+								Name:         "ltgp2",
+								Description:  "this is ltgp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 			})
 			So(rs["Task"].Create, ShouldResemble, map[string]*RelationAction{
 				"list": &RelationAction{
 					Description: "yoyo.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "ltcp1",
+								Description:  "this is ltcp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "ltcp1",
+							},
+							&Parameter{
+								Name:         "ltcp2",
+								Description:  "this is ltcp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 			})
 			So(rs["Task"].Update, ShouldResemble, map[string]*RelationAction{
@@ -99,6 +195,22 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["User"].GetMany, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "yey.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "rugmp1",
+								Description:  "this is rugmp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "rugmp1",
+							},
+							&Parameter{
+								Name:         "rugmp2",
+								Description:  "this is rugmp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 				"list": &RelationAction{
 					Description: "yeye.",
@@ -107,6 +219,22 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["User"].Create, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "you.",
+					ParameterDefinition: &ParameterDefinition{
+						Entries: []*Parameter{
+							&Parameter{
+								Name:         "rucp1",
+								Description:  "this is rucp1.",
+								Type:         ParameterTypeString,
+								ExampleValue: "rucp1",
+							},
+							&Parameter{
+								Name:         "rucp2",
+								Description:  "this is rucp2.",
+								Type:         ParameterTypeBool,
+								ExampleValue: "true",
+							},
+						},
+					},
 				},
 			})
 			So(rs["User"].Update, ShouldResemble, map[string]*RelationAction{

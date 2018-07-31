@@ -90,56 +90,76 @@
                 }
             }
         },
-        "parameter": {
-            "title": "Parameter",
-            "description": "Document a parameters that can be sent with the query.",
+        "parameters": {
+            "title": "Parameter Definition",
             "type": "object",
             "additionalProperties": false,
-            "required": [
-                "name",
-                "description",
-                "type"
-            ],
             "properties": {
-                "name": {
-                    "description": "Name of the parameter.",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "Description of the parameter.",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "The type of parameter.",
-                    "type": "string",
-                    "enum": [
-                        "string",
-                        "integer",
-                        "float",
-                        "boolean",
-                        "enum",
-                        "duration",
-                        "time"
-                    ]
-                },
-                "multiple": {
-                    "description": "Defines if the parameter can be sent multiple times.",
-                    "type": "boolean"
-                },
-                "allowed_choices": {
-                    "description": "If the type is enum, lists all the possible values",
+                "required": {
+                    "description": "Required parameters expressions. It will be treated as a list of ors of ands",
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
                     }
                 },
-                "default_value": {
-                    "description": "Default value of the parameter if omitted",
-                    "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
-                },
-                "example_value": {
-                    "description": "Example value of the parameter",
-                    "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                "entries": {
+                    "title": "Parameter",
+                    "description": "Document a parameters that can be sent with the query.",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "name",
+                        "description",
+                        "type"
+                    ],
+                    "properties": {
+                        "name": {
+                            "description": "Name of the parameter.",
+                            "type": "string"
+                        },
+                        "description": {
+                            "description": "Description of the parameter.",
+                            "type": "string"
+                        },
+                        "type": {
+                            "description": "The type of parameter.",
+                            "type": "string",
+                            "enum": [
+                                "string",
+                                "integer",
+                                "float",
+                                "boolean",
+                                "enum",
+                                "duration",
+                                "time"
+                            ]
+                        },
+                        "multiple": {
+                            "description": "Defines if the parameter can be sent multiple times.",
+                            "type": "boolean"
+                        },
+                        "allowed_choices": {
+                            "description": "If the type is enum, lists all the possible values",
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "default_value": {
+                            "description": "Default value of the parameter if omitted",
+                            "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                        },
+                        "example_value": {
+                            "description": "Example value of the parameter",
+                            "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                        }
+                    }
                 }
             }
         },
@@ -365,23 +385,10 @@
                     "description": "Tells if the relation is deprecated",
                     "type": "string"
                 },
-                "requiredParameters": {
-                    "description": "Required parameters expressions. It will be treated as a list of ors of ands",
-                    "type": "array",
-                    "items": {
-                        "type": "array",
-                        "items": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
                 "parameters": {
-                    "type": "array",
+                    "type": "object",
                     "items": {
-                        "$ref": "#/definitions/parameter"
+                        "$ref": "#/definitions/parameters"
                     }
                 }
             }

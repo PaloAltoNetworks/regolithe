@@ -10,36 +10,39 @@ model:
   get:
     description: Retrieves the list with the given ID.
     parameters:
-    - name: lgp1
-      description: this is lgp1.
-      type: string
-      example_value: lgp1
-    - name: lgp2
-      description: this is lgp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: lgp1
+        description: this is lgp1.
+        type: string
+        example_value: lgp1
+      - name: lgp2
+        description: this is lgp2.
+        type: boolean
+        example_value: "true"
   update:
     description: Updates the list with the given ID.
     parameters:
-    - name: lup1
-      description: this is lpu1.
-      type: string
-      example_value: lpu1
-    - name: lup2
-      description: this is lpu2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: lup1
+        description: this is lup1.
+        type: string
+        example_value: lup1
+      - name: lup2
+        description: this is lup2.
+        type: boolean
+        example_value: "true"
   delete:
     description: Deletes the list with the given ID.
     parameters:
-    - name: ldp1
-      description: this is ldp1.
-      type: string
-      example_value: ldp1
-    - name: ldp2
-      description: this is ldp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: ldp1
+        description: this is ldp1.
+        type: string
+        example_value: ldp1
+      - name: ldp2
+        description: this is ldp2.
+        type: boolean
+        example_value: "true"
   extends:
   - '@base'
 
@@ -119,25 +122,27 @@ relations:
   get:
     description: yeye.
     parameters:
-    - name: ltgp1
-      description: this is ltgp1.
-      type: string
-      example_value: ltgp1
-    - name: ltgp2
-      description: this is ltgp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: ltgp1
+        description: this is ltgp1.
+        type: string
+        example_value: ltgp1
+      - name: ltgp2
+        description: this is ltgp2.
+        type: boolean
+        example_value: "true"
   create:
     description: yoyo.
     parameters:
-    - name: ltcp1
-      description: this is ltcp1.
-      type: string
-      example_value: ltcp1
-    - name: ltcp2
-      description: this is ltcp2.
-      type: boolean
-      example_value: "true"
+      entries:
+      - name: ltcp1
+        description: this is ltcp1.
+        type: string
+        example_value: ltcp1
+      - name: ltcp2
+        description: this is ltcp2.
+        type: boolean
+        example_value: "true"
 
 - rest_name: user
   get:

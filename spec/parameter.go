@@ -16,6 +16,25 @@ const (
 	ParameterTypeDuration ParameterType = "duration"
 )
 
+// ParameterDefinition represents a parameter definition.
+type ParameterDefinition struct {
+	Required [][][]string `yaml:"required,omitempty"    json:"required,omitempty"`
+	Entries  []*Parameter `yaml:"entries,omitempty"     json:"entries,omitempty"`
+}
+
+// Validate validates the parameter definition.
+func (p *ParameterDefinition) Validate(relatedReSTName string) []error {
+
+	var errs []error
+	for _, p := range p.Entries {
+		if err := p.Validate(relatedReSTName); err != nil {
+			errs = append(errs, err...)
+		}
+	}
+
+	return errs
+}
+
 // A Parameter represent one parameter that can be
 // sent with a query
 type Parameter struct {
