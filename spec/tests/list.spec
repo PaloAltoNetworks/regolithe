@@ -9,10 +9,31 @@ model:
   - lst
   get:
     description: Retrieves the list with the given ID.
+    parameters:
+    - name: lgp1
+      description: this is lgp1.
+      type: string
+    - name: lgp2
+      description: this is lgp2.
+      type: boolean
   update:
     description: Updates the list with the given ID.
+    parameters:
+    - name: lup1
+      description: this is lpu1.
+      type: string
+    - name: lup2
+      description: this is lpu2.
+      type: boolean
   delete:
     description: Deletes the list with the given ID.
+    parameters:
+    - name: ldp1
+      description: this is ldp1.
+      type: string
+    - name: ldp2
+      description: this is ldp2.
+      type: boolean
   extends:
   - '@base'
 
@@ -91,8 +112,22 @@ relations:
 - rest_name: task
   get:
     description: yeye.
+    parameters:
+    - name: ltgp1
+      description: this is ltgp1.
+      type: string
+    - name: ltgp2
+      description: this is ltgp2.
+      type: boolean
   create:
     description: yoyo.
+    parameters:
+    - name: ltcp1
+      description: this is ltcp1.
+      type: string
+    - name: ltcp2
+      description: this is ltcp2.
+      type: boolean
 
 - rest_name: user
   get:
