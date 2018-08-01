@@ -97,6 +97,13 @@ func sortAttributes(attrs []*Attribute) {
 	})
 }
 
+func sortParameters(params []*Parameter) {
+
+	sort.Slice(params, func(i int, j int) bool {
+		return strings.Compare(params[i].Name, params[j].Name) == -1
+	})
+}
+
 func versionToInt(version string) (int, error) {
 
 	return strconv.Atoi(strings.TrimPrefix(version, "v"))

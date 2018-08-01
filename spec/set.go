@@ -292,67 +292,81 @@ func LoadSpecificationSet(
 			if spec.Model() != nil {
 
 				if spec.Model().Get != nil {
-					for _, pr := range spec.Model().Get.ParameterReferences {
+					for _, key := range spec.Model().Get.ParameterReferences {
 						if spec.Model().Get.ParameterDefinition == nil {
 							spec.Model().Get.ParameterDefinition = &ParameterDefinition{}
 						}
-						spec.Model().Get.ParameterDefinition.extend(set.globalParameters[pr])
+						if err := spec.Model().Get.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							return nil, err
+						}
 					}
 				}
 
 				if spec.Model().Update != nil {
-					for _, pr := range spec.Model().Update.ParameterReferences {
+					for _, key := range spec.Model().Update.ParameterReferences {
 						if spec.Model().Update.ParameterDefinition == nil {
 							spec.Model().Update.ParameterDefinition = &ParameterDefinition{}
 						}
-						spec.Model().Update.ParameterDefinition.extend(set.globalParameters[pr])
+						if err := spec.Model().Update.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							return nil, err
+						}
 					}
 				}
 
 				if spec.Model().Delete != nil {
-					for _, pr := range spec.Model().Delete.ParameterReferences {
+					for _, key := range spec.Model().Delete.ParameterReferences {
 						if spec.Model().Delete.ParameterDefinition == nil {
 							spec.Model().Delete.ParameterDefinition = &ParameterDefinition{}
 						}
-						spec.Model().Delete.ParameterDefinition.extend(set.globalParameters[pr])
+						if err := spec.Model().Delete.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							return nil, err
+						}
 					}
 				}
 
 				for _, r := range spec.Relations() {
 
 					if r.Create != nil {
-						for _, pr := range r.Create.ParameterReferences {
+						for _, key := range r.Create.ParameterReferences {
 							if r.Create.ParameterDefinition == nil {
 								r.Create.ParameterDefinition = &ParameterDefinition{}
 							}
-							r.Create.ParameterDefinition.extend(set.globalParameters[pr])
+							if err := r.Create.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
 						}
 					}
 
 					if r.Get != nil {
-						for _, pr := range r.Get.ParameterReferences {
+						for _, key := range r.Get.ParameterReferences {
 							if r.Get.ParameterDefinition == nil {
 								r.Get.ParameterDefinition = &ParameterDefinition{}
 							}
-							r.Get.ParameterDefinition.extend(set.globalParameters[pr])
+							if err := r.Get.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
 						}
 					}
 
 					if r.Update != nil {
-						for _, pr := range r.Update.ParameterReferences {
+						for _, key := range r.Update.ParameterReferences {
 							if r.Update.ParameterDefinition == nil {
 								r.Update.ParameterDefinition = &ParameterDefinition{}
 							}
-							r.Update.ParameterDefinition.extend(set.globalParameters[pr])
+							if err := r.Update.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
 						}
 					}
 
 					if r.Delete != nil {
-						for _, pr := range r.Delete.ParameterReferences {
+						for _, key := range r.Delete.ParameterReferences {
 							if r.Delete.ParameterDefinition == nil {
 								r.Delete.ParameterDefinition = &ParameterDefinition{}
 							}
-							r.Delete.ParameterDefinition.extend(set.globalParameters[pr])
+							if err := r.Delete.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
 						}
 					}
 				}

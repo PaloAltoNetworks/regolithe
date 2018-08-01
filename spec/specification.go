@@ -133,18 +133,30 @@ func (s *specification) Write(writer io.Writer) error {
 		for i, rel := range s.RawRelations {
 			if rel.Get != nil {
 				rel.Get.Description = wordwrap.WrapString(rel.Get.Description, 80)
+				if rel.Get.ParameterDefinition != nil {
+					sortParameters(rel.Get.ParameterDefinition.Entries)
+				}
 			}
 
 			if rel.Create != nil {
 				rel.Create.Description = wordwrap.WrapString(rel.Create.Description, 80)
+				if rel.Create.ParameterDefinition != nil {
+					sortParameters(rel.Create.ParameterDefinition.Entries)
+				}
 			}
 
 			if rel.Update != nil {
 				rel.Update.Description = wordwrap.WrapString(rel.Update.Description, 80)
+				if rel.Update.ParameterDefinition != nil {
+					sortParameters(rel.Update.ParameterDefinition.Entries)
+				}
 			}
 
 			if rel.Delete != nil {
 				rel.Delete.Description = wordwrap.WrapString(rel.Delete.Description, 80)
+				if rel.Delete.ParameterDefinition != nil {
+					sortParameters(rel.Delete.ParameterDefinition.Entries)
+				}
 			}
 
 			relations[i] = toYAMLMapSlice(rel)
@@ -163,6 +175,7 @@ func (s *specification) Write(writer io.Writer) error {
 	prfx1 := []byte("- ")
 	prfx2 := []byte("  - name")
 	prfx3 := []byte("  v")
+	prfx4 := []byte("      - name")
 	sufx1 := []byte(":")
 	yamlModelKey := []byte(rootModelKey + ":")
 	yamlAttrKey := []byte(rootAttributesKey + ":")
@@ -175,7 +188,10 @@ func (s *specification) Write(writer io.Writer) error {
 
 		condFirstLine := i == 0
 		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
-		condPrefixed := bytes.HasPrefix(line, prfx1) || bytes.HasPrefix(line, prfx3) || (bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1))
+		condPrefixed := bytes.HasPrefix(line, prfx1) ||
+			bytes.HasPrefix(line, prfx3) ||
+			(bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1)) ||
+			(bytes.HasPrefix(line, prfx4) && !bytes.HasSuffix(previousLine, sufx1))
 
 		if !condFirstLine && !condFirstIn && condPrefixed {
 			buf.WriteRune('\n')

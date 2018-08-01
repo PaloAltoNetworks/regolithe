@@ -54,9 +54,16 @@ type ParameterDefinition struct {
 	Entries  []*Parameter `yaml:"entries,omitempty"     json:"entries,omitempty"`
 }
 
-func (p *ParameterDefinition) extend(additional *ParameterDefinition) {
+func (p *ParameterDefinition) extend(additional *ParameterDefinition, key string) error {
+
+	if additional == nil {
+		return fmt.Errorf("unable to find global parameter key '%s'", key)
+	}
+
 	p.Required = append(p.Required, additional.Required...)
 	p.Entries = append(p.Entries, additional.Entries...)
+
+	return nil
 }
 
 // Validate validates the parameter definition.
@@ -78,10 +85,10 @@ type Parameter struct {
 	Name           string        `yaml:"name,omitempty"              json:"name,omitempty"`
 	Description    string        `yaml:"description,omitempty"       json:"description,omitempty"`
 	Type           ParameterType `yaml:"type,omitempty"              json:"type,omitempty"`
+	Multiple       bool          `yaml:"multiple,omitempty"          json:"multiple,omitempty"`
 	AllowedChoices []string      `yaml:"allowed_choices,omitempty"   json:"allowed_choices,omitempty"`
 	DefaultValue   interface{}   `yaml:"default_value,omitempty"     json:"default_value,omitempty"`
 	ExampleValue   interface{}   `yaml:"example_value,omitempty"     json:"example_value,omitempty"`
-	Multiple       bool          `yaml:"multiple,omitempty"          json:"multiple,omitempty"`
 }
 
 // Validate validates the parameter definition.
@@ -111,7 +118,7 @@ func (p *Parameter) Validate(relatedReSTName string) []error {
 		errs = append(errs, fmt.Errorf("%s.spec: enum parameter '%s' must define allowed_choices", relatedReSTName, p.Name))
 	}
 
-	if p.DefaultValue == nil && p.ExampleValue == nil {
+	if p.DefaultValue == nil && p.ExampleValue == nil && p.Type == ParameterTypeString {
 		errs = append(errs, fmt.Errorf("%s.spec: parameter '%s' must provide an example value as it doesn't have a default", relatedReSTName, p.Name))
 	}
 

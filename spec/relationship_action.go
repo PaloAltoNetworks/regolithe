@@ -5,9 +5,9 @@ import "fmt"
 // A RelationAction represents one the the possible action
 type RelationAction struct {
 	Description         string               `yaml:"description,omitempty"           json:"description,omitempty"`
-	ParameterDefinition *ParameterDefinition `yaml:"parameters,omitempty"            json:"parameters,omitempty"`
-	ParameterReferences []string             `yaml:"globalParameters,omitempty"      json:"globalParameters,omitempty"`
 	Deprecated          bool                 `yaml:"deprecated,omitempty"            json:"deprecated,omitempty"`
+	ParameterReferences []string             `yaml:"globalParameters,omitempty"      json:"globalParameters,omitempty"`
+	ParameterDefinition *ParameterDefinition `yaml:"parameters,omitempty"            json:"parameters,omitempty"`
 }
 
 // Validate validates the relation action.
