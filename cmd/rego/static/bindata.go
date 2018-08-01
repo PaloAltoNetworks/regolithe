@@ -94,7 +94,7 @@ func templatesSpecMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 711, mode: os.FileMode(420), modTime: time.Unix(1528494787, 0)}
+	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 711, mode: os.FileMode(420), modTime: time.Unix(1533099905, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

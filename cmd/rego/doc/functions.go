@@ -190,17 +190,20 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 
 	buf := &bytes.Buffer{}
 	for i, r := range full {
+		if i > 0 {
+			buf.WriteString("\n")
+		}
 		buf.WriteString(fmt.Sprintf("#### `%s %s`\n\n", r.method, r.url))
-		buf.WriteString(fmt.Sprintf(`%s\n`, r.doc))
+		buf.WriteString(fmt.Sprintf(`%s`, r.doc))
 
 		if r.params != nil {
-			buf.WriteString("\n##### Parameters\n\n")
+			buf.WriteString("\n\n##### Parameters\n\n")
 			for _, pd := range r.params.Entries {
 				buf.WriteString(fmt.Sprintf("- `%s` (%s): %s\n", pd.Name, pd.Type, strings.Replace(pd.Description, "\n", "", -1)))
 			}
 
 			if r.params.Required != nil {
-				buf.WriteString("\n##### Mandatory Parameters\n\n")
+				buf.WriteString("\n\n##### Mandatory Parameters\n\n")
 
 				var out string
 				for i, lvl1 := range r.params.Required {
@@ -227,25 +230,14 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 					}
 				}
 
-				buf.WriteString(fmt.Sprintf("%s\n", out))
+				buf.WriteString(fmt.Sprintf("%s", out))
 			}
 		}
 
-		if i+1 < len(full) {
+		if i < len(full) {
 			buf.WriteString("\n")
 		}
 	}
-	// buf := &bytes.Buffer{}
-	// w := &tabwriter.Writer{}
-	// w.Init(buf, 0, 8, 0, ' ', 0)
-
-	// fmt.Fprintln(w, "| Method \t|\t URL \t|\t Description \t|") // nolint: errcheck
-	// fmt.Fprintln(w, "| -: \t|\t - \t|\t - \t|")                 // nolint: errcheck
-
-	// for i := 0; i < total; i++ {
-	// 	fmt.Fprintln(w, full[i].String()) // nolint: errcheck
-	// }
-	// w.Flush() // nolint: errcheck
 
 	return buf.String()
 }
