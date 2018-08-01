@@ -869,7 +869,7 @@ model:
   - lst
   get:
     description: Retrieves the list with the given ID.
-    globalParameters:
+    global_parameters:
     - sharedParameterA
     - sharedParameterB
     parameters:

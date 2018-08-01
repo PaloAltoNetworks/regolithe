@@ -45,10 +45,10 @@
                     }
                 },
                 "update": {
-                    "$ref": "#/definitions/relationAction"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "delete": {
-                    "$ref": "#/definitions/relationAction"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "description": {
                     "description": "The description of the represented object.",
@@ -66,7 +66,7 @@
                     }
                 },
                 "get": {
-                    "$ref": "#/definitions/relationAction"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "package": {
                     "description": "The name of the package of the represented object.",
@@ -368,20 +368,20 @@
                     "type": "string"
                 },
                 "create": {
-                    "$ref": "#/definitions/relationAction"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "delete": {
-                    "$ref": "#/definitions/relationAction"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "get": {
-                    "$ref": "#/definitions/relationAction"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "update": {
-                    "$ref": "#/definitions/relationAction"
+                    "$ref": "#/definitions/relationaction"
                 }
             }
         },
-        "relationAction": {
+        "relationaction": {
             "title": "Relation Action",
             "description": "Specification of a action of a relation.",
             "type": "object",
@@ -400,7 +400,7 @@
                     "description": "Tells if the relation is deprecated",
                     "type": "boolean"
                 },
-                "globalParameters": {
+                "global_parameters": {
                     "title": "Global Parameters References",
                     "description": "Reference to global parameters defined in the _parameters file",
                     "type": "array",

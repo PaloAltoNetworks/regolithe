@@ -9,19 +9,20 @@ model:
   - lst
   get:
     description: Retrieves the list with the given ID.
+    global_parameters:
+    - sharedParameterA
+    - sharedParameterB
     parameters:
       entries:
       - name: lgp1
         description: this is lgp1.
         type: string
         example_value: lgp1
+
       - name: lgp2
         description: this is lgp2.
         type: boolean
         example_value: "true"
-    globalParameters:
-    - sharedParameterA
-    - sharedParameterB
   update:
     description: Updates the list with the given ID.
     parameters:
@@ -30,6 +31,7 @@ model:
         description: this is lup1.
         type: string
         example_value: lup1
+
       - name: lup2
         description: this is lup2.
         type: boolean
@@ -42,6 +44,7 @@ model:
         description: this is ldp1.
         type: string
         example_value: ldp1
+
       - name: ldp2
         description: this is ldp2.
         type: boolean
@@ -130,6 +133,7 @@ relations:
         description: this is ltgp1.
         type: string
         example_value: ltgp1
+
       - name: ltgp2
         description: this is ltgp2.
         type: boolean
@@ -142,6 +146,7 @@ relations:
         description: this is ltcp1.
         type: string
         example_value: ltcp1
+
       - name: ltcp2
         description: this is ltcp2.
         type: boolean
