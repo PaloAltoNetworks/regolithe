@@ -5,14 +5,14 @@ model:
   entity_name: Root
   package: root
   description: root object.
-  get: true
+  get:
+    description: gets the object.
   root: true
 
 # Relations
 relations:
 - rest_name: object
-  descriptions:
-    create: Creates a new object.
-    get: Retrieves the list of objects.
-  get: true
-  create: true
+  get:
+    description: Retrieves the list of objects.
+  create:
+    description: Creates a new object.

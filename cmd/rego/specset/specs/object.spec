@@ -5,9 +5,12 @@ model:
   entity_name: Objects
   package: default
   description: This is random object.
-  get: true
-  update: true
-  delete: true
+  get:
+    description: Gets the object.
+  update:
+    description: Updates the object.
+  delete:
+    description: Deletes the object.
   extends:
   - '@identifiable'
 

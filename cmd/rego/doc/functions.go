@@ -49,6 +49,7 @@ type operation struct {
 	method string
 	url    string
 	doc    string
+	params *spec.ParameterDefinition
 }
 
 func (o operation) String() string {
@@ -68,6 +69,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 			method: "PUT",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
 			doc:    model.Update.Description,
+			params: model.Update.ParameterDefinition,
 		})
 	}
 
@@ -76,6 +78,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 			method: "DELETE",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
 			doc:    model.Delete.Description,
+			params: model.Delete.ParameterDefinition,
 		})
 	}
 
@@ -84,6 +87,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 			method: "GET",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
 			doc:    model.Get.Description,
+			params: model.Get.ParameterDefinition,
 		})
 	}
 
@@ -93,6 +97,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				method: "GET",
 				url:    fmt.Sprintf("/%s", model.ResourceName),
 				doc:    ra.Description,
+				params: ra.ParameterDefinition,
 			})
 			continue
 		}
@@ -101,6 +106,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 			method: "GET",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
 			doc:    ra.Description,
+			params: ra.ParameterDefinition,
 		})
 	}
 
@@ -110,6 +116,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				method: "POST",
 				url:    fmt.Sprintf("/%s", model.ResourceName),
 				doc:    ra.Description,
+				params: ra.ParameterDefinition,
 			})
 			continue
 		}
@@ -118,6 +125,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 			method: "POST",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
 			doc:    ra.Description,
+			params: ra.ParameterDefinition,
 		})
 	}
 
@@ -131,6 +139,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				method: "POST",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Create.Description,
+				params: rel.Create.ParameterDefinition,
 			})
 		}
 		if rel.Update != nil {
@@ -138,6 +147,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				method: "PUT",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Update.Description,
+				params: rel.Update.ParameterDefinition,
 			})
 		}
 		if rel.Get != nil {
@@ -145,6 +155,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				method: "GET",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Get.Description,
+				params: rel.Get.ParameterDefinition,
 			})
 		}
 		if rel.Delete != nil {
@@ -152,6 +163,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 				method: "DELETE",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
 				doc:    rel.Delete.Description,
+				params: rel.Delete.ParameterDefinition,
 			})
 		}
 	}
@@ -177,16 +189,63 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 	}
 
 	buf := &bytes.Buffer{}
-	w := &tabwriter.Writer{}
-	w.Init(buf, 0, 8, 0, ' ', 0)
+	for i, r := range full {
+		buf.WriteString(fmt.Sprintf("#### `%s %s`\n\n", r.method, r.url))
+		buf.WriteString(fmt.Sprintf(`%s\n`, r.doc))
 
-	fmt.Fprintln(w, "| Method \t|\t URL \t|\t Description \t|") // nolint: errcheck
-	fmt.Fprintln(w, "| -: \t|\t - \t|\t - \t|")                 // nolint: errcheck
+		if r.params != nil {
+			buf.WriteString("\n##### Parameters\n\n")
+			for _, pd := range r.params.Entries {
+				buf.WriteString(fmt.Sprintf("- `%s` (%s): %s\n", pd.Name, pd.Type, strings.Replace(pd.Description, "\n", "", -1)))
+			}
 
-	for i := 0; i < total; i++ {
-		fmt.Fprintln(w, full[i].String()) // nolint: errcheck
+			if r.params.Required != nil {
+				buf.WriteString("\n##### Mandatory Parameters\n\n")
+
+				var out string
+				for i, lvl1 := range r.params.Required {
+					if len(r.params.Required) > 1 {
+						out += "("
+					}
+					for j, lvl2 := range lvl1 {
+						if len(lvl1) > 1 {
+							out += "("
+						}
+						out += "`" + strings.Join(lvl2, "` and `") + "`"
+						if len(lvl1) > 1 {
+							out += ")"
+						}
+						if j+1 != len(lvl1) {
+							out += " or "
+						}
+					}
+					if len(r.params.Required) > 1 {
+						out += ")"
+					}
+					if i+1 != len(r.params.Required) {
+						out += " and "
+					}
+				}
+
+				buf.WriteString(fmt.Sprintf("%s\n", out))
+			}
+		}
+
+		if i+1 < len(full) {
+			buf.WriteString("\n")
+		}
 	}
-	w.Flush() // nolint: errcheck
+	// buf := &bytes.Buffer{}
+	// w := &tabwriter.Writer{}
+	// w.Init(buf, 0, 8, 0, ' ', 0)
+
+	// fmt.Fprintln(w, "| Method \t|\t URL \t|\t Description \t|") // nolint: errcheck
+	// fmt.Fprintln(w, "| -: \t|\t - \t|\t - \t|")                 // nolint: errcheck
+
+	// for i := 0; i < total; i++ {
+	// 	fmt.Fprintln(w, full[i].String()) // nolint: errcheck
+	// }
+	// w.Flush() // nolint: errcheck
 
 	return buf.String()
 }
