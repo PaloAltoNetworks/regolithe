@@ -51,13 +51,13 @@ func makeSchemaValidationError(message string, res []gojsonschema.ResultError) [
 
 func formatValidationErrors(errs []error) error {
 
+	if len(errs) == 0 {
+		return nil
+	}
+
 	out := make([]string, len(errs))
 	for i := range errs {
 		out[i] = errs[i].Error()
-	}
-
-	if len(out) == 0 {
-		return nil
 	}
 
 	sort.Strings(out)
@@ -74,7 +74,7 @@ func sortVersionStrings(versions []string) []string {
 		v := versions[i]
 		currentVersion, err := versionToInt(v)
 		if err != nil {
-			panic(fmt.Sprintf("Invalid version '%s'", v))
+			panic(fmt.Sprintf("invalid version '%s'", v))
 		}
 
 		vs[i] = currentVersion

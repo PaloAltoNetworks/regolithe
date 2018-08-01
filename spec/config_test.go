@@ -6,7 +6,7 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestConfog_LoadConfig(t *testing.T) {
+func TestConfig_LoadConfig(t *testing.T) {
 
 	Convey("Given I load a monolithe.ini", t, func() {
 
@@ -25,6 +25,18 @@ func TestConfog_LoadConfig(t *testing.T) {
 			So(cfg.ProductName, ShouldEqual, "Fixture")
 			So(cfg.URL, ShouldEqual, "aporeto.com")
 			So(cfg.Version, ShouldEqual, "1.0")
+		})
+
+		Convey("Then I call key on valid section and key", func() {
+			So(cfg.Key("test", "key"), ShouldEqual, "value")
+		})
+
+		Convey("Then I call key on valid section and invalid key", func() {
+			So(cfg.Key("test", "notkey"), ShouldEqual, "")
+		})
+
+		Convey("Then I call key on invalid section", func() {
+			So(cfg.Key("nottest", "key"), ShouldEqual, "")
 		})
 	})
 }
