@@ -13,6 +13,13 @@ model:
     description: Updates the user with the given ID.
   delete:
     description: Deletes the user with the given ID.
+    parameters:
+      required:
+      - - - required
+      entries:
+      - name: confirm
+        description: this is required.
+        type: boolean
   extends:
   - '@base'
 
