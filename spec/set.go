@@ -18,9 +18,10 @@ import (
 
 // A specificationSet represents a compete set of Specification
 type specificationSet struct {
-	configuration *Config
-	externalTypes TypeMapping
-	apiInfo       *APIInfo
+	configuration    *Config
+	externalTypes    TypeMapping
+	apiInfo          *APIInfo
+	globalParameters map[string]*ParameterDefinition
 
 	specs map[string]Specification
 }
@@ -179,6 +180,13 @@ func LoadSpecificationSet(
 				return nil, err
 			}
 
+		case "_parameters":
+
+			set.globalParameters, err = LoadGlobalParameters(path.Join(dirname, info.Name()))
+			if err != nil {
+				return nil, err
+			}
+
 		case "_api.info":
 			set.apiInfo, err = LoadAPIInfo(path.Join(dirname, info.Name()))
 			if err != nil {
@@ -278,6 +286,92 @@ func LoadSpecificationSet(
 				}
 			}
 		}
+
+		if set.globalParameters != nil {
+
+			if spec.Model() != nil {
+
+				if spec.Model().Get != nil {
+					for _, key := range spec.Model().Get.ParameterReferences {
+						if spec.Model().Get.ParameterDefinition == nil {
+							spec.Model().Get.ParameterDefinition = &ParameterDefinition{}
+						}
+						if err := spec.Model().Get.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							return nil, err
+						}
+					}
+				}
+
+				if spec.Model().Update != nil {
+					for _, key := range spec.Model().Update.ParameterReferences {
+						if spec.Model().Update.ParameterDefinition == nil {
+							spec.Model().Update.ParameterDefinition = &ParameterDefinition{}
+						}
+						if err := spec.Model().Update.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							return nil, err
+						}
+					}
+				}
+
+				if spec.Model().Delete != nil {
+					for _, key := range spec.Model().Delete.ParameterReferences {
+						if spec.Model().Delete.ParameterDefinition == nil {
+							spec.Model().Delete.ParameterDefinition = &ParameterDefinition{}
+						}
+						if err := spec.Model().Delete.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							return nil, err
+						}
+					}
+				}
+
+				for _, r := range spec.Relations() {
+
+					if r.Create != nil {
+						for _, key := range r.Create.ParameterReferences {
+							if r.Create.ParameterDefinition == nil {
+								r.Create.ParameterDefinition = &ParameterDefinition{}
+							}
+							if err := r.Create.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
+						}
+					}
+
+					if r.Get != nil {
+						for _, key := range r.Get.ParameterReferences {
+							if r.Get.ParameterDefinition == nil {
+								r.Get.ParameterDefinition = &ParameterDefinition{}
+							}
+							if err := r.Get.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
+						}
+					}
+
+					if r.Update != nil {
+						for _, key := range r.Update.ParameterReferences {
+							if r.Update.ParameterDefinition == nil {
+								r.Update.ParameterDefinition = &ParameterDefinition{}
+							}
+							if err := r.Update.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
+						}
+					}
+
+					if r.Delete != nil {
+						for _, key := range r.Delete.ParameterReferences {
+							if r.Delete.ParameterDefinition == nil {
+								r.Delete.ParameterDefinition = &ParameterDefinition{}
+							}
+							if err := r.Delete.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+								return nil, err
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	var errs []error
@@ -347,14 +441,14 @@ func (s *specificationSet) Relationships() map[string]*Relationship {
 
 		model := spec.Model()
 		if !model.IsRoot {
-			if model.AllowsUpdate {
-				relationships[model.EntityName].Set("update", "root")
+			if model.Update != nil {
+				relationships[model.EntityName].Set("update", "root", model.Update)
 			}
-			if model.AllowsDelete {
-				relationships[model.EntityName].Set("delete", "root")
+			if model.Delete != nil {
+				relationships[model.EntityName].Set("delete", "root", model.Delete)
 			}
-			if model.AllowsGet {
-				relationships[model.EntityName].Set("get", "root")
+			if model.Get != nil {
+				relationships[model.EntityName].Set("get", "root", model.Get)
 			}
 		}
 
@@ -365,11 +459,11 @@ func (s *specificationSet) Relationships() map[string]*Relationship {
 			model := spec.Model()
 			relatedModed := childrenSpec.Model()
 
-			if rel.AllowsGet {
-				relationships[relatedModed.EntityName].Set("getmany", model.RestName)
+			if rel.Get != nil {
+				relationships[relatedModed.EntityName].Set("getmany", model.RestName, rel.Get)
 			}
-			if rel.AllowsCreate {
-				relationships[relatedModed.EntityName].Set("create", model.RestName)
+			if rel.Create != nil {
+				relationships[relatedModed.EntityName].Set("create", model.RestName, rel.Create)
 			}
 		}
 	}
@@ -391,26 +485,26 @@ func (s *specificationSet) RelationshipsByRestName() map[string]*Relationship {
 		model := spec.Model()
 
 		if !model.IsRoot {
-			if model.AllowsUpdate {
-				relationships[model.RestName].Set("update", "root")
+			if model.Update != nil {
+				relationships[model.RestName].Set("update", "root", model.Update)
 			}
-			if model.AllowsDelete {
-				relationships[model.RestName].Set("delete", "root")
+			if model.Delete != nil {
+				relationships[model.RestName].Set("delete", "root", model.Delete)
 			}
-			if model.AllowsGet {
-				relationships[model.RestName].Set("get", "root")
+			if model.Get != nil {
+				relationships[model.RestName].Set("get", "root", model.Get)
 			}
 		}
 
 		for _, rel := range spec.Relations() {
 
-			if rel.AllowsGet {
-				relationships[rel.RestName].Set("getmany", model.RestName)
-			}
-			if rel.AllowsCreate {
-				relationships[rel.RestName].Set("create", model.RestName)
+			if rel.Get != nil {
+				relationships[rel.RestName].Set("getmany", model.RestName, rel.Get)
 			}
 
+			if rel.Create != nil {
+				relationships[rel.RestName].Set("create", model.RestName, rel.Create)
+			}
 		}
 	}
 
@@ -431,14 +525,14 @@ func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationshi
 		model := spec.Model()
 
 		if !model.IsRoot {
-			if model.AllowsUpdate {
-				relationships[model.ResourceName].Set("update", "root")
+			if model.Update != nil {
+				relationships[model.ResourceName].Set("update", "root", model.Update)
 			}
-			if model.AllowsDelete {
-				relationships[model.ResourceName].Set("delete", "root")
+			if model.Delete != nil {
+				relationships[model.ResourceName].Set("delete", "root", model.Delete)
 			}
-			if model.AllowsGet {
-				relationships[model.ResourceName].Set("get", "root")
+			if model.Get != nil {
+				relationships[model.ResourceName].Set("get", "root", model.Get)
 			}
 		}
 
@@ -446,11 +540,11 @@ func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationshi
 
 			childrenSpec := s.specs[rel.RestName]
 
-			if rel.AllowsGet {
-				relationships[childrenSpec.Model().ResourceName].Set("getmany", model.RestName)
+			if rel.Get != nil {
+				relationships[childrenSpec.Model().ResourceName].Set("getmany", model.RestName, rel.Get)
 			}
-			if rel.AllowsCreate {
-				relationships[childrenSpec.Model().ResourceName].Set("create", model.RestName)
+			if rel.Create != nil {
+				relationships[childrenSpec.Model().ResourceName].Set("create", model.RestName, rel.Create)
 			}
 
 		}

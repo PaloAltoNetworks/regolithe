@@ -74,4 +74,29 @@ func TestAttribute_Validate(t *testing.T) {
 			})
 		})
 	})
+
+	Convey("Given I have an attribute required with no default value", t, func() {
+
+		a := &Attribute{
+			Name:         "name",
+			Type:         "enum",
+			Description:  "coucou.",
+			ExampleValue: "coucou",
+			linkedSpecification: &specification{
+				RawModel: &Model{
+					RestName: "spec",
+				},
+			},
+		}
+
+		Convey("When I call validate", func() {
+
+			errs := a.Validate()
+
+			Convey("Then there should be validation error", func() {
+				So(len(errs), ShouldEqual, 1)
+				So(errs[0].Error(), ShouldEqual, "spec.spec: enum attribute 'name' must define allowed_choices")
+			})
+		})
+	})
 }

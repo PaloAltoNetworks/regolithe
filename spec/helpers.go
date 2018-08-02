@@ -41,9 +41,9 @@ func Pluralize(word string) string {
 
 func makeSchemaValidationError(message string, res []gojsonschema.ResultError) []error {
 
-	var out []error
-	for _, r := range res {
-		out = append(out, fmt.Errorf("%s: schema error: %s", message, r.String()))
+	out := make([]error, len(res))
+	for i := range res {
+		out[i] = fmt.Errorf("%s: schema error: %s", message, res[i].String())
 	}
 
 	return out
@@ -51,13 +51,13 @@ func makeSchemaValidationError(message string, res []gojsonschema.ResultError) [
 
 func formatValidationErrors(errs []error) error {
 
-	var out []string
-	for _, err := range errs {
-		out = append(out, err.Error())
+	if len(errs) == 0 {
+		return nil
 	}
 
-	if len(out) == 0 {
-		return nil
+	out := make([]string, len(errs))
+	for i := range errs {
+		out[i] = errs[i].Error()
 	}
 
 	sort.Strings(out)
@@ -67,23 +67,24 @@ func formatValidationErrors(errs []error) error {
 
 func sortVersionStrings(versions []string) []string {
 
-	var vs []int
+	vs := make([]int, len(versions))
 
-	for _, v := range versions {
+	for i := range versions {
 
+		v := versions[i]
 		currentVersion, err := versionToInt(v)
 		if err != nil {
-			panic(fmt.Sprintf("Invalid version '%s'", v))
+			panic(fmt.Sprintf("invalid version '%s'", v))
 		}
 
-		vs = append(vs, currentVersion)
+		vs[i] = currentVersion
 	}
 
 	sort.Ints(vs)
 
-	var out []string
-	for _, v := range vs {
-		out = append(out, fmt.Sprintf("v%d", v))
+	out := make([]string, len(vs))
+	for i := range vs {
+		out[i] = fmt.Sprintf("v%d", vs[i])
 	}
 
 	return out
@@ -93,6 +94,13 @@ func sortAttributes(attrs []*Attribute) {
 
 	sort.Slice(attrs, func(i int, j int) bool {
 		return strings.Compare(attrs[i].Name, attrs[j].Name) == -1
+	})
+}
+
+func sortParameters(params []*Parameter) {
+
+	sort.Slice(params, func(i int, j int) bool {
+		return strings.Compare(params[i].Name, params[j].Name) == -1
 	})
 }
 

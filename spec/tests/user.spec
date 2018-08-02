@@ -7,9 +7,19 @@ model:
   description: Represent a user.
   aliases:
   - usr
-  get: true
-  update: true
-  delete: true
+  get:
+    description: Retrieves the user with the given ID.
+  update:
+    description: Updates the user with the given ID.
+  delete:
+    description: Deletes the user with the given ID.
+    parameters:
+      required:
+      - - - required
+      entries:
+      - name: confirm
+        description: this is required.
+        type: boolean
   extends:
   - '@base'
 

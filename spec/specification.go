@@ -131,9 +131,34 @@ func (s *specification) Write(writer io.Writer) error {
 		relations := make([]yaml.MapSlice, len(s.RawRelations))
 
 		for i, rel := range s.RawRelations {
-			for k, v := range rel.Descriptions {
-				rel.Descriptions[k] = wordwrap.WrapString(v, 80)
+			if rel.Get != nil {
+				rel.Get.Description = wordwrap.WrapString(rel.Get.Description, 80)
+				if rel.Get.ParameterDefinition != nil {
+					sortParameters(rel.Get.ParameterDefinition.Entries)
+				}
 			}
+
+			if rel.Create != nil {
+				rel.Create.Description = wordwrap.WrapString(rel.Create.Description, 80)
+				if rel.Create.ParameterDefinition != nil {
+					sortParameters(rel.Create.ParameterDefinition.Entries)
+				}
+			}
+
+			if rel.Update != nil {
+				rel.Update.Description = wordwrap.WrapString(rel.Update.Description, 80)
+				if rel.Update.ParameterDefinition != nil {
+					sortParameters(rel.Update.ParameterDefinition.Entries)
+				}
+			}
+
+			if rel.Delete != nil {
+				rel.Delete.Description = wordwrap.WrapString(rel.Delete.Description, 80)
+				if rel.Delete.ParameterDefinition != nil {
+					sortParameters(rel.Delete.ParameterDefinition.Entries)
+				}
+			}
+
 			relations[i] = toYAMLMapSlice(rel)
 		}
 
@@ -150,6 +175,7 @@ func (s *specification) Write(writer io.Writer) error {
 	prfx1 := []byte("- ")
 	prfx2 := []byte("  - name")
 	prfx3 := []byte("  v")
+	prfx4 := []byte("      - name")
 	sufx1 := []byte(":")
 	yamlModelKey := []byte(rootModelKey + ":")
 	yamlAttrKey := []byte(rootAttributesKey + ":")
@@ -162,7 +188,10 @@ func (s *specification) Write(writer io.Writer) error {
 
 		condFirstLine := i == 0
 		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
-		condPrefixed := bytes.HasPrefix(line, prfx1) || bytes.HasPrefix(line, prfx3) || (bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1))
+		condPrefixed := bytes.HasPrefix(line, prfx1) ||
+			bytes.HasPrefix(line, prfx3) ||
+			(bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1)) ||
+			(bytes.HasPrefix(line, prfx4) && !bytes.HasSuffix(previousLine, sufx1))
 
 		if !condFirstLine && !condFirstIn && condPrefixed {
 			buf.WriteRune('\n')
@@ -231,11 +260,12 @@ func (s *specification) Validate() []error {
 		} else {
 			errs = append(errs, makeSchemaValidationError(path.Base(s.path), res.Errors())...)
 		}
-
 	}
 
-	if s.RawModel != nil && s.RawModel.Description != "" && s.RawModel.Description[len(s.RawModel.Description)-1] != '.' {
-		errs = append(errs, fmt.Errorf("%s.spec: model description must end with a period", s.RawModel.RestName))
+	if s.RawModel != nil {
+		if e := s.RawModel.Validate(); e != nil {
+			errs = append(errs, e...)
+		}
 	}
 
 	for _, attrs := range s.RawAttributes {
@@ -277,9 +307,11 @@ func (s *specification) Attribute(name string, version string) *Attribute {
 // AttributeVersions returns the list of all attribute versions.
 func (s *specification) AttributeVersions() []string {
 
-	var out []string
+	out := make([]string, len(s.RawAttributes))
+	var i int
 	for v := range s.RawAttributes {
-		out = append(out, v)
+		out[i] = v
+		i++
 	}
 
 	return out
@@ -317,9 +349,11 @@ func (s *specification) Attributes(version string) []*Attribute {
 		}
 	}
 
-	var attrs []*Attribute
+	attrs := make([]*Attribute, len(attrMap))
+	var i int
 	for _, attr := range attrMap {
-		attrs = append(attrs, attr)
+		attrs[i] = attr
+		i++
 	}
 
 	sortAttributes(attrs)
@@ -330,7 +364,7 @@ func (s *specification) Attributes(version string) []*Attribute {
 // ExposedAttributes returns the exposed attributes.
 func (s *specification) ExposedAttributes(version string) []*Attribute {
 
-	var attrs []*Attribute
+	var attrs []*Attribute // nolint
 
 	for _, attr := range s.Attributes(version) {
 		if !attr.Exposed {
@@ -357,7 +391,7 @@ func (s *specification) Identifier() *Attribute {
 // OrderingAttributes returns all the ordering attribute.
 func (s *specification) OrderingAttributes(version string) []*Attribute {
 
-	var out []*Attribute
+	var out []*Attribute // nolint
 	versions := s.versionsFrom(version)
 
 	for _, v := range versions {
@@ -548,9 +582,9 @@ func (s *specification) versionsFrom(version string) []string {
 
 	sort.Ints(versions)
 
-	var out []string
-	for _, v := range versions {
-		out = append(out, fmt.Sprintf("v%d", v))
+	out := make([]string, len(versions))
+	for i := range versions {
+		out[i] = fmt.Sprintf("v%d", versions[i])
 	}
 
 	return out

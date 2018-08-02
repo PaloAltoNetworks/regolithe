@@ -7,9 +7,12 @@ model:
   description: Represent a task to do in a listd.
   aliases:
   - tsk
-  get: true
-  update: true
-  delete: true
+  get:
+    description: Retrieve the task with the given ID.
+  update:
+    description: Updates the task with the given ID.
+  delete:
+    description: Deletes the task with the given ID.
   extends:
   - '@base'
 

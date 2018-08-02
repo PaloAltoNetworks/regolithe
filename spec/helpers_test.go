@@ -207,6 +207,20 @@ func TestHelpers_formatValidationErrors(t *testing.T) {
 			})
 		})
 	})
+
+	Convey("Given I have no error", t, func() {
+
+		errs := []error{}
+
+		Convey("When I call formatValidationErrors", func() {
+
+			err := formatValidationErrors(errs)
+
+			Convey("Then err should be nil", func() {
+				So(err, ShouldBeNil)
+			})
+		})
+	})
 }
 
 func TestHelpers_sortVersionString(t *testing.T) {
@@ -224,11 +238,23 @@ func TestHelpers_sortVersionString(t *testing.T) {
 			})
 		})
 	})
+
+	Convey("Given I have an invalid version array", t, func() {
+
+		v := []string{"v1", "a", "v3", "v2"}
+
+		Convey("When I Call sortVersionString", func() {
+
+			Convey("Then it should panic", func() {
+				So(func() { sortVersionStrings(v) }, ShouldPanicWith, `invalid version 'a'`)
+			})
+		})
+	})
 }
 
 func TestHelpers_sortAttributes(t *testing.T) {
 
-	Convey("Given I have a some attribbutes", t, func() {
+	Convey("Given I have a some attributes", t, func() {
 
 		v := []*Attribute{
 			&Attribute{
@@ -246,11 +272,41 @@ func TestHelpers_sortAttributes(t *testing.T) {
 
 			sortAttributes(v)
 
-			Convey("Then the attribbutes should be sorted", func() {
+			Convey("Then the attributes should be sorted", func() {
 				So(len(v), ShouldEqual, 3)
 				So(v[0].Name, ShouldEqual, "a")
 				So(v[1].Name, ShouldEqual, "b")
 				So(v[2].Name, ShouldEqual, "c")
+			})
+		})
+	})
+}
+
+func TestHelpers_sortParameters(t *testing.T) {
+
+	Convey("Given I have a some parameters", t, func() {
+
+		p := []*Parameter{
+			&Parameter{
+				Name: "c",
+			},
+			&Parameter{
+				Name: "a",
+			},
+			&Parameter{
+				Name: "b",
+			},
+		}
+
+		Convey("When I Call sortParameters", func() {
+
+			sortParameters(p)
+
+			Convey("Then the paremeters should be sorted", func() {
+				So(len(p), ShouldEqual, 3)
+				So(p[0].Name, ShouldEqual, "a")
+				So(p[1].Name, ShouldEqual, "b")
+				So(p[2].Name, ShouldEqual, "c")
 			})
 		})
 	})

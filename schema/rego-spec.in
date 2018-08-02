@@ -44,13 +44,11 @@
                         "type": "string"
                     }
                 },
-                "create": {
-                    "description": "The represented object can be created.",
-                    "type": "boolean"
+                "update": {
+                    "$ref": "#/definitions/relationaction"
                 },
                 "delete": {
-                    "description": "Therepresented object can be deleted.",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "description": {
                     "description": "The description of the represented object.",
@@ -68,8 +66,7 @@
                     }
                 },
                 "get": {
-                    "description": "The represented object can be retrieved.",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "package": {
                     "description": "The name of the package of the represented object.",
@@ -90,12 +87,11 @@
                 "root": {
                     "description": "The represented object acts as the root specification.",
                     "type": "boolean"
-                },
-                "update": {
-                    "description": "The represented object can be updated.",
-                    "type": "boolean"
                 }
             }
+        },
+        "parameters": {
+__PARAMETER__
         },
         "attributes": {
 __ATTRIBUTE__
@@ -106,61 +102,57 @@ __ATTRIBUTE__
             "type": "object",
             "additionalProperties": false,
             "required": [
-                "rest_name",
-                "descriptions"
+                "rest_name"
             ],
 
             "properties": {
-                "create": {
-                    "description": "The related objects can be created from the current represented object",
-                    "type": "boolean"
-                },
-                "delete": {
-                    "description": "The related objects can be deleted from the current represented object",
-                    "type": "boolean"
-                },
-                "deprecated": {
-                    "description": "The relation is deprecated",
-                    "type": "boolean"
-                },
-                "descriptions": {
-                    "$ref": "#/definitions/descriptions"
-                },
-                "get": {
-                    "description": "The related objects can be retrieved from the current represented object",
-                    "type": "boolean"
-                },
                 "rest_name": {
                     "description": "rest_name used as a link to the related object",
                     "type": "string"
                 },
+                "create": {
+                    "$ref": "#/definitions/relationaction"
+                },
+                "delete": {
+                    "$ref": "#/definitions/relationaction"
+                },
+                "get": {
+                    "$ref": "#/definitions/relationaction"
+                },
                 "update": {
-                    "description": "The related objects can be updated from the current represented object",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationaction"
                 }
             }
         },
-        "descriptions": {
-            "title": "Relation descriptions per action",
-            "description": "Documentation of the relation.",
+        "relationaction": {
+            "title": "Relation Action",
+            "description": "Specification of a action of a relation.",
             "type": "object",
             "additionalProperties": false,
+            "required": [
+                "description"
+            ],
             "properties": {
-                "create": {
-                    "description": "Documentation for the create operation.",
+                "description": {
+                    "title": "Relation Description",
+                    "description": "Description of the relation.",
                     "type": "string"
                 },
-                "delete": {
-                    "description": "Documentation for the delete operation",
-                    "type": "string"
+                "deprecated": {
+                    "title": "Relation Depreciation",
+                    "description": "Tells if the relation is deprecated",
+                    "type": "boolean"
                 },
-                "get": {
-                    "description": "Documentation for the get operation",
-                    "type": "string"
+                "global_parameters": {
+                    "title": "Global Parameters References",
+                    "description": "Reference to global parameters defined in the _parameters file",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
-                "update": {
-                    "description": "Documentation for the update operation",
-                    "type": "string"
+                "parameters": {
+                    "$ref": "#/definitions/parameters"
                 }
             }
         }

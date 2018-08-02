@@ -1,5 +1,7 @@
 package spec
 
+import "fmt"
+
 // A Model holds generic information about a specification.
 type Model struct {
 
@@ -14,13 +16,42 @@ type Model struct {
 	Aliases      []string `yaml:"aliases,omitempty"         json:"aliases,omitempty"`
 	Private      bool     `yaml:"private,omitempty"         json:"private,omitempty"`
 
-	AllowsCreate bool `yaml:"create,omitempty"  json:"create,omitempty"`
-	AllowsGet    bool `yaml:"get,omitempty"     json:"get,omitempty"`
-	AllowsUpdate bool `yaml:"update,omitempty"  json:"update,omitempty"`
-	AllowsDelete bool `yaml:"delete,omitempty"  json:"delete,omitempty"`
+	Get    *RelationAction `yaml:"get,omitempty"     json:"get,omitempty"`
+	Update *RelationAction `yaml:"update,omitempty"  json:"update,omitempty"`
+	Delete *RelationAction `yaml:"delete,omitempty"  json:"delete,omitempty"`
 
 	Extends []string `yaml:"extends,omitempty"  json:"extends,omitempty"`
 	IsRoot  bool     `yaml:"root,omitempty"     json:"root,omitempty"`
 
 	EntityNamePlural string `yaml:"-" json:"-"`
+}
+
+// Validate validates the Model.
+func (m *Model) Validate() []error {
+
+	var errs []error
+
+	if m.Description != "" && m.Description[len(m.Description)-1] != '.' {
+		errs = append(errs, fmt.Errorf("%s.spec: model description must end with a period", m.RestName))
+	}
+
+	if m.Get != nil {
+		if err := m.Get.Validate(m.RestName, m.RestName, "get"); err != nil {
+			errs = append(errs, err...)
+		}
+	}
+
+	if m.Update != nil {
+		if err := m.Update.Validate(m.RestName, m.RestName, "update"); err != nil {
+			errs = append(errs, err...)
+		}
+	}
+
+	if m.Delete != nil {
+		if err := m.Delete.Validate(m.RestName, m.RestName, "delete"); err != nil {
+			errs = append(errs, err...)
+		}
+	}
+
+	return errs
 }

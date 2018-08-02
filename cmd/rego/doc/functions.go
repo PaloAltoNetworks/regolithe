@@ -49,6 +49,7 @@ type operation struct {
 	method string
 	url    string
 	doc    string
+	params *spec.ParameterDefinition
 }
 
 func (o operation) String() string {
@@ -58,72 +59,73 @@ func (o operation) String() string {
 func operations(spec spec.Specification, relationships map[string]*spec.Relationship, set spec.SpecificationSet) string {
 
 	var rootOps []operation
-	var parentOps []operation
+	var parentOps []operation // nolint
 	var childOps []operation
 
 	model := spec.Model()
 
-	if model.AllowsUpdate {
+	if model.Update != nil {
 		rootOps = append(rootOps, operation{
 			method: "PUT",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
-			doc:    fmt.Sprintf("Updates the `%s` with the given `:id`.", model.RestName),
+			doc:    model.Update.Description,
+			params: model.Update.ParameterDefinition,
 		})
 	}
 
-	if model.AllowsDelete {
+	if model.Delete != nil {
 		rootOps = append(rootOps, operation{
 			method: "DELETE",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
-			doc:    fmt.Sprintf("Deletes the `%s` with the given `:id`.", model.RestName),
+			doc:    model.Delete.Description,
+			params: model.Delete.ParameterDefinition,
 		})
 	}
 
-	if model.AllowsGet {
+	if model.Get != nil {
 		rootOps = append(rootOps, operation{
 			method: "GET",
 			url:    fmt.Sprintf("/%s/:id", model.ResourceName),
-			doc:    fmt.Sprintf("Retrieve the `%s` with the given `:id`.", model.RestName),
+			doc:    model.Get.Description,
+			params: model.Get.ParameterDefinition,
 		})
 	}
 
-	for k := range relationships[model.RestName].AllowsGetMany {
+	for k, ra := range relationships[model.RestName].GetMany {
 		if k == rootSpecRestName {
-			if k == rootSpecRestName {
-				childSpec := set.Specification(rootSpecRestName)
-				rootOps = append(rootOps, operation{
-					method: "GET",
-					url:    fmt.Sprintf("/%s", model.ResourceName),
-					doc:    childSpec.Relation(model.RestName).Descriptions["get"],
-				})
-				continue
-			}
+			rootOps = append(rootOps, operation{
+				method: "GET",
+				url:    fmt.Sprintf("/%s", model.ResourceName),
+				doc:    ra.Description,
+				params: ra.ParameterDefinition,
+			})
+			continue
 		}
 		childSpec := set.Specification(k)
 		parentOps = append(parentOps, operation{
 			method: "GET",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
-			doc:    childSpec.Relation(model.RestName).Descriptions["get"],
+			doc:    ra.Description,
+			params: ra.ParameterDefinition,
 		})
 	}
 
-	for k := range relationships[model.RestName].AllowsCreate {
+	for k, ra := range relationships[model.RestName].Create {
 		if k == rootSpecRestName {
-			if k == rootSpecRestName {
-				childSpec := set.Specification(rootSpecRestName)
-				rootOps = append(rootOps, operation{
-					method: "POST",
-					url:    fmt.Sprintf("/%s", model.ResourceName),
-					doc:    childSpec.Relation(model.RestName).Descriptions["create"],
-				})
-				continue
-			}
+			rootOps = append(rootOps, operation{
+				method: "POST",
+				url:    fmt.Sprintf("/%s", model.ResourceName),
+				doc:    ra.Description,
+				params: ra.ParameterDefinition,
+			})
+			continue
 		}
 		childSpec := set.Specification(k)
 		parentOps = append(parentOps, operation{
 			method: "POST",
 			url:    fmt.Sprintf("/%s/:id/%s", childSpec.Model().ResourceName, model.ResourceName),
-			doc:    childSpec.Relation(model.RestName).Descriptions["create"],
+			doc:    ra.Description,
+			params: ra.ParameterDefinition,
 		})
 	}
 
@@ -132,32 +134,36 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 		childSpec := set.Specification(rel.RestName)
 		childModel := childSpec.Model()
 
-		if rel.AllowsCreate {
+		if rel.Create != nil {
 			childOps = append(childOps, operation{
 				method: "POST",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["create"],
+				doc:    rel.Create.Description,
+				params: rel.Create.ParameterDefinition,
 			})
 		}
-		if rel.AllowsUpdate {
+		if rel.Update != nil {
 			childOps = append(childOps, operation{
 				method: "PUT",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["update"],
+				doc:    rel.Update.Description,
+				params: rel.Update.ParameterDefinition,
 			})
 		}
-		if rel.AllowsGet {
+		if rel.Get != nil {
 			childOps = append(childOps, operation{
 				method: "GET",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["get"],
+				doc:    rel.Get.Description,
+				params: rel.Get.ParameterDefinition,
 			})
 		}
-		if rel.AllowsDelete {
+		if rel.Delete != nil {
 			childOps = append(childOps, operation{
 				method: "DELETE",
 				url:    fmt.Sprintf("/%s/:id/%s", model.ResourceName, childModel.ResourceName),
-				doc:    rel.Descriptions["delete"],
+				doc:    rel.Delete.Description,
+				params: rel.Delete.ParameterDefinition,
 			})
 		}
 	}
@@ -183,16 +189,55 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 	}
 
 	buf := &bytes.Buffer{}
-	w := &tabwriter.Writer{}
-	w.Init(buf, 0, 8, 0, ' ', 0)
+	for i, r := range full {
+		if i > 0 {
+			buf.WriteString("\n")
+		}
+		buf.WriteString(fmt.Sprintf("#### `%s %s`\n\n", r.method, r.url))
+		buf.WriteString(fmt.Sprintf(`%s`, r.doc))
 
-	fmt.Fprintln(w, "| Method \t|\t URL \t|\t Description \t|") // nolint: errcheck
-	fmt.Fprintln(w, "| -: \t|\t - \t|\t - \t|")                 // nolint: errcheck
+		if r.params != nil {
+			buf.WriteString("\n\n##### Parameters\n\n")
+			for _, pd := range r.params.Entries {
+				buf.WriteString(fmt.Sprintf("- `%s` (%s): %s\n", pd.Name, pd.Type, strings.Replace(pd.Description, "\n", "", -1)))
+			}
 
-	for i := 0; i < total; i++ {
-		fmt.Fprintln(w, full[i].String()) // nolint: errcheck
+			if r.params.Required != nil {
+				buf.WriteString("\n\n##### Mandatory Parameters\n\n")
+
+				var out string
+				for i, lvl1 := range r.params.Required {
+					if len(r.params.Required) > 1 {
+						out += "("
+					}
+					for j, lvl2 := range lvl1 {
+						if len(lvl1) > 1 {
+							out += "("
+						}
+						out += "`" + strings.Join(lvl2, "` and `") + "`"
+						if len(lvl1) > 1 {
+							out += ")"
+						}
+						if j+1 != len(lvl1) {
+							out += " or "
+						}
+					}
+					if len(r.params.Required) > 1 {
+						out += ")"
+					}
+					if i+1 != len(r.params.Required) {
+						out += " and "
+					}
+				}
+
+				buf.WriteString(fmt.Sprintf("%s", out))
+			}
+		}
+
+		if i < len(full) {
+			buf.WriteString("\n")
+		}
 	}
-	w.Flush() // nolint: errcheck
 
 	return buf.String()
 }

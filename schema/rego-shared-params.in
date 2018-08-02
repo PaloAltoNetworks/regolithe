@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Shared Parameters",
+    "description": "The parameters defined here can be referecenced by other specifications.",
+    "type": "object",
+    "additionalProperties": false,
+    "patternProperties": {
+        ".*": {
+            "$ref": "#/definitions/parameters"
+        }
+    },
+    "definitions": {
+        "parameters": {
+__PARAMETER__
+        }
+    }
+}

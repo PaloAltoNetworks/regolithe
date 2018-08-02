@@ -1,7 +1,6 @@
 package spec
 
 import (
-	"sort"
 	"strings"
 
 	"github.com/fatih/structs"
@@ -12,7 +11,7 @@ import (
 
 func toYAMLMapSlice(s interface{}) yaml.MapSlice {
 
-	var out, leftOvers yaml.MapSlice
+	var out yaml.MapSlice
 
 	for _, field := range structs.Fields(s) {
 
@@ -44,11 +43,7 @@ func toYAMLMapSlice(s interface{}) yaml.MapSlice {
 		out = append(out, item)
 	}
 
-	sort.Slice(leftOvers, func(i int, j int) bool {
-		return strings.Compare(leftOvers[i].Key.(string), leftOvers[j].Key.(string)) == -1
-	})
-
-	return append(out, leftOvers...)
+	return out
 }
 
 func splitTags(tag string) (string, bool) {

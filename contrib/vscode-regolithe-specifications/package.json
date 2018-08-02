@@ -50,7 +50,8 @@
                 ],
                 "filenames": [
                     "_api.info",
-                    "_type.mapping"
+                    "_type.mapping",
+                    "_parameters"
                 ]
             }
         ],
@@ -58,6 +59,10 @@
             {
                 "fileMatch": "_api.info",
                 "url": "./schemas/rego-info.json"
+            },
+            {
+                "fileMatch": "_parameters",
+                "url": "./schemas/rego-shared-params.json"
             },
             {
                 "fileMatch": "_type.mapping",

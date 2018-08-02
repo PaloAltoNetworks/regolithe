@@ -44,13 +44,11 @@
                         "type": "string"
                     }
                 },
-                "create": {
-                    "description": "The represented object can be created.",
-                    "type": "boolean"
+                "update": {
+                    "$ref": "#/definitions/relationaction"
                 },
                 "delete": {
-                    "description": "Therepresented object can be deleted.",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "description": {
                     "description": "The description of the represented object.",
@@ -68,8 +66,7 @@
                     }
                 },
                 "get": {
-                    "description": "The represented object can be retrieved.",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationaction"
                 },
                 "package": {
                     "description": "The name of the package of the represented object.",
@@ -90,10 +87,92 @@
                 "root": {
                     "description": "The represented object acts as the root specification.",
                     "type": "boolean"
+                }
+            }
+        },
+        "parameters": {
+            "title": "Parameter Set",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "required": {
+                    "title": "Parameters Requirements Expressions",
+                    "description": "Define what combinations of parameters are required.",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 },
-                "update": {
-                    "description": "The represented object can be updated.",
-                    "type": "boolean"
+                "entries": {
+                    "title": "List of Parameters",
+                    "description": "Describe the list of available parameters.",
+                    "type": "array",
+                    "items": {
+                        "title": "Parameter",
+                        "description": "Describe a single parameter",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "name",
+                            "description",
+                            "type"
+                        ],
+                        "properties": {
+                            "name": {
+                                "title": "Parameter Name",
+                                "description": "Name of the parameter.",
+                                "type": "string"
+                            },
+                            "description": {
+                                "title": "Parameter Description",
+                                "description": "Description of the parameter.",
+                                "type": "string"
+                            },
+                            "type": {
+                                "title": "Parameter Type",
+                                "description": "The type of parameter.",
+                                "type": "string",
+                                "enum": [
+                                    "string",
+                                    "integer",
+                                    "float",
+                                    "boolean",
+                                    "enum",
+                                    "duration",
+                                    "time"
+                                ]
+                            },
+                            "multiple": {
+                                "title": "Parameter Multiplicity",
+                                "description": "Defines if the parameter can be sent multiple times.",
+                                "type": "boolean"
+                            },
+                            "allowed_choices": {
+                                "title": "Parameter Possile Values",
+                                "description": "If the type is enum, lists all the possible values",
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "default_value": {
+                                "title": "Parameter Default Value",
+                                "description": "Default value of the parameter if omitted",
+                                "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                            },
+                            "example_value": {
+                                "title": "Parameter Example Value",
+                                "description": "Example value of the parameter",
+                                "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -280,61 +359,57 @@
             "type": "object",
             "additionalProperties": false,
             "required": [
-                "rest_name",
-                "descriptions"
+                "rest_name"
             ],
 
             "properties": {
-                "create": {
-                    "description": "The related objects can be created from the current represented object",
-                    "type": "boolean"
-                },
-                "delete": {
-                    "description": "The related objects can be deleted from the current represented object",
-                    "type": "boolean"
-                },
-                "deprecated": {
-                    "description": "The relation is deprecated",
-                    "type": "boolean"
-                },
-                "descriptions": {
-                    "$ref": "#/definitions/descriptions"
-                },
-                "get": {
-                    "description": "The related objects can be retrieved from the current represented object",
-                    "type": "boolean"
-                },
                 "rest_name": {
                     "description": "rest_name used as a link to the related object",
                     "type": "string"
                 },
+                "create": {
+                    "$ref": "#/definitions/relationaction"
+                },
+                "delete": {
+                    "$ref": "#/definitions/relationaction"
+                },
+                "get": {
+                    "$ref": "#/definitions/relationaction"
+                },
                 "update": {
-                    "description": "The related objects can be updated from the current represented object",
-                    "type": "boolean"
+                    "$ref": "#/definitions/relationaction"
                 }
             }
         },
-        "descriptions": {
-            "title": "Relation descriptions per action",
-            "description": "Documentation of the relation.",
+        "relationaction": {
+            "title": "Relation Action",
+            "description": "Specification of a action of a relation.",
             "type": "object",
             "additionalProperties": false,
+            "required": [
+                "description"
+            ],
             "properties": {
-                "create": {
-                    "description": "Documentation for the create operation.",
+                "description": {
+                    "title": "Relation Description",
+                    "description": "Description of the relation.",
                     "type": "string"
                 },
-                "delete": {
-                    "description": "Documentation for the delete operation",
-                    "type": "string"
+                "deprecated": {
+                    "title": "Relation Depreciation",
+                    "description": "Tells if the relation is deprecated",
+                    "type": "boolean"
                 },
-                "get": {
-                    "description": "Documentation for the get operation",
-                    "type": "string"
+                "global_parameters": {
+                    "title": "Global Parameters References",
+                    "description": "Reference to global parameters defined in the _parameters file",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
-                "update": {
-                    "description": "Documentation for the update operation",
-                    "type": "string"
+                "parameters": {
+                    "$ref": "#/definitions/parameters"
                 }
             }
         }
