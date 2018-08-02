@@ -271,22 +271,38 @@ func LoadSpecificationSet(
 					attr.ConvertedType, attr.TypeProvider = typeConvertFunc(attr.Type, attr.SubType)
 				}
 
-				if attr.Type != AttributeTypeExt {
-					continue
-				}
+				if typeMappingName != "" {
 
-				if typeMappingName != "" && set.typeMap != nil {
-					m, err := set.typeMap.Mapping(typeMappingName, attr.SubType)
-					if err != nil {
-						return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
+					if set.typeMap != nil && attr.Type == AttributeTypeExt {
+
+						m, err := set.typeMap.Mapping(typeMappingName, attr.SubType)
+						if err != nil {
+							return nil, fmt.Errorf("Cannot apply type mapping '%s' to attribute '%s'", attr.SubType, attr.Name)
+						}
+
+						if m != nil {
+							attr.ConvertedType = m.Type
+							attr.Initializer = m.Initializer
+							attr.TypeProvider = m.Import
+						} else {
+							attr.ConvertedType = string(attr.Type)
+						}
 					}
 
-					if m != nil {
-						attr.ConvertedType = m.Type
-						attr.Initializer = m.Initializer
-						attr.TypeProvider = m.Import
-					} else {
-						attr.ConvertedType = string(attr.Type)
+					if set.validationsMap != nil {
+
+						for _, validationName := range attr.Validations {
+
+							m, err := set.validationsMap.Mapping(typeMappingName, validationName)
+							if err != nil {
+								return nil, fmt.Errorf("Cannot apply validation mapping '%s' to attribute '%s': %s", validationName, attr.Name, err)
+							}
+							if m == nil {
+								continue
+							}
+
+							attr.ValidationProviders = append(attr.ValidationProviders, m)
+						}
 					}
 				}
 			}

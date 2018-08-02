@@ -467,6 +467,33 @@ func (s *specification) TypeProviders() []string {
 	return providers
 }
 
+// ValidationProviders returns the unique list of all attributes validation providers.
+func (s *specification) ValidationProviders() []string {
+
+	yes := &struct{}{}
+	cache := map[string]*struct{}{}
+	var providers []string
+
+	for _, attrs := range s.RawAttributes {
+		for _, attr := range attrs {
+
+			for _, m := range attr.ValidationProviders {
+
+				if _, ok := cache[m.Import]; ok {
+					continue
+				}
+
+				cache[m.Import] = yes
+				if m.Import != "" {
+					providers = append(providers, m.Import)
+				}
+			}
+		}
+	}
+
+	return providers
+}
+
 // AttributeInitializers returns all initializers of the Attributes.
 func (s *specification) AttributeInitializers(version string) map[string]interface{} {
 

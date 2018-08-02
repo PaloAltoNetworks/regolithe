@@ -25,7 +25,7 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 				}
 				return string(typ), ""
 			},
-			"elemental",
+			"test",
 		)
 
 		Convey("Then err should be nil", func() {

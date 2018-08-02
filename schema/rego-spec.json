@@ -65,6 +65,20 @@
                         "type": "string"
                     }
                 },
+                "extensions": {
+                    "description": "Opaque key value pairs that can be used by compilers.",
+                    "type": "object"
+                },
+                "indexes": {
+                    "description": "List of compound indexes",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
                 "get": {
                     "$ref": "#/definitions/relationaction"
                 },
@@ -246,6 +260,10 @@
                                 "type": "boolean",
                                 "default": "true"
                             },
+                            "extensions": {
+                                "description": "Opaque key value pairs that can be used by compilers.",
+                                "type": "object"
+                            },
                             "filterable": {
                                 "description": "The attribute can be used for filtering purposes",
                                 "type": "boolean"
@@ -262,10 +280,6 @@
                                 "description": "The attribute is used as a main identifier",
                                 "type": "boolean",
                                 "uniqueItems": true
-                            },
-                            "index": {
-                                "description": "The attribute is used as an index",
-                                "type": "boolean"
                             },
                             "max_length": {
                                 "description": "The maximum length of the attribute of type string",

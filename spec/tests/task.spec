@@ -39,7 +39,7 @@ attributes:
     setter: true
     orderable: true
     validations:
-    - $nospaces
+    - $nospace
     - $nocap
 
   - name: status

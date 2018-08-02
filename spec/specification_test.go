@@ -180,6 +180,95 @@ func TestSpecification_Getters(t *testing.T) {
 	})
 }
 
+func TestSpecification_TypeProviders(t *testing.T) {
+
+	Convey("Given I have a new API", t, func() {
+
+		s := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						Name:          "not-id",
+						ConvertedName: "not-id",
+						TypeProvider:  "toto",
+					},
+					&Attribute{
+						ConvertedName: "id",
+						TypeProvider:  "titi",
+					},
+					&Attribute{
+						ConvertedName: "id2",
+						TypeProvider:  "titi",
+					},
+					&Attribute{},
+				},
+			},
+		}
+
+		Convey("When I call TypeProviders", func() {
+
+			providers := s.TypeProviders()
+
+			Convey("Then the providers should be correct", func() {
+				So(providers, ShouldResemble, []string{"toto", "titi"})
+			})
+		})
+	})
+}
+
+func TestSpecification_AttributesProviders(t *testing.T) {
+
+	Convey("Given I have a new API", t, func() {
+
+		s := &specification{
+			RawAttributes: map[string][]*Attribute{
+				"v1": []*Attribute{
+					&Attribute{
+						ValidationProviders: []*ValidationMap{
+							&ValidationMap{
+								Import: "a",
+							},
+							&ValidationMap{
+								Import: "b",
+							},
+						},
+					},
+					&Attribute{
+						ValidationProviders: []*ValidationMap{
+							&ValidationMap{
+								Import: "c",
+							},
+							&ValidationMap{
+								Import: "b",
+							},
+						},
+					},
+					&Attribute{
+						ValidationProviders: []*ValidationMap{
+							&ValidationMap{
+								Import: "d",
+							},
+							&ValidationMap{
+								Import: "b",
+							},
+						},
+					},
+					&Attribute{},
+				},
+			},
+		}
+
+		Convey("When I call ValidationProviders", func() {
+
+			providers := s.ValidationProviders()
+
+			Convey("Then the providers should be correct", func() {
+				So(providers, ShouldResemble, []string{"a", "b", "c", "d"})
+			})
+		})
+	})
+}
+
 func TestSpecification_AttributeInitializers(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {
@@ -459,7 +548,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[0].ForeignKey, ShouldBeFalse)
 			So(attrs[0].Getter, ShouldBeFalse)
 			So(attrs[0].Identifier, ShouldBeFalse)
-			So(attrs[0].Index, ShouldBeFalse)
 			So(attrs[0].MaxLength, ShouldEqual, 0)
 			So(attrs[0].MaxValue, ShouldEqual, 0.0)
 			So(attrs[0].MinLength, ShouldEqual, 0)
@@ -492,7 +580,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[1].ForeignKey, ShouldBeFalse)
 			So(attrs[1].Getter, ShouldBeTrue)
 			So(attrs[1].Identifier, ShouldBeFalse)
-			So(attrs[1].Index, ShouldBeFalse)
 			So(attrs[1].MaxLength, ShouldEqual, 0)
 			So(attrs[1].MaxValue, ShouldEqual, 0.0)
 			So(attrs[1].MinLength, ShouldEqual, 0)
@@ -525,7 +612,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[2].ForeignKey, ShouldBeFalse)
 			So(attrs[2].Getter, ShouldBeFalse)
 			So(attrs[2].Identifier, ShouldBeFalse)
-			So(attrs[2].Index, ShouldBeFalse)
 			So(attrs[2].MaxLength, ShouldEqual, 0)
 			So(attrs[2].MaxValue, ShouldEqual, 0.0)
 			So(attrs[2].MinLength, ShouldEqual, 0)

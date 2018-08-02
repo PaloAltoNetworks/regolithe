@@ -56,12 +56,7 @@ func (t ValidationMapping) Mapping(mode string, functionName string) (mapping *V
 		return nil, fmt.Errorf("no function '%s' found in type mapping mode %s", functionName, mode)
 	}
 
-	tm, ok := m[mode]
-	if !ok {
-		return nil, fmt.Errorf("no mode '%s' found in validation mapping", mode)
-	}
-
-	return tm, nil
+	return m[mode], nil
 }
 
 // Validate validates the type mappings against the schema.

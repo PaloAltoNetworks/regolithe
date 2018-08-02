@@ -74,6 +74,10 @@
                                 "type": "boolean",
                                 "default": "true"
                             },
+                            "extensions": {
+                                "description": "Opaque key value pairs that can be used by compilers.",
+                                "type": "object"
+                            },
                             "filterable": {
                                 "description": "The attribute can be used for filtering purposes",
                                 "type": "boolean"
@@ -90,10 +94,6 @@
                                 "description": "The attribute is used as a main identifier",
                                 "type": "boolean",
                                 "uniqueItems": true
-                            },
-                            "index": {
-                                "description": "The attribute is used as an index",
-                                "type": "boolean"
                             },
                             "max_length": {
                                 "description": "The maximum length of the attribute of type string",

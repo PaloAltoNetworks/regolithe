@@ -65,6 +65,20 @@
                         "type": "string"
                     }
                 },
+                "extensions": {
+                    "description": "Opaque key value pairs that can be used by compilers.",
+                    "type": "object"
+                },
+                "indexes": {
+                    "description": "List of compound indexes",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
                 "get": {
                     "$ref": "#/definitions/relationaction"
                 },
