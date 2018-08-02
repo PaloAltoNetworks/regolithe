@@ -19,7 +19,8 @@ import (
 // A specificationSet represents a compete set of Specification
 type specificationSet struct {
 	configuration    *Config
-	externalTypes    TypeMapping
+	typeMap          TypeMapping
+	validationsMap   ValidationMapping
 	apiInfo          *APIInfo
 	globalParameters map[string]*ParameterDefinition
 
@@ -175,7 +176,14 @@ func LoadSpecificationSet(
 
 		case "_type.mapping":
 
-			set.externalTypes, err = LoadTypeMapping(path.Join(dirname, info.Name()))
+			set.typeMap, err = LoadTypeMapping(path.Join(dirname, info.Name()))
+			if err != nil {
+				return nil, err
+			}
+
+		case "_validation.mapping":
+
+			set.validationsMap, err = LoadValidationMapping(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err
 			}
@@ -249,39 +257,36 @@ func LoadSpecificationSet(
 			rel.remoteSpecification = linked
 		}
 
-		if set.externalTypes != nil {
+		for _, version := range spec.AttributeVersions() {
 
-			for _, version := range spec.AttributeVersions() {
+			for _, attr := range spec.Attributes(version) {
 
-				for _, attr := range spec.Attributes(version) {
+				if nameConvertFunc != nil {
+					attr.ConvertedName = nameConvertFunc(attr.Name)
+				} else {
+					attr.ConvertedName = attr.Name
+				}
 
-					if nameConvertFunc != nil {
-						attr.ConvertedName = nameConvertFunc(attr.Name)
+				if typeConvertFunc != nil {
+					attr.ConvertedType, attr.TypeProvider = typeConvertFunc(attr.Type, attr.SubType)
+				}
+
+				if attr.Type != AttributeTypeExt {
+					continue
+				}
+
+				if typeMappingName != "" && set.typeMap != nil {
+					m, err := set.typeMap.Mapping(typeMappingName, attr.SubType)
+					if err != nil {
+						return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
+					}
+
+					if m != nil {
+						attr.ConvertedType = m.Type
+						attr.Initializer = m.Initializer
+						attr.TypeProvider = m.Import
 					} else {
-						attr.ConvertedName = attr.Name
-					}
-
-					if typeConvertFunc != nil {
-						attr.ConvertedType, attr.TypeProvider = typeConvertFunc(attr.Type, attr.SubType)
-					}
-
-					if attr.Type != AttributeTypeExt {
-						continue
-					}
-
-					if typeMappingName != "" {
-						m, err := set.externalTypes.Mapping(typeMappingName, attr.SubType)
-						if err != nil {
-							return nil, fmt.Errorf("Cannot apply type mapping for attribute '%s' for subtype '%s'", attr.Name, attr.SubType)
-						}
-
-						if m != nil {
-							attr.ConvertedType = m.Type
-							attr.Initializer = m.Initializer
-							attr.TypeProvider = m.Import
-						} else {
-							attr.ConvertedType = string(attr.Type)
-						}
+						attr.ConvertedType = string(attr.Type)
 					}
 				}
 			}
@@ -393,9 +398,14 @@ func (s *specificationSet) Configuration() *Config {
 	return s.configuration
 }
 
-func (s *specificationSet) ExternalTypes() TypeMapping {
+func (s *specificationSet) TypeMapping() TypeMapping {
 
-	return s.externalTypes
+	return s.typeMap
+}
+
+func (s *specificationSet) ValidationMapping() ValidationMapping {
+
+	return s.validationsMap
 }
 
 func (s *specificationSet) APIInfo() *APIInfo {

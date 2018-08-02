@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema#",
-    "title": "Type Mappings",
-    "description": "This file is used to map external types to language specifics.",
+    "title": "Validation Mapping",
+    "description": "This file is used to map validation functions to language specifics.",
     "type": "object",
     "additionalProperties": false,
     "patternProperties": {
@@ -27,19 +27,15 @@
             "type": "object",
             "additionalProperties": false,
             "required": [
-                "type"
+                "name"
             ],
             "properties": {
-                "type": {
-                    "description": "The translated type.",
-                    "type": "string"
-                },
-                "init": {
-                    "description": "How to initialize the type.",
+                "name": {
+                    "description": "Name of the function to call to perform the validation.",
                     "type": "string"
                 },
                 "import": {
-                    "description": "Eventual additional import or package that provides the type.",
+                    "description": "Eventual additional import or package that provides the validation function.",
                     "type": "string"
                 }
             }

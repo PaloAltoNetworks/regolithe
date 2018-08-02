@@ -25,7 +25,6 @@ attributes:
     exposed: true
     stored: true
     filterable: true
-    format: free
     orderable: true
 
   - name: name
@@ -36,10 +35,12 @@ attributes:
     required: true
     example_value: the name
     filterable: true
-    format: free
     getter: true
     setter: true
     orderable: true
+    validations:
+    - $nospaces
+    - $nocap
 
   - name: status
     description: The status of the task.

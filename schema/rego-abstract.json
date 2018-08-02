@@ -82,18 +82,6 @@
                                 "description": "The attribute is a foreign key",
                                 "type": "boolean"
                             },
-                            "format": {
-                                "description": "The format of the attribute",
-                                "enum": [
-                                    "free",
-                                    "email",
-                                    "phone",
-                                    "IPv4",
-                                    "IPv6",
-                                    "cidr",
-                                    "date"
-                                ]
-                            },
                             "getter": {
                                 "description": "The attribute will have a generated getter",
                                 "type": "boolean"
@@ -182,6 +170,13 @@
                                     "time",
                                     "external"
                                 ]
+                            },
+                            "validations": {
+                                "description": "Name of a custom validation from the _validation file to apply to the attribute",
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }

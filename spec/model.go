@@ -20,8 +20,9 @@ type Model struct {
 	Update *RelationAction `yaml:"update,omitempty"  json:"update,omitempty"`
 	Delete *RelationAction `yaml:"delete,omitempty"  json:"delete,omitempty"`
 
-	Extends []string `yaml:"extends,omitempty"  json:"extends,omitempty"`
-	IsRoot  bool     `yaml:"root,omitempty"     json:"root,omitempty"`
+	Extends     []string `yaml:"extends,omitempty"  json:"extends,omitempty"`
+	IsRoot      bool     `yaml:"root,omitempty"     json:"root,omitempty"`
+	Validations []string `yaml:"validations,omitempty"     json:"validations,omitempty"`
 
 	EntityNamePlural string `yaml:"-" json:"-"`
 }

@@ -24,6 +24,7 @@ export class RegolitheGenerator {
             && !doc.fileName.endsWith('_type.mapping')
             && !doc.fileName.endsWith('_api.info')
             && !doc.fileName.endsWith('_parameters')
+            && !doc.fileName.endsWith('_validation.mapping')
         ) {
             return;
         }

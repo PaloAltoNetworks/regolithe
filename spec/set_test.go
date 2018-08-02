@@ -273,6 +273,16 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["User"].Delete, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "Deletes the user with the given ID.",
+					ParameterDefinition: &ParameterDefinition{
+						Required: [][][]string{[][]string{[]string{"confirm"}}},
+						Entries: []*Parameter{
+							&Parameter{
+								Name:        "confirm",
+								Description: "this is required.",
+								Type:        ParameterTypeBool,
+							},
+						},
+					},
 				},
 			})
 		})
@@ -506,6 +516,16 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["user"].Delete, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "Deletes the user with the given ID.",
+					ParameterDefinition: &ParameterDefinition{
+						Required: [][][]string{[][]string{[]string{"confirm"}}},
+						Entries: []*Parameter{
+							&Parameter{
+								Name:        "confirm",
+								Description: "this is required.",
+								Type:        ParameterTypeBool,
+							},
+						},
+					},
 				},
 			})
 		})
@@ -739,6 +759,16 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 			So(rs["users"].Delete, ShouldResemble, map[string]*RelationAction{
 				"root": &RelationAction{
 					Description: "Deletes the user with the given ID.",
+					ParameterDefinition: &ParameterDefinition{
+						Required: [][][]string{[][]string{[]string{"confirm"}}},
+						Entries: []*Parameter{
+							&Parameter{
+								Name:        "confirm",
+								Description: "this is required.",
+								Type:        ParameterTypeBool,
+							},
+						},
+					},
 				},
 			})
 		})
@@ -761,24 +791,18 @@ func TestSpec_LoadSpecificationDir(t *testing.T) {
 		})
 
 		Convey("Then the type mapping should be correctly loaded", func() {
-			m, _ := set.ExternalTypes().Mapping("test", "string_map")
+			m, _ := set.TypeMapping().Mapping("test", "string_map")
 			So(m.Type, ShouldEqual, "map[string]string")
+		})
+
+		Convey("Then the validation mapping should be correctly loaded", func() {
+			m, _ := set.ValidationMapping().Mapping("test", "$username")
+			So(m.Name, ShouldEqual, "validate.CheckUserName")
 		})
 
 		Convey("Then the api info should be correctly loaded", func() {
 
 			So(set.APIInfo().Version, ShouldEqual, 1)
-		})
-
-		Convey("Then the type conversion should have worked", func() {
-			So(set.Specification("list").Attribute("name", "v1").ConvertedName, ShouldEqual, "NAME")
-			So(set.Specification("list").Attribute("name", "v1").TypeProvider, ShouldEqual, "")
-
-			So(set.Specification("list").Attribute("name", "v1").ConvertedType, ShouldEqual, "String")
-			So(set.Specification("list").Attribute("name", "v1").TypeProvider, ShouldEqual, "")
-
-			So(set.Specification("list").Attribute("date", "v1").ConvertedType, ShouldEqual, "time.Time")
-			So(set.Specification("list").Attribute("date", "v1").TypeProvider, ShouldEqual, "time")
 		})
 	})
 }

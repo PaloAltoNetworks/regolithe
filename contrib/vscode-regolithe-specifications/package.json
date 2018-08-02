@@ -51,6 +51,7 @@
                 "filenames": [
                     "_api.info",
                     "_type.mapping",
+                    "_validation.mapping",
                     "_parameters"
                 ]
             }
@@ -63,6 +64,10 @@
             {
                 "fileMatch": "_parameters",
                 "url": "./schemas/rego-shared-params.json"
+            },
+            {
+                "fileMatch": "_validation.mapping",
+                "url": "./schemas/rego-validation-mapping.json"
             },
             {
                 "fileMatch": "_type.mapping",

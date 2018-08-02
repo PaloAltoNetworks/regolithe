@@ -189,7 +189,7 @@ func (s *specification) Write(writer io.Writer) error {
 		condFirstLine := i == 0
 		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
 		condPrefixed := bytes.HasPrefix(line, prfx1) ||
-			bytes.HasPrefix(line, prfx3) ||
+			(bytes.HasPrefix(line, prfx3) && !bytes.HasPrefix(line, []byte("  validation"))) ||
 			(bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1)) ||
 			(bytes.HasPrefix(line, prfx4) && !bytes.HasSuffix(previousLine, sufx1))
 

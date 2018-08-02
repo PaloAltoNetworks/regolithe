@@ -15,13 +15,15 @@ model:
     description: Deletes the user with the given ID.
     parameters:
       required:
-      - - - required
+      - - - confirm
       entries:
       - name: confirm
         description: this is required.
         type: boolean
   extends:
   - '@base'
+  validations:
+  - $username
 
 # Attributes
 attributes:
@@ -34,7 +36,6 @@ attributes:
     required: true
     example_value: firstName
     filterable: true
-    format: free
     orderable: true
 
   - name: lastName
@@ -45,7 +46,6 @@ attributes:
     required: true
     example_value: lastName
     filterable: true
-    format: free
     orderable: true
 
   - name: userName
@@ -56,5 +56,4 @@ attributes:
     required: true
     example_value: userName
     filterable: true
-    format: free
     orderable: true

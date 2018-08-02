@@ -62,7 +62,6 @@ attributes:
     stored: true
     creation_only: true
     filterable: true
-    format: free
     orderable: true
 
   - name: date
@@ -79,7 +78,6 @@ attributes:
     exposed: true
     stored: true
     filterable: true
-    format: free
     orderable: true
 
   - name: name
@@ -90,7 +88,6 @@ attributes:
     required: true
     example_value: the name
     filterable: true
-    format: free
     getter: true
     setter: true
     orderable: true
@@ -102,7 +99,6 @@ attributes:
     stored: true
     read_only: true
     filterable: true
-    format: free
     orderable: true
 
   - name: slice
@@ -119,7 +115,6 @@ attributes:
     type: string
     stored: true
     filterable: true
-    format: free
     orderable: true
 
 # Relations

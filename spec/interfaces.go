@@ -24,7 +24,8 @@ type SpecificationSet interface {
 	RelationshipsByResourceName() map[string]*Relationship
 
 	Configuration() *Config
-	ExternalTypes() TypeMapping
+	TypeMapping() TypeMapping
+	ValidationMapping() ValidationMapping
 	APIInfo() *APIInfo
 }
 
@@ -61,10 +62,6 @@ type Specification interface {
 	// OrderingAttributes returns the list of attributes used for ordering.
 	OrderingAttributes(version string) []*Attribute
 
-	// AttributeInitializers returns all the attribute initializers for the
-	// given version.
-	AttributeInitializers(version string) map[string]interface{}
-
 	// AttributeVersions returns all the versions of attributes.
 	AttributeVersions() []string
 
@@ -79,7 +76,4 @@ type Specification interface {
 
 	// Identitier returns the Attribute used as an identifier.
 	Identifier() *Attribute
-
-	// TypeProviders returns all type providers.
-	TypeProviders() []string
 }

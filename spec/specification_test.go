@@ -180,44 +180,6 @@ func TestSpecification_Getters(t *testing.T) {
 	})
 }
 
-func TestSpecification_TypeProviders(t *testing.T) {
-
-	Convey("Given I have a new API", t, func() {
-
-		s := &specification{
-			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
-						Name:          "not-id",
-						ConvertedName: "not-id",
-						TypeProvider:  "toto",
-					},
-					&Attribute{
-						ConvertedName: "id",
-						TypeProvider:  "titi",
-					},
-					&Attribute{
-						ConvertedName: "id2",
-						TypeProvider:  "titi",
-					},
-					&Attribute{},
-				},
-			},
-		}
-
-		s.buildAttributesMapping() // nolint: errcheck
-
-		Convey("When I call TypeProviders", func() {
-
-			providers := s.TypeProviders()
-
-			Convey("Then the providers should be correct", func() {
-				So(providers, ShouldResemble, []string{"toto", "titi"})
-			})
-		})
-	})
-}
-
 func TestSpecification_AttributeInitializers(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {
@@ -495,7 +457,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[0].Exposed, ShouldBeTrue)
 			So(attrs[0].Filterable, ShouldBeTrue)
 			So(attrs[0].ForeignKey, ShouldBeFalse)
-			So(attrs[0].Format, ShouldEqual, AttributeFormatFree)
 			So(attrs[0].Getter, ShouldBeFalse)
 			So(attrs[0].Identifier, ShouldBeFalse)
 			So(attrs[0].Index, ShouldBeFalse)
@@ -529,7 +490,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[1].Exposed, ShouldBeTrue)
 			So(attrs[1].Filterable, ShouldBeTrue)
 			So(attrs[1].ForeignKey, ShouldBeFalse)
-			So(attrs[1].Format, ShouldEqual, AttributeFormatFree)
 			So(attrs[1].Getter, ShouldBeTrue)
 			So(attrs[1].Identifier, ShouldBeFalse)
 			So(attrs[1].Index, ShouldBeFalse)
@@ -563,7 +523,6 @@ func TestSpecification_LoadSpecification(t *testing.T) {
 			So(attrs[2].Exposed, ShouldBeTrue)
 			So(attrs[2].Filterable, ShouldBeTrue)
 			So(attrs[2].ForeignKey, ShouldBeFalse)
-			So(attrs[2].Format, ShouldEqual, "")
 			So(attrs[2].Getter, ShouldBeFalse)
 			So(attrs[2].Identifier, ShouldBeFalse)
 			So(attrs[2].Index, ShouldBeFalse)
@@ -922,7 +881,6 @@ attributes:
     stored: true
     creation_only: true
     filterable: true
-    format: free
     orderable: true
 
   - name: date
@@ -939,7 +897,6 @@ attributes:
     exposed: true
     stored: true
     filterable: true
-    format: free
     orderable: true
 
   - name: name
@@ -950,7 +907,6 @@ attributes:
     required: true
     example_value: the name
     filterable: true
-    format: free
     getter: true
     setter: true
     orderable: true
@@ -962,7 +918,6 @@ attributes:
     stored: true
     read_only: true
     filterable: true
-    format: free
     orderable: true
 
   - name: slice
@@ -979,7 +934,6 @@ attributes:
     type: string
     stored: true
     filterable: true
-    format: free
     orderable: true
 
 # Relations

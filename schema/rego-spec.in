@@ -87,6 +87,13 @@
                 "root": {
                     "description": "The represented object acts as the root specification.",
                     "type": "boolean"
+                },
+                "validations": {
+                    "description": "Name of a custom validation from the _validation file to apply to the object",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
