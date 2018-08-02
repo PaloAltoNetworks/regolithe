@@ -274,7 +274,7 @@ func specsetSpecsObjectSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/object.spec", size: 487, mode: os.FileMode(420), modTime: time.Unix(1533098307, 0)}
+	info := bindataFileInfo{name: "specset/specs/object.spec", size: 487, mode: os.FileMode(420), modTime: time.Unix(1533220356, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -294,7 +294,7 @@ func specsetSpecsRootSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/root.spec", size: 321, mode: os.FileMode(420), modTime: time.Unix(1533098277, 0)}
+	info := bindataFileInfo{name: "specset/specs/root.spec", size: 321, mode: os.FileMode(420), modTime: time.Unix(1533220356, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -314,7 +314,7 @@ func specsetSpecsType_mappingIni() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/type_mapping.ini", size: 1, mode: os.FileMode(420), modTime: time.Unix(1533098320, 0)}
+	info := bindataFileInfo{name: "specset/specs/type_mapping.ini", size: 1, mode: os.FileMode(420), modTime: time.Unix(1533220356, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
