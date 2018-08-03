@@ -265,7 +265,7 @@ func characteristics(attr *spec.Attribute) string {
 	}
 
 	if attr.DefaultValue != nil {
-		fmt.Fprintln(w, fmt.Sprintf("| Default \t|\t `%s` \t|", attr.DefaultValue)) // nolint: errcheck
+		fmt.Fprintln(w, fmt.Sprintf("| Default \t|\t `%#v` \t|", attr.DefaultValue)) // nolint: errcheck
 	}
 
 	if attr.MinLength > 0 {

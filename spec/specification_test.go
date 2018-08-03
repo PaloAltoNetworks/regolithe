@@ -269,45 +269,6 @@ func TestSpecification_AttributesProviders(t *testing.T) {
 	})
 }
 
-func TestSpecification_AttributeInitializers(t *testing.T) {
-
-	Convey("Given I have a new API", t, func() {
-
-		s := &specification{
-			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
-						Identifier:    false,
-						Name:          "not-id",
-						ConvertedName: "not-id",
-						DefaultValue:  "default1",
-						Type:          AttributeTypeString,
-					},
-					&Attribute{
-						Identifier:    true,
-						Name:          "id",
-						ConvertedName: "id",
-						Initializer:   "init",
-					},
-				},
-			},
-		}
-
-		s.buildAttributesMapping() // nolint: errcheck
-
-		Convey("When I call AttributeInitializers", func() {
-
-			inits := s.AttributeInitializers("v1")
-
-			Convey("Then the initializers should be correct", func() {
-				So(inits["id"], ShouldEqual, "init")
-				So(inits["not-id"], ShouldEqual, `"default1"`)
-				So(len(inits), ShouldEqual, 2)
-			})
-		})
-	})
-}
-
 func TestSpecification_OrderingAttributes(t *testing.T) {
 
 	Convey("Given I have a new API", t, func() {

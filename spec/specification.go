@@ -494,30 +494,6 @@ func (s *specification) ValidationProviders() []string {
 	return providers
 }
 
-// AttributeInitializers returns all initializers of the Attributes.
-func (s *specification) AttributeInitializers(version string) map[string]interface{} {
-
-	out := map[string]interface{}{}
-
-	for _, attr := range s.Attributes(version) {
-
-		if attr.Initializer != "" {
-			out[attr.ConvertedName] = attr.Initializer
-			continue
-		}
-
-		if attr.DefaultValue != nil {
-			if attr.Type == AttributeTypeString || attr.Type == AttributeTypeEnum {
-				out[attr.ConvertedName] = `"` + attr.DefaultValue.(string) + `"`
-				continue
-			}
-			out[attr.ConvertedName] = attr.DefaultValue
-		}
-	}
-
-	return out
-}
-
 func (s *specification) buildAttributesMapping() error {
 
 	s.attributeMap = attributeMapping{}
