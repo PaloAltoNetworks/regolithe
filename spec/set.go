@@ -154,7 +154,7 @@ func LoadSpecificationSet(
 	typeMappingName string,
 ) (SpecificationSet, error) {
 
-	var loadedMonolitheINI bool
+	var loadedRegolitheINI bool
 
 	set := &specificationSet{
 		specs: map[string]Specification{},
@@ -171,14 +171,14 @@ func LoadSpecificationSet(
 
 		switch info.Name() {
 
-		case "monolithe.ini":
+		case "regolithe.ini":
 
 			set.configuration, err = LoadConfig(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err
 			}
 
-			loadedMonolitheINI = true
+			loadedRegolitheINI = true
 
 		case "_type.mapping":
 
@@ -232,8 +232,8 @@ func LoadSpecificationSet(
 		}
 	}
 
-	if !loadedMonolitheINI {
-		return nil, fmt.Errorf("Could not find monolithe.ini in folder %s", dirname)
+	if !loadedRegolitheINI {
+		return nil, fmt.Errorf("Could not find regolithe.ini in folder %s", dirname)
 	}
 
 	// Massage the specs

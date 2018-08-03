@@ -8,9 +8,9 @@ import (
 
 func TestConfig_LoadConfig(t *testing.T) {
 
-	Convey("Given I load a monolithe.ini", t, func() {
+	Convey("Given I load a regolithe.ini", t, func() {
 
-		cfg, err := LoadConfig("./tests/monolithe.ini")
+		cfg, err := LoadConfig("./tests/regolithe.ini")
 
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)

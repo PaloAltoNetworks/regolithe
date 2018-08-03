@@ -34,7 +34,7 @@ func LoadConfig(path string) (*Config, error) {
 	c.cfg = cfg
 
 	// Load the sections
-	monolitheSection, err := cfg.GetSection("monolithe")
+	regolitheSection, err := cfg.GetSection("regolithe")
 	if err != nil {
 		return nil, err
 	}
@@ -45,13 +45,13 @@ func LoadConfig(path string) (*Config, error) {
 	}
 
 	// Set the values
-	productNameKey, err := monolitheSection.GetKey("product_name")
+	productNameKey, err := regolitheSection.GetKey("product_name")
 	if err != nil {
 		return nil, err
 	}
 	c.ProductName = productNameKey.String()
 
-	copyrightKey, err := monolitheSection.GetKey("copyright")
+	copyrightKey, err := regolitheSection.GetKey("copyright")
 	if err == nil {
 		c.Copyright = copyrightKey.String()
 	}

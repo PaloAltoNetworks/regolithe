@@ -29,7 +29,7 @@ const (
 	AttributeTypeExt    AttributeType = "external"
 )
 
-// An Attribute represents a monolithe specification attribute.
+// An Attribute represents a regolithe specification attribute.
 type Attribute struct {
 
 	// NOTE: Order of attributes matters!
