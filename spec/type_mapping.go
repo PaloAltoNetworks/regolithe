@@ -1,8 +1,11 @@
 package spec
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"os"
+	"sort"
 
 	"github.com/xeipuuv/gojsonschema"
 	"go.aporeto.io/regolithe/schema"
@@ -36,18 +39,77 @@ func LoadTypeMapping(path string) (TypeMapping, error) {
 
 	tm := NewTypeMapping()
 
-	decoder := yaml.NewDecoder(file)
-	decoder.SetStrict(true)
-
-	if err := decoder.Decode(tm); err != nil {
+	if err = tm.Read(file, true); err != nil {
 		return nil, err
 	}
 
-	if err := tm.Validate(); err != nil {
-		return nil, formatValidationErrors(err)
+	return tm, nil
+}
+
+// Read loads a type mapping from the given io.Reader
+func (t TypeMapping) Read(reader io.Reader, validate bool) (err error) {
+
+	decoder := yaml.NewDecoder(reader)
+	decoder.SetStrict(true)
+
+	if err = decoder.Decode(&t); err != nil {
+		return err
 	}
 
-	return tm, nil
+	if validate {
+		if errs := t.Validate(); len(errs) != 0 {
+			return formatValidationErrors(errs)
+		}
+	}
+
+	return nil
+}
+
+// Write dumps the specification into a []byte.
+func (t TypeMapping) Write(writer io.Writer) error {
+
+	repr := yaml.MapSlice{}
+
+	keys := make([]string, len(t))
+	var i int
+	for k := range t {
+		keys[i] = k
+		i++
+	}
+
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		repr = append(repr, yaml.MapItem{
+			Key:   k,
+			Value: t[k],
+		})
+	}
+
+	data, err := yaml.Marshal(repr)
+	if err != nil {
+		return err
+	}
+
+	buf := &bytes.Buffer{}
+	lines := bytes.Split(data, []byte("\n"))
+
+	for i, line := range lines {
+		condFirstLine := i == 0
+
+		if !condFirstLine && len(line) > 0 && line[0] != ' ' {
+			buf.WriteRune('\n')
+		}
+
+		buf.Write(line)
+
+		if i+1 < len(lines) {
+			buf.WriteRune('\n')
+		}
+	}
+
+	_, err = writer.Write(buf.Bytes())
+	return err
 }
 
 // Mapping returns the TypeMap for the given external type.

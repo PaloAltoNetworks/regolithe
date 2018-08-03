@@ -1,14 +1,14 @@
-$username:
+$nocap:
+  other:
+    name: noCap
   test:
-    name: validate.CheckUserName
+    name: nocapper.NoCap
+    import: github.com/aporeto/nocapper
 
 $nospace:
   test:
     name: validate.NoSpace
 
-$nocap:
+$username:
   test:
-    name: nocapper.NoCap
-    import: github.com/aporeto/nocapper
-  other:
-    name: noCap
+    name: validate.CheckUserName

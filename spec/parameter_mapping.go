@@ -1,8 +1,11 @@
 package spec
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/araddon/dateparse"
@@ -23,8 +26,16 @@ const (
 	ParameterTypeDuration ParameterType = "duration"
 )
 
+// A ParameterMapping is a list parameter mapping
+type ParameterMapping map[string]*ParameterDefinition
+
+// NewParameterMapping returns a new ParameterMapping.
+func NewParameterMapping() ParameterMapping {
+	return ParameterMapping{}
+}
+
 // LoadGlobalParameters loads the global parameters file.
-func LoadGlobalParameters(path string) (map[string]*ParameterDefinition, error) {
+func LoadGlobalParameters(path string) (ParameterMapping, error) {
 
 	file, err := os.Open(path)
 	if err != nil {
@@ -32,22 +43,100 @@ func LoadGlobalParameters(path string) (map[string]*ParameterDefinition, error) 
 	}
 	defer file.Close() // nolint: errcheck
 
-	pm := map[string]*ParameterDefinition{}
+	pm := ParameterMapping{}
 
-	decoder := yaml.NewDecoder(file)
-	decoder.SetStrict(true)
-
-	if err := decoder.Decode(pm); err != nil {
+	if err = pm.Read(file, true); err != nil {
 		return nil, err
 	}
 
-	for _, v := range pm {
-		if err := v.Validate("_parameters"); err != nil {
-			return nil, formatValidationErrors(err)
+	return pm, nil
+}
+
+// Read loads a validation mapping from the given io.Reader
+func (p ParameterMapping) Read(reader io.Reader, validate bool) (err error) {
+
+	decoder := yaml.NewDecoder(reader)
+	decoder.SetStrict(true)
+
+	if err = decoder.Decode(&p); err != nil {
+		return err
+	}
+
+	if validate {
+		if errs := p.Validate(); len(errs) != 0 {
+			return formatValidationErrors(errs)
 		}
 	}
 
-	return pm, nil
+	return nil
+}
+
+// Write dumps the specification into a []byte.
+func (p ParameterMapping) Write(writer io.Writer) error {
+
+	repr := yaml.MapSlice{}
+
+	keys := make([]string, len(p))
+	var i int
+	for k := range p {
+		keys[i] = k
+		i++
+	}
+
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		repr = append(repr, yaml.MapItem{
+			Key:   k,
+			Value: p[k],
+		})
+	}
+
+	data, err := yaml.Marshal(repr)
+	if err != nil {
+		return err
+	}
+
+	buf := &bytes.Buffer{}
+	prfx1 := []byte("  - name: ")
+	prfx2 := []byte("  entries:")
+	lines := bytes.Split(data, []byte("\n"))
+	var previousLine []byte
+
+	for i, line := range lines {
+		condFirstLine := i == 0
+
+		if !condFirstLine &&
+			(len(line) > 0 && line[0] != ' ') ||
+			(bytes.HasPrefix(line, prfx1) && !bytes.HasPrefix(previousLine, prfx2)) {
+			buf.WriteRune('\n')
+		}
+
+		buf.Write(line)
+
+		if i+1 < len(lines) {
+			buf.WriteRune('\n')
+		}
+
+		previousLine = line
+	}
+
+	_, err = writer.Write(buf.Bytes())
+	return err
+}
+
+// Validate the ParameterMapping
+func (p ParameterMapping) Validate() []error {
+
+	var errs []error
+
+	for _, v := range p {
+		if err := v.Validate("_parameter.mapping"); err != nil {
+			errs = append(errs, err...)
+		}
+	}
+
+	return errs
 }
 
 // ParameterDefinition represents a parameter definition.

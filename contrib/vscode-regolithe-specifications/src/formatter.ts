@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import * as path from 'path';
 
-import { shouldConsiderDocument } from './utils';
+import { tmFile, vmFile, pmFile, shouldConsiderDocument } from './utils';
 
 export class RegolitheDocumentFormattingEditProvider {
 
@@ -31,7 +31,18 @@ export class RegolitheDocumentFormattingEditProvider {
             let stdout = '';
             let stderr = '';
 
-            const p = cp.spawn(this.formatCommandBinPath, ['format'])
+            const params = ['format'];
+            if (doc.fileName.endsWith(tmFile)) {
+                params.push("--mode", "typemapping");
+            } else if (doc.fileName.endsWith(vmFile)) {
+                params.push("--mode", "validationmapping");
+            } else if (doc.fileName.endsWith(pmFile)) {
+                params.push("--mode", "parametermapping");
+            }
+            console.error(params)
+
+            const p = cp.spawn(this.formatCommandBinPath, params)
+
             p.stdout.setEncoding('utf8');
             p.stdout.on('data', data => stdout += data);
             p.stderr.on('data', data => stderr += data);

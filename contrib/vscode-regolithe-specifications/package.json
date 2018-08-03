@@ -2,7 +2,7 @@
     "name": "regolithe-specifications",
     "displayName": "Regolithe Specifications",
     "description": "Snippets and schema validation for Regolithe Specifications",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "icon": "assets/icon.png",
     "publisher": "aporeto",
     "scripts": {
@@ -52,7 +52,7 @@
                     "_api.info",
                     "_type.mapping",
                     "_validation.mapping",
-                    "_parameters"
+                    "_parameter.mapping"
                 ]
             }
         ],
@@ -62,7 +62,7 @@
                 "url": "./schemas/rego-info.json"
             },
             {
-                "fileMatch": "_parameters",
+                "fileMatch": "_parameter.mapping",
                 "url": "./schemas/rego-shared-params.json"
             },
             {

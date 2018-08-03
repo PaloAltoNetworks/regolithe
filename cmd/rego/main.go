@@ -39,21 +39,61 @@ func main() {
 		Short:         "Reads a specification from stdin and prints it formatted on std out.",
 		SilenceErrors: true,
 		SilenceUsage:  true,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return viper.BindPFlags(cmd.Flags())
+		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			s := spec.NewSpecification()
+			switch viper.Get("mode") {
+			case "spec":
+				s := spec.NewSpecification()
 
-			if err := s.Read(os.Stdin, true); err != nil {
-				return err
-			}
+				if err := s.Read(os.Stdin, true); err != nil {
+					return err
+				}
 
-			if err := s.Write(os.Stdout); err != nil {
-				return err
+				if err := s.Write(os.Stdout); err != nil {
+					return err
+				}
+
+			case "typemapping":
+				tm := spec.NewTypeMapping()
+
+				if err := tm.Read(os.Stdin, true); err != nil {
+					return err
+				}
+
+				if err := tm.Write(os.Stdout); err != nil {
+					return err
+				}
+
+			case "validationmapping":
+				vm := spec.NewValidationMapping()
+
+				if err := vm.Read(os.Stdin, true); err != nil {
+					return err
+				}
+
+				if err := vm.Write(os.Stdout); err != nil {
+					return err
+				}
+
+			case "parametermapping":
+				pm := spec.NewParameterMapping()
+
+				if err := pm.Read(os.Stdin, true); err != nil {
+					return err
+				}
+
+				if err := pm.Write(os.Stdout); err != nil {
+					return err
+				}
 			}
 
 			return nil
 		},
 	}
+	formatCmd.Flags().StringP("mode", "m", "spec", "Mode of formatting. Can be spec, typemapping, validationmapping, parametermapping.")
 
 	var docCmd = &cobra.Command{
 		Use:           "doc",

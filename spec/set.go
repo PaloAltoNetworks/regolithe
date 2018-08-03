@@ -18,11 +18,11 @@ import (
 
 // A specificationSet represents a compete set of Specification
 type specificationSet struct {
-	configuration    *Config
-	typeMap          TypeMapping
-	validationsMap   ValidationMapping
-	apiInfo          *APIInfo
-	globalParameters map[string]*ParameterDefinition
+	configuration  *Config
+	typeMap        TypeMapping
+	validationsMap ValidationMapping
+	apiInfo        *APIInfo
+	parametersMap  ParameterMapping
 
 	specs map[string]Specification
 }
@@ -188,9 +188,9 @@ func LoadSpecificationSet(
 				return nil, err
 			}
 
-		case "_parameters":
+		case "_parameter.mapping":
 
-			set.globalParameters, err = LoadGlobalParameters(path.Join(dirname, info.Name()))
+			set.parametersMap, err = LoadGlobalParameters(path.Join(dirname, info.Name()))
 			if err != nil {
 				return nil, err
 			}
@@ -308,7 +308,7 @@ func LoadSpecificationSet(
 			}
 		}
 
-		if set.globalParameters != nil {
+		if set.parametersMap != nil {
 
 			if spec.Model() != nil {
 
@@ -317,7 +317,7 @@ func LoadSpecificationSet(
 						if spec.Model().Get.ParameterDefinition == nil {
 							spec.Model().Get.ParameterDefinition = &ParameterDefinition{}
 						}
-						if err := spec.Model().Get.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+						if err := spec.Model().Get.ParameterDefinition.extend(set.parametersMap[key], key); err != nil {
 							return nil, err
 						}
 					}
@@ -328,7 +328,7 @@ func LoadSpecificationSet(
 						if spec.Model().Update.ParameterDefinition == nil {
 							spec.Model().Update.ParameterDefinition = &ParameterDefinition{}
 						}
-						if err := spec.Model().Update.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+						if err := spec.Model().Update.ParameterDefinition.extend(set.parametersMap[key], key); err != nil {
 							return nil, err
 						}
 					}
@@ -339,7 +339,7 @@ func LoadSpecificationSet(
 						if spec.Model().Delete.ParameterDefinition == nil {
 							spec.Model().Delete.ParameterDefinition = &ParameterDefinition{}
 						}
-						if err := spec.Model().Delete.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+						if err := spec.Model().Delete.ParameterDefinition.extend(set.parametersMap[key], key); err != nil {
 							return nil, err
 						}
 					}
@@ -352,7 +352,7 @@ func LoadSpecificationSet(
 							if r.Create.ParameterDefinition == nil {
 								r.Create.ParameterDefinition = &ParameterDefinition{}
 							}
-							if err := r.Create.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							if err := r.Create.ParameterDefinition.extend(set.parametersMap[key], key); err != nil {
 								return nil, err
 							}
 						}
@@ -363,7 +363,7 @@ func LoadSpecificationSet(
 							if r.Get.ParameterDefinition == nil {
 								r.Get.ParameterDefinition = &ParameterDefinition{}
 							}
-							if err := r.Get.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							if err := r.Get.ParameterDefinition.extend(set.parametersMap[key], key); err != nil {
 								return nil, err
 							}
 						}
@@ -374,7 +374,7 @@ func LoadSpecificationSet(
 							if r.Update.ParameterDefinition == nil {
 								r.Update.ParameterDefinition = &ParameterDefinition{}
 							}
-							if err := r.Update.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							if err := r.Update.ParameterDefinition.extend(set.parametersMap[key], key); err != nil {
 								return nil, err
 							}
 						}
@@ -385,7 +385,7 @@ func LoadSpecificationSet(
 							if r.Delete.ParameterDefinition == nil {
 								r.Delete.ParameterDefinition = &ParameterDefinition{}
 							}
-							if err := r.Delete.ParameterDefinition.extend(set.globalParameters[key], key); err != nil {
+							if err := r.Delete.ParameterDefinition.extend(set.parametersMap[key], key); err != nil {
 								return nil, err
 							}
 						}

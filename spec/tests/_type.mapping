@@ -1,18 +1,17 @@
-
-string_map:
-  test:
-    type: map[string]string
-
 int_array:
   test:
     type: '[]int'
     init: '[]int{}'
 
+string_map:
+  test:
+    type: map[string]string
+
 toto:
+  other:
+    type: Object
+    init: new Object()
   test:
     type: Toto
     init: Toto{}
     import: github.com/toto/toto
-  other:
-    type: Object
-    init: new Object()
