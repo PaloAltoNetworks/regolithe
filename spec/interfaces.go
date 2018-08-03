@@ -23,9 +23,16 @@ type SpecificationSet interface {
 	// RelationshipsByResourceName returns the relationships indexed by resource name.
 	RelationshipsByResourceName() map[string]*Relationship
 
+	// Configuration returns the specification set Config.
 	Configuration() *Config
+
+	// TypeMapping returns the specification set TypeMapping.
 	TypeMapping() TypeMapping
+
+	// ValidationMapping returns the specification set ValidationMapping.
 	ValidationMapping() ValidationMapping
+
+	// APIInfo returns the specification set APIInfo.
 	APIInfo() *APIInfo
 }
 

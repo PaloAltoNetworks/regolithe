@@ -16,6 +16,12 @@ import (
 	git "gopkg.in/src-d/go-git.v4"
 )
 
+// AttributeNameConverterFunc is the type of a attribute name conveter.
+type AttributeNameConverterFunc func(name string) string
+
+// AttributeTypeConverterFunc is the type of a attribute type conveter.
+type AttributeTypeConverterFunc func(typ AttributeType, subtype string) (converted string, provider string)
+
 // A specificationSet represents a compete set of Specification
 type specificationSet struct {
 	configuration  *Config
