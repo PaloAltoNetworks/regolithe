@@ -154,7 +154,10 @@
                                     "list",
                                     "object",
                                     "time",
-                                    "external"
+                                    "external",
+                                    "ref",
+                                    "refList",
+                                    "refMap"
                                 ]
                             },
                             "validations": {

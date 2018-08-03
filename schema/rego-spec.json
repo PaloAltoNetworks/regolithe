@@ -108,6 +108,10 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "detached": {
+                    "description": "If true, indicates the compiler that this object is detached from the api",
+                    "type": "boolean"
                 }
             }
         },
@@ -354,7 +358,10 @@
                                     "list",
                                     "object",
                                     "time",
-                                    "external"
+                                    "external",
+                                    "ref",
+                                    "refList",
+                                    "refMap"
                                 ]
                             },
                             "validations": {

@@ -4,29 +4,23 @@ import (
 	"fmt"
 )
 
-// AttributeUniqueScope represent the unique scope for an attribute.
-type AttributeUniqueScope string
-
-// Various values for an AttributeUniqueScope.
-const (
-	AttributeUniqueScopeLocal  AttributeUniqueScope = "local"
-	AttributeUniqueScopeGlobal AttributeUniqueScope = "global"
-)
-
 // AttributeType represents the various type for an attribute.
 type AttributeType string
 
 // Various values for AttributeType.
 const (
-	AttributeTypeString AttributeType = "string"
-	AttributeTypeInt    AttributeType = "integer"
-	AttributeTypeFloat  AttributeType = "float"
-	AttributeTypeBool   AttributeType = "boolean"
-	AttributeTypeEnum   AttributeType = "enum"
-	AttributeTypeList   AttributeType = "list"
-	AttributeTypeObject AttributeType = "object"
-	AttributeTypeTime   AttributeType = "time"
-	AttributeTypeExt    AttributeType = "external"
+	AttributeTypeString  AttributeType = "string"
+	AttributeTypeInt     AttributeType = "integer"
+	AttributeTypeFloat   AttributeType = "float"
+	AttributeTypeBool    AttributeType = "boolean"
+	AttributeTypeEnum    AttributeType = "enum"
+	AttributeTypeList    AttributeType = "list"
+	AttributeTypeObject  AttributeType = "object"
+	AttributeTypeTime    AttributeType = "time"
+	AttributeTypeExt     AttributeType = "external"
+	AttributeTypeRef     AttributeType = "ref"
+	AttributeTypeRefList AttributeType = "refList"
+	AttributeTypeRefMap  AttributeType = "refMap"
 )
 
 // An Attribute represents a regolithe specification attribute.

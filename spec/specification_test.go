@@ -82,7 +82,7 @@ func TestSpecification_Validate(t *testing.T) {
 
 			Convey("Then err should not be nil", func() {
 				So(errs, ShouldNotBeNil)
-				So(formatValidationErrors(errs).Error(), ShouldEqual, `thing.spec: schema error: attributes.v1.1.type: attributes.v1.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external"
+				So(formatValidationErrors(errs).Error(), ShouldEqual, `thing.spec: schema error: attributes.v1.1.type: attributes.v1.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external", "ref", "refList", "refMap"
 thing.spec: schema error: description: description is required
 thing.spec: schema error: package: package is required
 thing.spec: schema error: type: type is required`)

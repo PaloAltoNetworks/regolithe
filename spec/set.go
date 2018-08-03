@@ -220,13 +220,15 @@ func LoadSpecificationSet(
 			}
 
 			baseName := strings.Replace(strings.Replace(info.Name(), ".spec", "", 1), ".abs", "", 1)
+			baseName = strings.TrimPrefix(baseName, "+")
 
 			targetMap[baseName], err = LoadSpecification(path.Join(dirname, info.Name()), false)
 			if err != nil {
 				return nil, err
 			}
 
-			if targetMap[baseName].Model() != nil && targetMap[baseName].Model().RestName != baseName {
+			if targetMap[baseName].Model() != nil &&
+				targetMap[baseName].Model().RestName != baseName {
 				return nil, fmt.Errorf("%s: declared rest_name '%s' must be identical to filename without extension", info.Name(), targetMap[baseName].Model().RestName)
 			}
 		}

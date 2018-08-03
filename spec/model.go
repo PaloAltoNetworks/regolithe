@@ -21,6 +21,7 @@ type Model struct {
 	Delete       *RelationAction        `yaml:"delete,omitempty"          json:"delete,omitempty"`
 	Extends      []string               `yaml:"extends,omitempty"         json:"extends,omitempty"`
 	IsRoot       bool                   `yaml:"root,omitempty"            json:"root,omitempty"`
+	Detached     bool                   `yaml:"detached,omitempty"        json:"detached,omitempty"`
 	Validations  []string               `yaml:"validations,omitempty"     json:"validations,omitempty"`
 	Extensions   map[string]interface{} `yaml:"extensions,omitempty"      json:"extensions,omitempty"`
 
