@@ -10,5 +10,7 @@ $nospace:
     name: validate.NoSpace
 
 $username:
+  elemental:
+    name: validate.CheckUserName
   test:
     name: validate.CheckUserName
