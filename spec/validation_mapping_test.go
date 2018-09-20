@@ -22,9 +22,6 @@ func TestValidationMapping_LoadValidationMapping(t *testing.T) {
 					"test": &ValidationMap{
 						Name: "validate.CheckUserName",
 					},
-					"elemental": &ValidationMap{
-						Name: "validate.CheckUserName",
-					},
 				},
 				"$nospace": map[string]*ValidationMap{
 					"test": &ValidationMap{
