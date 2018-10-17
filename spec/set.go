@@ -3,12 +3,12 @@ package spec
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"sort"
 	"strings"
 
-	"github.com/Sirupsen/logrus"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
@@ -71,11 +71,7 @@ func LoadSpecificationSetFromGithub(
 		ref = plumbing.NewReferenceFromStrings("refs/heads/"+refName, "").Name()
 	}
 
-	logrus.WithFields(logrus.Fields{
-		"ref":  refName,
-		"repo": repoURL,
-		"path": internalPath,
-	}).Info("Retrieving repository")
+	log.Println("Retrieving repository: ref=%s repo=% path=%s", refName, repoURL, internalPath)
 
 	cloneFunc := func(folder string, ref plumbing.ReferenceName) (*git.Repository, error) {
 		return git.PlainClone(
@@ -93,12 +89,8 @@ func LoadSpecificationSetFromGithub(
 
 	if err != nil {
 		if err == plumbing.ErrReferenceNotFound {
-			logrus.WithFields(logrus.Fields{
-				"err":  err,
-				"ref":  refName,
-				"repo": repoURL,
-				"path": internalPath,
-			}).Warn("Trying to clone with refs/tags - failed to clone with refs/heads")
+
+			log.Println("failed to clone with refs/heads: ref=%s repo=% path=%s err=%s", refName, repoURL, internalPath, err)
 
 			// Need to recreate a folder, get error repository already created otherwise
 			// Happened even if old tmp folder is deleted...
