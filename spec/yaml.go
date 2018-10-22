@@ -5,7 +5,6 @@ import (
 
 	"github.com/fatih/structs"
 	"github.com/mitchellh/go-wordwrap"
-
 	yaml "gopkg.in/yaml.v2"
 )
 

@@ -8,10 +8,9 @@ import (
 	"path"
 	"sort"
 
+	wordwrap "github.com/mitchellh/go-wordwrap"
 	"github.com/xeipuuv/gojsonschema"
 	"go.aporeto.io/regolithe/schema"
-
-	wordwrap "github.com/mitchellh/go-wordwrap"
 	yaml "gopkg.in/yaml.v2"
 )
 
