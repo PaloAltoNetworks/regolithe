@@ -9,11 +9,10 @@ import (
 	"sort"
 	"strings"
 
+	git "gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
-
-	git "gopkg.in/src-d/go-git.v4"
 )
 
 // AttributeNameConverterFunc is the type of a attribute name conveter.
