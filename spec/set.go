@@ -70,7 +70,7 @@ func LoadSpecificationSetFromGithub(
 		ref = plumbing.NewReferenceFromStrings("refs/heads/"+refName, "").Name()
 	}
 
-	log.Println("Retrieving repository: ref=%s repo=% path=%s", refName, repoURL, internalPath)
+	log.Printf("Retrieving repository: ref=%s repo=%s path=%s", refName, repoURL, internalPath)
 
 	cloneFunc := func(folder string, ref plumbing.ReferenceName) (*git.Repository, error) {
 		return git.PlainClone(
@@ -89,7 +89,7 @@ func LoadSpecificationSetFromGithub(
 	if err != nil {
 		if err == plumbing.ErrReferenceNotFound {
 
-			log.Println("failed to clone with refs/heads: ref=%s repo=% path=%s err=%s", refName, repoURL, internalPath, err)
+			log.Printf("failed to clone with refs/heads: ref=%s repo=%s path=%s err=%s", refName, repoURL, internalPath, err)
 
 			// Need to recreate a folder, get error repository already created otherwise
 			// Happened even if old tmp folder is deleted...
