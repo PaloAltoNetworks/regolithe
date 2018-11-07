@@ -4,10 +4,11 @@
 */debug
 vendor
 *.cover
-coverage.txt
 Gopkg.lock
 cmd/rego/rego
 
+*.cov
+artifacts
 
 for p in *.spec ; do
     data=$(cat $p)
