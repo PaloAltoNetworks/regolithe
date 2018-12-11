@@ -8,8 +8,7 @@ PROJECT_RELEASE ?= dev
 ci: init lint test codecov
 
 init:
-	dep ensure
-	dep status
+	export GO11MODULE=on && go get ./...
 
 lint:
 	golangci-lint run \
