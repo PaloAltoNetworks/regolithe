@@ -8,7 +8,7 @@ PROJECT_RELEASE ?= dev
 ci: init lint test codecov
 
 init:
-	export GO11MODULE=on && go get ./...
+	export GO111MODULE=on && go get ./...
 
 lint:
 	golangci-lint run \

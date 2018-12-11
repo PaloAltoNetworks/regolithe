@@ -76,7 +76,7 @@ func TestInfo_Validate(t *testing.T) {
 
 			Convey("Then there should be validation errors", func() {
 				So(len(errs), ShouldEqual, 1)
-				So(errs[0].Error(), ShouldEqual, "_api.info: schema error: prefix: prefix is required")
+				So(errs[0].Error(), ShouldEqual, "_api.info: schema error: (root): prefix is required")
 			})
 		})
 	})

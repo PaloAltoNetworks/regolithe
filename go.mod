@@ -3,7 +3,10 @@ module go.aporeto.io/regolithe
 require (
 	github.com/araddon/dateparse v0.0.0-20181123171228-21df004e09ca
 	github.com/fatih/structs v1.1.0
+	github.com/jtolds/gls v4.2.1+incompatible // indirect
 	github.com/mitchellh/go-wordwrap v1.0.0
+	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
+	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/viper v1.3.1
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
