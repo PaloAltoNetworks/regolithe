@@ -11,6 +11,9 @@ init:
 	export GO111MODULE=on && go get ./...
 
 lint:
+	golangci-lint --version
+	@ go get -u github.com/golangci/golangci-lint
+	golangci-lint --version
 	golangci-lint run \
 		--disable-all \
 		--exclude-use-default=false \
