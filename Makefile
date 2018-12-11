@@ -12,7 +12,7 @@ init:
 
 lint:
 	@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-	golangci-lint run \
+	GO111MODULE=on golangci-lint run \
 		--disable-all \
 		--exclude-use-default=false \
 		--enable=errcheck \
