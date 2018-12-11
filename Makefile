@@ -11,6 +11,7 @@ init:
 	GO111MODULE=on go get ./...
 
 lint:
+	@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	golangci-lint run \
 		--disable-all \
 		--exclude-use-default=false \
