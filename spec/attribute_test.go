@@ -99,4 +99,30 @@ func TestAttribute_Validate(t *testing.T) {
 			})
 		})
 	})
+
+	Convey("Given I have an attribute with allowed_chars and no allowed_chars_message", t, func() {
+
+		a := &Attribute{
+			Name:         "name",
+			Type:         "string",
+			Description:  "coucou.",
+			ExampleValue: "coucou",
+			AllowedChars: "abc",
+			linkedSpecification: &specification{
+				RawModel: &Model{
+					RestName: "spec",
+				},
+			},
+		}
+
+		Convey("When I call validate", func() {
+
+			errs := a.Validate()
+
+			Convey("Then there should be validation error", func() {
+				So(len(errs), ShouldEqual, 1)
+				So(errs[0].Error(), ShouldEqual, "spec.spec: attribute 'name' must define allowed_chars_message")
+			})
+		})
+	})
 }

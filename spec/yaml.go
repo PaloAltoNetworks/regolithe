@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/fatih/structs"
-	"github.com/mitchellh/go-wordwrap"
+	wordwrap "github.com/mitchellh/go-wordwrap"
 	yaml "gopkg.in/yaml.v2"
 )
 

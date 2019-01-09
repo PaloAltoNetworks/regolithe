@@ -9,7 +9,7 @@ import (
 
 	"github.com/xeipuuv/gojsonschema"
 	"go.aporeto.io/regolithe/schema"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // A TypeMap represent a single Type Map.

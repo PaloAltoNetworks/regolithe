@@ -6,7 +6,7 @@ import (
 	"os"
 	"sort"
 
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // ParameterType represents the various type for a parameter.
