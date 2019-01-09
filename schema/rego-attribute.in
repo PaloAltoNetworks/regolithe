@@ -19,6 +19,10 @@
                                 "description": "Regexp that a string attribute must honor to be valid",
                                 "type": "string"
                             },
+                            "allowed_chars_message": {
+                                "description": "Message explaining the regexp declared in allowed_chars",
+                                "type": "string"
+                            },
                             "allowed_choices": {
                                 "description": "Allowed values for an attribute of type Enum",
                                 "type": "array",
