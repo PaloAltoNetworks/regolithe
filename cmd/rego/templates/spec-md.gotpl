@@ -1,10 +1,10 @@
-## {{ .Spec.Model.EntityName }}
+### {{ .Spec.Model.EntityName }}
 {{ $latestVersion := .Spec.LatestAttributesVersion }}
 {{ trimspace .Spec.Model.Description }}
 
 {{ $example := example .Spec $latestVersion }}
 {{ if $example }}
-### Example
+#### Example
 
 ```json
 {{ $example }}
@@ -13,7 +13,7 @@
 
 {{ $ops := operations .Spec .Relationships .Set }}
 {{ if $ops}}
-### Relations
+#### Relations
 
 {{ $ops }}
 {{ end }}
@@ -21,10 +21,10 @@
 {{ $attributes := .Spec.ExposedAttributes $latestVersion }}
 {{- if $attributes }}
 
-### Attributes
+#### Attributes
 
 {{ range $attributes -}}
-#### `{{ .Name }} ({{ if eq .Type "external" }}{{ .Type }}:{{ .SubType }}{{ else }}{{ .Type }}{{ end }})`
+##### `{{ .Name }} ({{ if eq .Type "external" }}{{ .Type }}:{{ .SubType }}{{ else }}{{ .Type }}{{ end }})`
 {{ if .Deprecated }}
 > This attribute is deprecated
 {{ end }}

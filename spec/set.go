@@ -434,6 +434,22 @@ func (s *specificationSet) Specification(name string) Specification {
 	return s.specs[name]
 }
 
+// SpecificationGroup returns the Specifications from the given group.
+func (s *specificationSet) SpecificationGroup(groupName string) (specs []Specification) {
+
+	for _, s := range s.specs {
+		if s.Model().Group == groupName {
+			specs = append(specs, s)
+		}
+	}
+
+	sort.Slice(specs, func(i int, j int) bool {
+		return strings.Compare(specs[i].Model().RestName, specs[j].Model().RestName) == -1
+	})
+
+	return
+}
+
 // Specifications returns all Specifications.
 func (s *specificationSet) Specifications() (specs []Specification) {
 
@@ -576,4 +592,25 @@ func (s *specificationSet) RelationshipsByResourceName() map[string]*Relationshi
 	}
 
 	return relationships
+}
+
+// Groups returns the list of all groups
+func (s *specificationSet) Groups() []string {
+
+	done := map[string]struct{}{}
+
+	for _, sp := range s.Specifications() {
+		done[sp.Model().Group] = struct{}{}
+	}
+
+	out := make([]string, len(done))
+	var i int
+	for k := range done {
+		out[i] = k
+		i++
+	}
+
+	sort.Strings(out)
+
+	return out
 }

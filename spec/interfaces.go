@@ -8,6 +8,9 @@ type SpecificationSet interface {
 	// Specification returns the Specification with the given name.
 	Specification(name string) Specification
 
+	// SpecificationGroup returns the Specifications in the given group name.
+	SpecificationGroup(groupName string) []Specification
+
 	// Specifications returns all Specifications.
 	Specifications() (specs []Specification)
 
@@ -34,6 +37,9 @@ type SpecificationSet interface {
 
 	// APIInfo returns the specification set APIInfo.
 	APIInfo() *APIInfo
+
+	// Groups returns the list of group names.
+	Groups() []string
 }
 
 // A Specification is the interface representing a Regolithe Specification.

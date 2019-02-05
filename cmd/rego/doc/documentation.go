@@ -42,60 +42,91 @@ func Write(set spec.SpecificationSet, format string) error {
 
 func writeMarkdownDoc(set spec.SpecificationSet) error {
 
-	data, err := static.Asset("templates/toc-md.gotpl")
+	tocData, err := static.Asset("templates/toc-md.gotpl")
 	if err != nil {
 		return fmt.Errorf("cannot open toc template: %s", err)
 	}
 
-	temp, err := template.New("toc").Funcs(functions).Parse(string(data))
+	specData, err := static.Asset("templates/spec-md.gotpl")
 	if err != nil {
-		return fmt.Errorf("cannot parse template: %s", err)
-	}
-
-	buf := &bytes.Buffer{}
-	if err := temp.Execute(buf, set); err != nil {
-		return fmt.Errorf("cannot execute template: %s", err)
+		return fmt.Errorf("cannot open spec template: %s", err)
 	}
 
 	relationships := set.RelationshipsByRestName()
 
-	fmt.Println(buf.String())
+	out := fmt.Sprintf(`<!-- markdownlint-disable MD024 MD025 -->
 
-	var out string
+# %s API Documentation
+
+> Version: %d
+
+`, strings.Title(set.Configuration().ProductName), set.APIInfo().Version)
+
 	r := regexp.MustCompile(`\n\n\n+`)
 
-	for _, s := range set.Specifications() {
+	groups := set.Groups()
 
-		model := s.Model()
+	for _, g := range groups {
 
-		if model.Private || model.IsRoot {
+		specs := set.SpecificationGroup(g)
+
+		if len(specs) == 0 || g == "none" {
 			continue
 		}
 
-		data, err := static.Asset("templates/spec-md.gotpl")
-		if err != nil {
-			return fmt.Errorf("cannot open spec template: %s", err)
+		buf := &bytes.Buffer{}
+		s := struct {
+			Set       spec.SpecificationSet
+			GroupName string
+		}{
+			set,
+			g,
 		}
 
-		temp, err := template.New(model.RestName).Funcs(functions).Parse(string(data[:len(data)-1]))
+		tocTemplate, err := template.New("toc-" + g).Funcs(functions).Parse(string(tocData))
 		if err != nil {
 			return fmt.Errorf("cannot parse template: %s", err)
 		}
 
-		buf := &bytes.Buffer{}
-		if err := temp.Execute(buf, struct {
-			Set           spec.SpecificationSet
-			Spec          spec.Specification
-			Relationships map[string]*spec.Relationship
-		}{
-			Set:           set,
-			Spec:          s,
-			Relationships: relationships,
-		}); err != nil {
+		if err := tocTemplate.Execute(buf, s); err != nil {
 			return fmt.Errorf("cannot execute template: %s", err)
 		}
 
-		out = out + r.ReplaceAllString(buf.String(), "\n\n")
+		var initializedGroup bool
+
+		for _, s := range specs {
+
+			model := s.Model()
+
+			if model.Private || model.IsRoot {
+				continue
+			}
+
+			if !initializedGroup {
+				out = fmt.Sprintf("%s%s\n", out, buf.String())
+				initializedGroup = true
+			}
+
+			temp, err := template.New(model.RestName).Funcs(functions).Parse(string(specData[:len(specData)-1]))
+			if err != nil {
+				return fmt.Errorf("cannot parse template: %s", err)
+			}
+
+			buf := &bytes.Buffer{}
+			if err := temp.Execute(buf, struct {
+				Set           spec.SpecificationSet
+				Spec          spec.Specification
+				Relationships map[string]*spec.Relationship
+			}{
+				Set:           set,
+				Spec:          s,
+				Relationships: relationships,
+			}); err != nil {
+				return fmt.Errorf("cannot execute template: %s", err)
+			}
+
+			out = out + r.ReplaceAllString(buf.String(), "\n\n")
+		}
 	}
 
 	fmt.Print(out[:len(out)-1])

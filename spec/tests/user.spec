@@ -4,6 +4,7 @@ model:
   resource_name: users
   entity_name: User
   package: todo-list
+  group: core
   description: Represent a user.
   aliases:
   - usr

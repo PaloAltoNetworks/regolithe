@@ -4,6 +4,7 @@ model:
   resource_name: lists
   entity_name: List
   package: todo-list
+  group: core
   description: Represent a a list of task to do.
   aliases:
   - lst

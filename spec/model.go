@@ -12,6 +12,7 @@ type Model struct {
 	ResourceName string                 `yaml:"resource_name,omitempty"   json:"resource_name,omitempty"`
 	EntityName   string                 `yaml:"entity_name,omitempty"     json:"entity_name,omitempty"`
 	Package      string                 `yaml:"package,omitempty"         json:"package,omitempty"`
+	Group        string                 `yaml:"group,omitempty"           json:"group,omitempty"`
 	Description  string                 `yaml:"description,omitempty"     json:"description,omitempty"`
 	Aliases      []string               `yaml:"aliases,omitempty"         json:"aliases,omitempty"`
 	Private      bool                   `yaml:"private,omitempty"         json:"private,omitempty"`

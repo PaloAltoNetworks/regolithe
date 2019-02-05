@@ -30,6 +30,7 @@ func TestSpecification_Validate(t *testing.T) {
 				Description:  "desc.",
 				EntityName:   "toto",
 				Package:      "package",
+				Group:        "core",
 			},
 			RawAttributes: map[string][]*Attribute{
 				"v1": []*Attribute{
@@ -60,6 +61,7 @@ func TestSpecification_Validate(t *testing.T) {
 				RestName:     "thing",
 				Description:  "desc.",
 				EntityName:   "toto",
+				Group:        "core",
 			},
 			RawAttributes: map[string][]*Attribute{
 				"v1": []*Attribute{
@@ -870,6 +872,7 @@ model:
   resource_name: lists
   entity_name: List
   package: todo-list
+  group: core
   description: Represent a a list of task to do.
   aliases:
   - lst

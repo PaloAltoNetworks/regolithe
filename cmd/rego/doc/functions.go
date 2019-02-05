@@ -19,14 +19,14 @@ func toc(specs []spec.Specification) string {
 	w := &tabwriter.Writer{}
 	w.Init(buf, 0, 8, 0, ' ', 0)
 
-	fmt.Fprintln(w, "| Object \t|\t Description \t|") // nolint: errcheck
-	fmt.Fprintln(w, "| - \t|\t - \t|")                // nolint: errcheck
+	fmt.Fprintln(w, "| Resource \t|\t Description \t|") // nolint: errcheck
+	fmt.Fprintln(w, "| - \t|\t - \t|")                  // nolint: errcheck
 
 	for _, spec := range specs {
 
 		model := spec.Model()
 
-		if model.Private {
+		if model.Private || model.Group == "none" {
 			continue
 		}
 

@@ -4,6 +4,7 @@ model:
   resource_name: root
   entity_name: Root
   package: todo-list
+  group: core
   description: Root object of the API.
   get:
     description: Retrieve the root object.

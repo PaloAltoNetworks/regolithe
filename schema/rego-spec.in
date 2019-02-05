@@ -33,7 +33,8 @@
                 "rest_name",
                 "resource_name",
                 "entity_name",
-                "description"
+                "description",
+                "group"
             ],
 
             "properties": {
@@ -84,6 +85,10 @@
                 },
                 "package": {
                     "description": "The name of the package of the represented object.",
+                    "type": "string"
+                },
+                "group": {
+                    "description": "The group of the api.",
                     "type": "string"
                 },
                 "private": {

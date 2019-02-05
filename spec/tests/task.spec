@@ -4,6 +4,7 @@ model:
   resource_name: tasks
   entity_name: Task
   package: todo-list
+  group: core
   description: Represent a task to do in a listd.
   aliases:
   - tsk
