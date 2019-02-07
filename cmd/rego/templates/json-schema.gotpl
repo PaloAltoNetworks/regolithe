@@ -1,0 +1,125 @@
+{{- define "parse-type" -}}
+{{- if eq . "time" -}}
+"type": "string",
+"format": "date-time"
+{{- else if eq . "string" -}}
+"type": "string"
+{{- else if eq . "boolean" -}}
+"type": "boolean"
+{{- else if eq . "integer" -}}
+"type": "integer"
+{{- else if eq . "float" -}}
+"type": "number"
+{{- else if eq . "object" -}}
+{{- else -}}
+"$ref": "gaia.json#/{{ . }}"
+{{- end -}}
+{{- end -}}
+
+{
+    {{ $latestVersion := .Spec.LatestAttributesVersion -}}
+    "title": "{{ .Spec.Model.EntityName }}",
+    "type": "object",
+    "properties": {
+    {{- range $idxAttr, $attr := .Spec.ExposedAttributes $latestVersion -}}
+    {{- if $idxAttr -}},{{- end }}
+    "{{ $attr.ConvertedName }}": {
+    "anyOf": [
+        {{- if not .Required }}
+        { "type": "null" },
+        {{- end }}
+        {
+        {{- /* ==== Type ==== */ -}}
+        {{- $type := convertType $attr.Type -}}
+        {{ if $attr.AllowedChoices }}
+        "enum": [
+            {{- range $idxChoice, $choice := $attr.AllowedChoices -}}
+            {{- if $idxChoice -}}, {{ end -}}
+            "{{ $choice }}"
+            {{- end -}}
+        ]
+        {{- else if eq $type "$external" }}
+            {{ stripFirstLevelBrackets $attr.ConvertedType }}
+        {{- else if eq $type "$list" }}
+        "type": "array"
+        {{- if $attr.SubType }},
+        "items": {
+            {{ template "parse-type" $attr.SubType }}
+        }
+        {{- end }}
+        {{- else if eq $type "$map" }}
+        "type": "object"
+        {{- if $attr.SubType -}},
+        "additionalProperties": {
+            {{ template "parse-type" $attr.SubType }}
+        }
+        {{- else -}},
+        "additionalProperties": true
+        {{- end }}
+        {{- else if eq $type "$ref" }}
+        {{ template "parse-type" $attr.SubType }}
+        {{- else }}
+        {{ template "parse-type" $type }}
+        {{- end }}
+
+        {{- /* ==== Other properties ==== */ -}}
+        {{- if $attr.AllowedChars -}},
+        "pattern": "{{ convertRegexp $attr.AllowedChars $attr.Required }}"
+        {{- end -}}
+        {{- if $attr.MaxLength -}},
+        "maxLength": {{ $attr.MaxLength }}
+        {{- end -}}
+        {{- if $attr.MinLength -}},
+        "minLength": {{ $attr.MinLength }}
+        {{- end -}}
+        {{- if $attr.MaxValue -}},
+        "maximum": {{ $attr.MaxValue }}
+        {{- end -}}
+        {{- if $attr.MinValue -}},
+        "minimum": {{ $attr.MinValue }}
+        {{- end -}}
+        {{ "" }}
+        }
+    ]
+
+    {{- /* ==== Metadata: Not a JSON schema keyword but kept for information  ==== */ -}}
+    {{- if $attr.Required -}},
+    "$required": true {{- /* JSON schema uses an array at "required" keyword at the parent */ -}}
+    {{- end -}}
+    {{- if $attr.ReadOnly -}},
+    "$readOnly": true
+    {{- end -}}
+    {{- if not (isNil $attr.DefaultValue) -}},
+    "$defaultValue": {{ $attr.DefaultValue | jsonStringify }}
+    {{- end -}}
+    {{ "" }}
+    }
+    {{- end }}
+    },
+    "additionalProperties": false,
+    "required": [
+        {{- with .Spec.ExposedAttributes $latestVersion -}}
+        {{- $first := true -}}
+        {{- range $attribute := . }}
+        {{- if $attribute.Required -}}
+            {{- if not $first -}}, {{ end -}}
+            {{- $first = false -}}
+            "{{ $attribute.ConvertedName }}"
+        {{- end -}}
+        {{- end -}}
+        {{- end -}}
+    ],
+
+    {{- /* ==== Metadata: Not a JSON schema keyword but kept for information  ==== */ -}}
+    {{- "" }}
+    "$modelName": "{{ .Spec.Model.EntityName }}",
+    "$modelRestName": "{{ .Spec.Model.RestName }}",
+    "$modelResourceName": "{{ .Spec.Model.ResourceName }}",
+    "$modelPackage": "{{ .Spec.Model.Package }}",
+    "$extends": [
+        {{- range $idxExtend, $extend := .Spec.Model.Extends -}}
+        {{- if $idxExtend -}}, {{ end -}}
+        "{{ $extend }}"
+        {{- end -}}
+    ]
+}

@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.aporeto.io/regolithe/cmd/rego/doc"
+	"go.aporeto.io/regolithe/cmd/rego/jsonschema"
 	"go.aporeto.io/regolithe/cmd/rego/static"
 	"go.aporeto.io/regolithe/spec"
 )
@@ -120,7 +121,32 @@ func main() {
 	}
 	docCmd.Flags().StringP("dir", "d", "", "Path of the specifications folder.")
 	docCmd.Flags().String("format", "markdown", "Path of the specifications folder.")
-	// docCmd.Flags().StringP("category", "c", nil, "Category.")
+
+	var jsonSchemaCmd = &cobra.Command{
+		Use:           "jsonschema",
+		Short:         "Generate a json schema out of a specification set",
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return viper.BindPFlags(cmd.Flags())
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+
+			s, err := spec.LoadSpecificationSet(
+				viper.GetString("dir"),
+				nil,
+				nil,
+				"jsonschema",
+			)
+			if err != nil {
+				return err
+			}
+
+			return jsonschema.Generate(s, viper.GetString("out"))
+		},
+	}
+	jsonSchemaCmd.Flags().StringP("dir", "d", "", "Path of the specifications folder.")
+	jsonSchemaCmd.Flags().StringP("out", "o", "./codegen", "Path where to write the json files.")
 
 	var initCmd = &cobra.Command{
 		Use:           "init <dest>",
@@ -158,6 +184,7 @@ func main() {
 		formatCmd,
 		docCmd,
 		initCmd,
+		jsonSchemaCmd,
 	)
 
 	if err := rootCmd.Execute(); err != nil {
