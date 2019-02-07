@@ -1,0 +1,19 @@
+{
+    "title": "{{ .Name }}",
+    "type": "object",
+    "properties": {
+        {{- range $idxSpec, $specification := .Set.Specifications -}}
+        {{- if $idxSpec -}},{{- end }}
+        {{ $latestVersion := $specification.LatestAttributesVersion -}}
+        "{{ $specification.Model.RestName }}": {
+            "$ref": "{{ $specification.Model.RestName }}.json"
+        },
+        "{{ $specification.Model.ResourceName }}": {
+            "type": "array",
+            "items": {
+                "$ref": "{{ $specification.Model.RestName }}.json"
+            }
+        }
+        {{- end }}
+    }
+}

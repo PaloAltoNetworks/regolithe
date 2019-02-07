@@ -19,7 +19,45 @@ var functions = template.FuncMap{
 	"stripFirstLevelBrackets": stripFirstLevelBrackets,
 }
 
-func printModel(set spec.SpecificationSet, outFolder string) error {
+func writeGlobal(set spec.SpecificationSet, outFolder string) error {
+
+	if err := os.MkdirAll(outFolder, 0755); err != nil && !os.IsExist(err) {
+		return err
+	}
+
+	tmpl, err := makeTemplate("templates/json-schema-global.gotpl")
+	if err != nil {
+		return err
+	}
+
+	var buf bytes.Buffer
+
+	if err = tmpl.Execute(
+		&buf,
+		struct {
+			Name string
+			Set  spec.SpecificationSet
+		}{
+			Name: set.Configuration().Name,
+			Set:  set,
+		}); err != nil {
+		return fmt.Errorf("Unable to generate global code: %s", err)
+	}
+
+	data := map[string]interface{}{}
+	if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
+		return fmt.Errorf("Unable to unmarshal model code: %s", err)
+	}
+
+	out, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return fmt.Errorf("Unable to marshal model code: %s", err)
+	}
+
+	return writeFile(path.Join(outFolder, "_model.json"), out)
+}
+
+func writeModel(set spec.SpecificationSet, outFolder string) error {
 
 	if err := os.MkdirAll(outFolder, 0755); err != nil && !os.IsExist(err) {
 		return err

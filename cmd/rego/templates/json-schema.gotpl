@@ -12,7 +12,7 @@
 "type": "number"
 {{- else if eq . "object" -}}
 {{- else -}}
-"$ref": "gaia.json#/{{ . }}"
+"$ref": "{{ . }}.json"
 {{- end -}}
 {{- end -}}
 
