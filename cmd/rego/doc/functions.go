@@ -13,6 +13,22 @@ import (
 
 const rootSpecRestName = "root"
 
+func typeOf(attr *spec.Attribute) string {
+
+	switch attr.Type {
+	case spec.AttributeTypeExt:
+		return attr.SubType
+	case spec.AttributeTypeRef:
+		return fmt.Sprintf("[%s](#%s)", attr.SubType, attr.SubType)
+	case spec.AttributeTypeRefList:
+		return fmt.Sprintf("[][%s](#%s)", attr.SubType, attr.SubType)
+	case spec.AttributeTypeRefMap:
+		return fmt.Sprintf("map[string][%s](#%s)", attr.SubType, attr.SubType)
+	default:
+		return string(attr.Type)
+	}
+}
+
 func toc(specs []spec.Specification) string {
 
 	buf := &bytes.Buffer{}
@@ -330,11 +346,17 @@ func makeExample(s spec.Specification, version string) string {
 	for _, attr := range s.Attributes(version) {
 
 		if attr.DefaultValue != nil {
+			data[attr.Name] = attr.DefaultValue
 			continue
 		}
 
 		if attr.ExampleValue != nil {
 			data[attr.Name] = attr.ExampleValue
+			continue
+		}
+
+		if attr.Type == spec.AttributeTypeEnum {
+			data[attr.Name] = attr.AllowedChoices[0]
 		}
 	}
 

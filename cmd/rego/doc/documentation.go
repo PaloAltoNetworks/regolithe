@@ -27,6 +27,7 @@ var functions = template.FuncMap{
 	"operations":      operations,
 	"characteristics": characteristics,
 	"example":         makeExample,
+	"typeOf":          typeOf,
 }
 
 // Write writes the documentation for the given spec.SpecificationSet.

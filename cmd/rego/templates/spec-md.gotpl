@@ -24,7 +24,7 @@
 #### Attributes
 
 {{ range $attributes -}}
-##### `{{ .Name }} ({{ if eq .Type "external" }}{{ .Type }}:{{ .SubType }}{{ else }}{{ .Type }}{{ end }})`
+##### `{{ .Name }}` ({{ typeOf . }})
 {{ if .Deprecated }}
 > This attribute is deprecated
 {{ end }}
