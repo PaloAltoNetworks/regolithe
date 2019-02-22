@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"sort"
+	"strings"
 
 	wordwrap "github.com/mitchellh/go-wordwrap"
 	"github.com/xeipuuv/gojsonschema"
@@ -129,7 +130,12 @@ func (s *specification) Write(writer io.Writer) error {
 
 		relations := make([]yaml.MapSlice, len(s.RawRelations))
 
-		for i, rel := range s.RawRelations {
+		rawRelations := s.RawRelations[:]
+		sort.Slice(rawRelations, func(i int, j int) bool {
+			return strings.Compare(rawRelations[i].RestName, rawRelations[j].RestName) == -1
+		})
+
+		for i, rel := range rawRelations {
 			if rel.Get != nil {
 				rel.Get.Description = wordwrap.WrapString(rel.Get.Description, 80)
 				if rel.Get.ParameterDefinition != nil {
