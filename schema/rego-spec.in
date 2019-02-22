@@ -66,6 +66,10 @@
                         "type": "string"
                     }
                 },
+                "documentation": {
+                    "description": "Advanced documentation for the specification.",
+                    "type": "string"
+                },
                 "extensions": {
                     "description": "Opaque key value pairs that can be used by compilers.",
                     "type": "object"
