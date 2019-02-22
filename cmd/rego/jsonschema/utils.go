@@ -39,22 +39,6 @@ func convertType(t spec.AttributeType) string {
 	return "UNRECOGNIZED_TYPE/" + string(t)
 }
 
-func indent(num int, s string) string {
-	if num == 0 || s == "" {
-		return s
-	}
-	lines := strings.Split(s, "\n")
-	prefix := strings.Repeat("  ", num)
-	for idx, line := range lines {
-		trimmedLine := strings.TrimRight(line, " ")
-		if len(trimmedLine) != 0 {
-			trimmedLine = prefix + trimmedLine
-		}
-		lines[idx] = trimmedLine
-	}
-	return strings.Join(lines, "\n")
-}
-
 func convertRegexp(str string, required bool) string {
 	escaped := strings.Replace(str, "\\", "\\\\", -1)
 	if required {
