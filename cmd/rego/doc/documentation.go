@@ -20,14 +20,15 @@ func shortString(s string, max int) string {
 }
 
 var functions = template.FuncMap{
-	"join":            strings.Join,
-	"title":           strings.Title,
-	"trimspace":       strings.TrimSpace,
-	"toc":             toc,
-	"operations":      operations,
-	"characteristics": characteristics,
-	"example":         makeExample,
-	"typeOf":          typeOf,
+	"join":             strings.Join,
+	"title":            strings.Title,
+	"trimspace":        strings.TrimSpace,
+	"toc":              toc,
+	"operations":       operations,
+	"characteristics":  characteristics,
+	"example":          makeExample,
+	"typeOf":           typeOf,
+	"makeDefaultValue": makeDefaultValue,
 }
 
 // Write writes the documentation for the given spec.SpecificationSet.

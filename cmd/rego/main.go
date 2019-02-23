@@ -50,44 +50,44 @@ func main() {
 				s := spec.NewSpecification()
 
 				if err := s.Read(os.Stdin, true); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to read spec: %s", err)
 				}
 
 				if err := s.Write(os.Stdout); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to write spec: %s", err)
 				}
 
 			case "typemapping":
 				tm := spec.NewTypeMapping()
 
 				if err := tm.Read(os.Stdin, true); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to read typemapping: %s", err)
 				}
 
 				if err := tm.Write(os.Stdout); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to write typemapping: %s", err)
 				}
 
 			case "validationmapping":
 				vm := spec.NewValidationMapping()
 
 				if err := vm.Read(os.Stdin, true); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to read validationmapping: %s", err)
 				}
 
 				if err := vm.Write(os.Stdout); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to write validationmapping: %s", err)
 				}
 
 			case "parametermapping":
 				pm := spec.NewParameterMapping()
 
 				if err := pm.Read(os.Stdin, true); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to read parametermapping: %s", err)
 				}
 
 				if err := pm.Write(os.Stdout); err != nil {
-					return err
+					return fmt.Errorf("unable to format: unable to write parametermapping: %s", err)
 				}
 			}
 
@@ -113,10 +113,14 @@ func main() {
 				viper.GetString("category"),
 			)
 			if err != nil {
-				return err
+				return fmt.Errorf("unable to load specification set: %s", err)
 			}
 
-			return doc.Write(s, viper.GetString("format"))
+			if err := doc.Write(s, viper.GetString("format")); err != nil {
+				return fmt.Errorf("unable to write specification set: %s", err)
+			}
+
+			return nil
 		},
 	}
 	docCmd.Flags().StringP("dir", "d", "", "Path of the specifications folder.")

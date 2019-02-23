@@ -22,13 +22,12 @@
 {{- if $attributes }}
 
 #### Attributes
-
-{{ range $attributes -}}
-##### `{{ .Name }}` ({{ typeOf . }})
+{{ range $attributes }}
+##### `{{ .Name }}` {{ typeOf . }}{{ characteristics . }}
 {{ if .Deprecated }}
-> This attribute is deprecated
+_This attribute is deprecated_.
 {{ end }}
 {{ trimspace .Description }}
-{{ characteristics . }}
-{{- end }}
-{{- end }}
+{{ makeDefaultValue . }}
+{{ end }}
+{{ end }}

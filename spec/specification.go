@@ -62,6 +62,33 @@ func LoadSpecification(specPath string, validate bool) (Specification, error) {
 	return spec, nil
 }
 
+func massageYAML(in interface{}) interface{} {
+
+	var out interface{}
+
+	switch m := in.(type) {
+
+	case map[interface{}]interface{}:
+		c := map[string]interface{}{}
+		for k, v := range m {
+			c[k.(string)] = massageYAML(v)
+		}
+		out = c
+
+	case []interface{}:
+		c := make([]interface{}, len(m))
+		for i, v := range m {
+			c[i] = massageYAML(v)
+		}
+		out = c
+
+	default:
+		out = in
+	}
+
+	return out
+}
+
 // Read loads a specifaction from the given io.Reader
 func (s *specification) Read(reader io.Reader, validate bool) (err error) {
 
@@ -69,15 +96,26 @@ func (s *specification) Read(reader io.Reader, validate bool) (err error) {
 	decoder.SetStrict(true)
 
 	if err = decoder.Decode(s); err != nil {
-		return err
+		return fmt.Errorf("unable to decode spec yaml: %s", err)
+	}
+
+	for _, attrs := range s.RawAttributes {
+		for _, attr := range attrs {
+			if attr.ExampleValue != nil {
+				attr.ExampleValue = massageYAML(attr.ExampleValue)
+			}
+			if attr.DefaultValue != nil {
+				attr.DefaultValue = massageYAML(attr.DefaultValue)
+			}
+		}
 	}
 
 	if err = s.buildAttributesMapping(); err != nil {
-		return err
+		return fmt.Errorf("unable to build attributes mapping: %s", err)
 	}
 
 	if err = s.buildRelationsMapping(); err != nil {
-		return err
+		return fmt.Errorf("unable to build relations mapping: %s", err)
 	}
 
 	if s.RawModel != nil {
@@ -254,7 +292,7 @@ func (s *specification) Validate() []error {
 
 	res, err := gojsonschema.Validate(schemaLoader, specLoader)
 	if err != nil {
-		return []error{err}
+		return []error{fmt.Errorf("unable to validate specification: %s", err)}
 	}
 
 	var errs []error

@@ -39,7 +39,6 @@ export class RegolitheDocumentFormattingEditProvider {
             } else if (doc.fileName.endsWith(pmFile)) {
                 params.push("--mode", "parametermapping");
             }
-            console.error(params)
 
             const p = cp.spawn(this.formatCommandBinPath, params)
 
