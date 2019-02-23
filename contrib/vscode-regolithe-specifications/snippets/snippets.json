@@ -1,36 +1,73 @@
 {
-    "Regolithe: New Spec File": {
-        "prefix": "spec",
-        "body": [
-            "# Model",
-            "model:",
-            "   rest_name: ${5:myspec}",
-            "   resource_name: ${4:myspecs}",
-            "   entity_name: ${2:MySpec}",
-            "   package: ${3:package}",
-            "   description: ${1:description}.",
-            "attributes:",
-            "relations:"
+  "Regolithe: New Spec File": {
+    "prefix": "spec",
 
-        ]
-    },
-    "Regolithe: New Attribute": {
-        "prefix": "attr",
-        "body": [
-            "- name: ${2:name}",
-            "  description: ${1:description}.",
-            "  type: ${3:string}",
-            "  exposed: true",
-            "  stored: true"
-        ]
-    },
-    "Regolithe: New Relation": {
-        "prefix": "rel",
-        "body": [
-            "- rest_name: ${1:restname}",
-            "  get: true",
-            "  descriptions:",
-            "   get: documentation for get."
-        ]
-    }
+    "body": [
+      "# Model",
+      "model:",
+      "  rest_name: ${TM_FILENAME/(.*)\\..+$/$1/}",
+      "  resource_name: ${1:${TM_FILENAME/(.*)\\..+$/$1/}s}",
+      "  entity_name: ${2:${TM_FILENAME/(.)(.*)\\..+$/${1:/upcase}$2/}}",
+      "  package: ${3:service}",
+      "  group: ${4:core/thing}",
+      "  description: ${6:description}.",
+      "  aliases: []",
+      "",
+      "# Attributes",
+      "attributes:",
+      "  v1: []"
+    ]
+  },
+  "Regolithe: New Attribute": {
+    "prefix": "attr",
+    "body": [
+      "- name: ${1:name}",
+      "  description: ${2:description}.",
+      "  type: ${3:string}",
+      "  exposed: true",
+      "  stored: true"
+    ]
+  },
+  "Regolithe: New Relation": {
+    "prefix": "rel",
+    "body": [
+      "- rest_name: ${1:restname}",
+      "  get:",
+      "    description: ${2:description}",
+      "    parameters: []",
+      "  create:",
+      "    description: ${3:description}",
+      "    global_parameters: []",
+      "    parameters:",
+      "      entries: []"
+    ]
+  },
+  "Regolithe: New Model Relation": {
+    "prefix": "mrel",
+    "body": [
+      "get:",
+      "  description: ${1:description}.",
+      "  global_parameters: []",
+      "  parameters:",
+      "    entries: []",
+      "update:",
+      "  description: ${2:description}.",
+      "  global_parameters: []",
+      "  parameters:",
+      "    entries: []",
+      "delete:",
+      "  description: ${3:description}.",
+      "  global_parameters: []",
+      "  parameters:",
+      "    entries: []"
+    ]
+  },
+  "Regolithe: New Parameter": {
+    "prefix": "param",
+    "body": [
+    "  - name: ${1:name}",
+    "    description: ${2:description}",
+    "    type: ${3:type}"
+    ]
+  }
 }
