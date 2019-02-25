@@ -4,6 +4,7 @@ model:
   resource_name: root
   entity_name: Root
   package: root
+  group: core
   description: root object.
   get:
     description: gets the object.

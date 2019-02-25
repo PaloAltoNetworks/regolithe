@@ -1,1 +1,15 @@
-elemental: {}
+'[][]string':
+  elemental:
+    type: '[][]string'
+    init: '[][]string{}'
+  jsonschema:
+    type: |-
+      {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }

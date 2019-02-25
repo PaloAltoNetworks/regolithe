@@ -1,0 +1,6 @@
+$queryable:
+  entries:
+  - name: q
+    description: This is an example.
+    type: string
+    example_value: hello == world

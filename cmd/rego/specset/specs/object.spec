@@ -4,6 +4,7 @@ model:
   resource_name: objects
   entity_name: Objects
   package: default
+  group: core
   description: This is random object.
   get:
     description: Gets the object.
@@ -22,5 +23,3 @@ attributes:
     type: string
     exposed: true
     stored: true
-    filterable: true
-    orderable: true

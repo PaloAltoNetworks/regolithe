@@ -167,9 +167,9 @@ func main() {
 			}
 
 			dir := args[0]
-			if err := os.MkdirAll(path.Base(dir), 0744); err != nil {
-				return err
-			}
+			// if err := os.MkdirAll(path.Base(dir), 0744); err != nil {
+			// 	return err
+			// }
 
 			tmp, err := ioutil.TempDir(os.TempDir(), "rego")
 			if err != nil {
