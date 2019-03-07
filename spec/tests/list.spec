@@ -102,6 +102,15 @@ attributes:
     filterable: true
     orderable: true
 
+  - name: secret
+    description: This attribute is secret.
+    type: string
+    exposed: true
+    stored: true
+    filterable: true
+    orderable: true
+    secret: true
+
   - name: slice
     description: this is a slice.
     type: list
