@@ -11,7 +11,11 @@ func Generate(set spec.SpecificationSet, outFolder string) error {
 		return err
 	}
 
-	if err := writeGlobal(set, outFolder); err != nil {
+	if err := writeGlobalResources(set, outFolder); err != nil {
+		return err
+	}
+
+	if err := writeGlobalResourceLists(set, outFolder); err != nil {
 		return err
 	}
 
