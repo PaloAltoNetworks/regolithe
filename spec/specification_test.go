@@ -84,10 +84,10 @@ func TestSpecification_Validate(t *testing.T) {
 
 			Convey("Then err should not be nil", func() {
 				So(errs, ShouldNotBeNil)
-				So(formatValidationErrors(errs).Error(), ShouldEqual, `thing.spec: schema error: attributes.v1.1.type: attributes.v1.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external", "ref", "refList", "refMap"
-thing.spec: schema error: description: description is required
-thing.spec: schema error: package: package is required
-thing.spec: schema error: type: type is required`)
+				So(formatValidationErrors(errs).Error(), ShouldEqual, `thing.spec: schema error: attributes.v1.0: description is required
+thing.spec: schema error: attributes.v1.0: type is required
+thing.spec: schema error: attributes.v1.1.type: attributes.v1.1.type must be one of the following: "string", "integer", "float", "boolean", "enum", "list", "object", "time", "external", "ref", "refList", "refMap"
+thing.spec: schema error: model: package is required`)
 			})
 		})
 	})
@@ -141,7 +141,7 @@ thing.spec: schema error: type: type is required`)
 
 			Convey("Then err should not be nil", func() {
 				So(len(err), ShouldEqual, 1)
-				So(err[0].Error(), ShouldEqual, ".: schema error: relations: Additional property relations is not allowed")
+				So(err[0].Error(), ShouldEqual, ".: schema error: (root): Additional property relations is not allowed")
 			})
 		})
 	})
