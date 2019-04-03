@@ -534,6 +534,7 @@ func (s *specification) ValidationProviders() []string {
 		}
 	}
 
+	sort.Strings(providers)
 	return providers
 }
 

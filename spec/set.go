@@ -260,6 +260,10 @@ func LoadSpecificationSet(
 
 			for _, attr := range spec.Attributes(version) {
 
+				if attr.ValidationProviders == nil {
+					attr.ValidationProviders = map[string]*ValidationMap{}
+				}
+
 				if nameConvertFunc != nil {
 					attr.ConvertedName = nameConvertFunc(attr.Name)
 				} else {
@@ -300,7 +304,7 @@ func LoadSpecificationSet(
 								continue
 							}
 
-							attr.ValidationProviders = append(attr.ValidationProviders, m)
+							attr.ValidationProviders[m.Name] = m
 						}
 					}
 				}

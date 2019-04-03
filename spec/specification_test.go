@@ -226,31 +226,31 @@ func TestSpecification_AttributesProviders(t *testing.T) {
 			RawAttributes: map[string][]*Attribute{
 				"v1": []*Attribute{
 					&Attribute{
-						ValidationProviders: []*ValidationMap{
-							&ValidationMap{
+						ValidationProviders: map[string]*ValidationMap{
+							"a": &ValidationMap{
 								Import: "a",
 							},
-							&ValidationMap{
+							"b": &ValidationMap{
 								Import: "b",
 							},
 						},
 					},
 					&Attribute{
-						ValidationProviders: []*ValidationMap{
-							&ValidationMap{
+						ValidationProviders: map[string]*ValidationMap{
+							"c": &ValidationMap{
 								Import: "c",
 							},
-							&ValidationMap{
+							"b": &ValidationMap{
 								Import: "b",
 							},
 						},
 					},
 					&Attribute{
-						ValidationProviders: []*ValidationMap{
-							&ValidationMap{
+						ValidationProviders: map[string]*ValidationMap{
+							"d": &ValidationMap{
 								Import: "d",
 							},
-							&ValidationMap{
+							"b": &ValidationMap{
 								Import: "b",
 							},
 						},
