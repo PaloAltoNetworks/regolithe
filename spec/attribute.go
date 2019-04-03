@@ -63,11 +63,11 @@ type Attribute struct {
 	Validations         []string               `yaml:"validations,omitempty"            json:"validations,omitempty"`
 	Extensions          map[string]interface{} `yaml:"extensions,omitempty"             json:"extensions,omitempty"`
 
-	ConvertedName       string           `yaml:"-" json:"-"`
-	ConvertedType       string           `yaml:"-" json:"-"`
-	TypeProvider        string           `yaml:"-" json:"-"`
-	Initializer         string           `yaml:"-" json:"-"`
-	ValidationProviders []*ValidationMap `yaml:"-" json:"-"`
+	ConvertedName       string                    `yaml:"-" json:"-"`
+	ConvertedType       string                    `yaml:"-" json:"-"`
+	TypeProvider        string                    `yaml:"-" json:"-"`
+	Initializer         string                    `yaml:"-" json:"-"`
+	ValidationProviders map[string]*ValidationMap `yaml:"-" json:"-"`
 
 	linkedSpecification Specification
 }
