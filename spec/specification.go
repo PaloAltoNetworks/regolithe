@@ -560,10 +560,10 @@ func (s *specification) buildAttributesMapping() error {
 
 			if _, ok := s.attributeMap[version][attr.Name]; ok {
 				if s.RawModel != nil {
-					return fmt.Errorf("Specification %s has more than one attribute named %s", s.RawModel.RestName, attr.Name)
+					return fmt.Errorf("specification %s has more than one attribute named %s", s.RawModel.RestName, attr.Name)
 				}
 
-				return fmt.Errorf("One abstract has more than one attribute named %s", attr.Name)
+				return fmt.Errorf("one abstract has more than one attribute named %s", attr.Name)
 			}
 
 			s.attributeMap[version][attr.Name] = attr

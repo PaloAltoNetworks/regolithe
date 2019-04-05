@@ -214,7 +214,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 			buf.WriteString("\n")
 		}
 		buf.WriteString(fmt.Sprintf("##### `%s %s`\n\n", r.method, r.url))
-		buf.WriteString(fmt.Sprintf(`%s`, r.doc))
+		buf.WriteString(r.doc)
 
 		if r.params != nil {
 			buf.WriteString("\n\nParameters:\n\n")
@@ -250,7 +250,7 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 					}
 				}
 
-				buf.WriteString(fmt.Sprintf("%s", out))
+				buf.WriteString(out)
 			}
 		}
 

@@ -41,17 +41,17 @@ func writeGlobalResources(set spec.SpecificationSet, outFolder string) error {
 			Name: set.Configuration().Name,
 			Set:  set,
 		}); err != nil {
-		return fmt.Errorf("Unable to generate global resource code: %s", err)
+		return fmt.Errorf("unable to generate global resource code: %s", err)
 	}
 
 	data := map[string]interface{}{}
 	if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
-		return fmt.Errorf("Unable to unmarshal model code: %s", err)
+		return fmt.Errorf("unable to unmarshal model code: %s", err)
 	}
 
 	out, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
-		return fmt.Errorf("Unable to marshal model code: %s", err)
+		return fmt.Errorf("unable to marshal model code: %s", err)
 	}
 
 	return writeFile(path.Join(outFolder, "_models.json"), out)
@@ -79,17 +79,17 @@ func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string) error
 			Name: set.Configuration().Name,
 			Set:  set,
 		}); err != nil {
-		return fmt.Errorf("Unable to generate global resource lists code: %s", err)
+		return fmt.Errorf("unable to generate global resource lists code: %s", err)
 	}
 
 	data := map[string]interface{}{}
 	if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
-		return fmt.Errorf("Unable to unmarshal model code: %s", err)
+		return fmt.Errorf("unable to unmarshal model code: %s", err)
 	}
 
 	out, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
-		return fmt.Errorf("Unable to marshal model code: %s", err)
+		return fmt.Errorf("unable to marshal model code: %s", err)
 	}
 
 	return writeFile(path.Join(outFolder, "_lists.json"), out)
@@ -118,17 +118,17 @@ func writeModel(set spec.SpecificationSet, outFolder string) error {
 				Name: set.Configuration().Name,
 				Spec: s,
 			}); err != nil {
-			return fmt.Errorf("Unable to generate model code: %s", err)
+			return fmt.Errorf("unable to generate model code: %s", err)
 		}
 
 		data := map[string]interface{}{}
 		if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
-			return fmt.Errorf("Unable to unmarshal model code: %s", err)
+			return fmt.Errorf("unable to unmarshal model code: %s", err)
 		}
 
 		out, err := json.MarshalIndent(data, "", "  ")
 		if err != nil {
-			return fmt.Errorf("Unable to marshal model code: %s", err)
+			return fmt.Errorf("unable to marshal model code: %s", err)
 		}
 
 		if err := writeFile(path.Join(outFolder, s.Model().RestName+".json"), out); err != nil {

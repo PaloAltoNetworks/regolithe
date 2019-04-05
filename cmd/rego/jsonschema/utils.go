@@ -79,12 +79,12 @@ func writeFile(path string, data []byte) error {
 
 	f, err := os.Create(path)
 	if err != nil {
-		return fmt.Errorf("Unable to write file: %s", f.Name())
+		return fmt.Errorf("unable to write file: %s", f.Name())
 	}
 
 	defer f.Close() // nolint: errcheck
 	if _, err := f.Write(data); err != nil {
-		return fmt.Errorf("Unable to write file: %s", f.Name())
+		return fmt.Errorf("unable to write file: %s", f.Name())
 	}
 
 	return nil

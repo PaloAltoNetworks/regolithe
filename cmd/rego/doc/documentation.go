@@ -38,7 +38,7 @@ func Write(set spec.SpecificationSet, format string) error {
 	case "markdown":
 		return writeMarkdownDoc(set)
 	default:
-		return fmt.Errorf("Unsuported documentation format: %s", format)
+		return fmt.Errorf("unsuported documentation format: %s", format)
 	}
 }
 

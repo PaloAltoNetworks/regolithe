@@ -226,7 +226,7 @@ func LoadSpecificationSet(
 	}
 
 	if !loadedRegolitheINI {
-		return nil, fmt.Errorf("Could not find regolithe.ini in folder %s", dirname)
+		return nil, fmt.Errorf("unable to find regolithe.ini in folder %s", dirname)
 	}
 
 	// Massage the specs
@@ -237,7 +237,7 @@ func LoadSpecificationSet(
 
 			base, ok := baseSpecs[ext]
 			if !ok {
-				return nil, fmt.Errorf("Unable to find base spec '%s' for spec '%s'", ext, spec.Model().RestName)
+				return nil, fmt.Errorf("unable to find base spec '%s' for spec '%s'", ext, spec.Model().RestName)
 			}
 
 			if err = spec.ApplyBaseSpecifications(base); err != nil {
@@ -250,7 +250,7 @@ func LoadSpecificationSet(
 
 			linked, ok := set.specs[rel.RestName]
 			if !ok {
-				return nil, fmt.Errorf("Unable to find related spec '%s' for spec '%s'", rel.RestName, spec.Model().RestName)
+				return nil, fmt.Errorf("unable to find related spec '%s' for spec '%s'", rel.RestName, spec.Model().RestName)
 			}
 
 			rel.remoteSpecification = linked
@@ -280,7 +280,7 @@ func LoadSpecificationSet(
 
 						m, err := set.typeMap.Mapping(typeMappingName, attr.SubType)
 						if err != nil {
-							return nil, fmt.Errorf("Cannot apply type mapping '%s' to attribute '%s'", attr.SubType, attr.Name)
+							return nil, fmt.Errorf("unable to apply type mapping '%s' to attribute '%s'", attr.SubType, attr.Name)
 						}
 
 						if m != nil {
@@ -298,7 +298,7 @@ func LoadSpecificationSet(
 
 							m, err := set.validationsMap.Mapping(typeMappingName, validationName)
 							if err != nil {
-								return nil, fmt.Errorf("Cannot apply validation mapping '%s' to attribute '%s': %s", validationName, attr.Name, err)
+								return nil, fmt.Errorf("unable to apply validation mapping '%s' to attribute '%s': %s", validationName, attr.Name, err)
 							}
 							if m == nil {
 								continue
