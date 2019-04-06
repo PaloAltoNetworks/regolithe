@@ -354,6 +354,11 @@ func (s *specification) Model() *Model {
 }
 
 func (s *specification) Indexes() [][]string {
+
+	if len(s.RawIndexes) == 1 && s.RawIndexes[0][0] == ":no-inherit" {
+		return nil
+	}
+
 	sort.Slice(s.RawIndexes, func(i int, j int) bool {
 		if s.RawIndexes[i][0][0] == ':' && s.RawIndexes[j][0][0] != ':' {
 			return true
@@ -498,6 +503,14 @@ func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
 			continue
 		}
 
+		if !s.Model().Detached {
+			if len(s.RawIndexes) != 1 || s.RawIndexes[0][0] != ":no-inherit" {
+				for _, indexes := range spec.RawIndexes {
+					s.RawIndexes = append(s.RawIndexes, indexes)
+				}
+			}
+		}
+
 		for version := range spec.RawAttributes {
 
 			// The spec may have no attributes at all.
@@ -510,10 +523,6 @@ func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
 					s.RawAttributes[version] = append(s.RawAttributes[version], attr)
 				}
 			}
-		}
-
-		for _, indexes := range spec.RawIndexes {
-			s.RawIndexes = append([][]string{indexes}, s.RawIndexes...)
 		}
 	}
 
