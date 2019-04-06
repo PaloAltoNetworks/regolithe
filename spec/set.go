@@ -226,7 +226,7 @@ func LoadSpecificationSet(
 	}
 
 	if !loadedRegolitheINI {
-		return nil, fmt.Errorf("unable to find regolithe.ini in folder %s", dirname)
+		return nil, fmt.Errorf("unable to find regolithe.ini in folder '%s'", dirname)
 	}
 
 	// Massage the specs

@@ -20,9 +20,24 @@
         },
         "model": {
             "$ref": "#/definitions/model"
+        },
+        "indexes": {
+            "$ref": "#/definitions/indexes"
         }
     },
     "definitions": {
+        "indexes": {
+            "title": "Indexes",
+            "description": "Describes the indexes of the spec.",
+            "additionalProperties": false,
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
         "model": {
             "title": "Model",
             "description": "Holds basic information of the represented object.",
@@ -36,7 +51,6 @@
                 "description",
                 "group"
             ],
-
             "properties": {
                 "aliases": {
                     "description": "List of aliases to represent a specification.",
@@ -73,16 +87,6 @@
                 "extensions": {
                     "description": "Opaque key value pairs that can be used by compilers.",
                     "type": "object"
-                },
-                "indexes": {
-                    "description": "List of compound indexes",
-                    "type": "array",
-                    "items": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
                 },
                 "get": {
                     "$ref": "#/definitions/relationaction"

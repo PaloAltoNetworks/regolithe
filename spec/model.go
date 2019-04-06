@@ -17,7 +17,6 @@ type Model struct {
 	Documentation string                 `yaml:"documentation,omitempty"   json:"documentation,omitempty"`
 	Aliases       []string               `yaml:"aliases,omitempty"         json:"aliases,omitempty"`
 	Private       bool                   `yaml:"private,omitempty"         json:"private,omitempty"`
-	Indexes       [][]string             `yaml:"indexes,omitempty"         json:"indexes,omitempty"`
 	Get           *RelationAction        `yaml:"get,omitempty"             json:"get,omitempty"`
 	Update        *RelationAction        `yaml:"update,omitempty"          json:"update,omitempty"`
 	Delete        *RelationAction        `yaml:"delete,omitempty"          json:"delete,omitempty"`

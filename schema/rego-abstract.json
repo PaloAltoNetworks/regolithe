@@ -8,9 +8,24 @@
     "properties": {
         "attributes": {
             "$ref": "#/definitions/attributes"
+        },
+        "indexes": {
+            "$ref": "#/definitions/indexes"
         }
     },
     "definitions": {
+        "indexes": {
+            "title": "Indexes",
+            "description": "Describes the indexes of the spec.",
+            "additionalProperties": false,
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
         "attributes": {
             "type": "object",
             "description": "List of versioned attributes.",
