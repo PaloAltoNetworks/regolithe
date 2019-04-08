@@ -17,6 +17,7 @@ import (
 
 const (
 	rootModelKey      = "model"
+	rootIndexesKey    = "indexes"
 	rootAttributesKey = "attributes"
 	rootRelationsKey  = "relations"
 )
@@ -29,6 +30,7 @@ type specification struct {
 	RawAttributes versionedAttributes `yaml:"attributes,omitempty"    json:"attributes,omitempty"`
 	RawRelations  []*Relation         `yaml:"relations,omitempty"     json:"relations,omitempty"`
 	RawModel      *Model              `yaml:"model,omitempty"         json:"model,omitempty"`
+	RawIndexes    [][]string          `yaml:"indexes,omitempty"       json:"indexes,omitempty"`
 
 	attributeMap       attributeMapping
 	relationsMap       relationMapping
@@ -140,6 +142,10 @@ func (s *specification) Write(writer io.Writer) error {
 		repr = append(repr, yaml.MapItem{Key: rootModelKey, Value: toYAMLMapSlice(s.RawModel)})
 	}
 
+	if len(s.RawIndexes) != 0 {
+		repr = append(repr, yaml.MapItem{Key: rootIndexesKey, Value: s.RawIndexes})
+	}
+
 	if len(s.RawAttributes) != 0 {
 
 		versionedAttrs := yaml.MapSlice{}
@@ -221,13 +227,22 @@ func (s *specification) Write(writer io.Writer) error {
 	prfx4 := []byte("      - name")
 	sufx1 := []byte(":")
 	yamlModelKey := []byte(rootModelKey + ":")
+	yamlIndexesKey := []byte(rootIndexesKey + ":")
 	yamlAttrKey := []byte(rootAttributesKey + ":")
 	yamlAttrRelation := []byte(rootRelationsKey + ":")
 
 	lines := bytes.Split(data, []byte("\n"))
 	lineN := len(lines)
 
+	var inIndexes bool
+
 	for i, line := range lines {
+
+		if bytes.Equal(line, yamlIndexesKey) {
+			inIndexes = true
+		} else if bytes.Equal(line, yamlAttrKey) {
+			inIndexes = false
+		}
 
 		condFirstLine := i == 0
 		condFirstIn := bytes.Equal(previousLine, yamlAttrKey) || bytes.Equal(previousLine, yamlAttrRelation)
@@ -236,7 +251,7 @@ func (s *specification) Write(writer io.Writer) error {
 			(bytes.HasPrefix(line, prfx2) && !bytes.HasSuffix(previousLine, sufx1)) ||
 			(bytes.HasPrefix(line, prfx4) && !bytes.HasSuffix(previousLine, sufx1))
 
-		if !condFirstLine && !condFirstIn && condPrefixed {
+		if !condFirstLine && !condFirstIn && !inIndexes && condPrefixed {
 			buf.WriteRune('\n')
 		}
 
@@ -245,6 +260,12 @@ func (s *specification) Write(writer io.Writer) error {
 				buf.WriteRune('\n')
 			}
 			buf.WriteString("# Model\n")
+		}
+		if bytes.Equal(line, yamlIndexesKey) {
+			if !condFirstLine {
+				buf.WriteRune('\n')
+			}
+			buf.WriteString("# Indexes\n")
 		}
 		if bytes.Equal(line, yamlAttrKey) {
 			if !condFirstLine {
@@ -330,6 +351,21 @@ func (s *specification) Validate() []error {
 
 func (s *specification) Model() *Model {
 	return s.RawModel
+}
+
+func (s *specification) Indexes() [][]string {
+
+	if len(s.RawIndexes) == 1 && s.RawIndexes[0][0] == ":no-inherit" {
+		return nil
+	}
+
+	sort.Slice(s.RawIndexes, func(i int, j int) bool {
+		if s.RawIndexes[i][0][0] == ':' && s.RawIndexes[j][0][0] != ':' {
+			return true
+		}
+		return strings.Compare(s.RawIndexes[i][0], s.RawIndexes[j][0]) != -1
+	})
+	return s.RawIndexes
 }
 
 func (s *specification) Relations() []*Relation {
@@ -463,8 +499,16 @@ func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
 			panic("given specification doesn't have the same type")
 		}
 
-		if spec.RawAttributes == nil {
+		if spec.RawAttributes == nil && len(spec.RawIndexes) == 0 {
 			continue
+		}
+
+		if !s.Model().Detached {
+			if len(s.RawIndexes) != 1 || s.RawIndexes[0][0] != ":no-inherit" {
+				for _, indexes := range spec.RawIndexes {
+					s.RawIndexes = append(s.RawIndexes, indexes)
+				}
+			}
 		}
 
 		for version := range spec.RawAttributes {
