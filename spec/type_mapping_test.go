@@ -51,7 +51,7 @@ func TestTypeMapping_Mapping(t *testing.T) {
 
 		tm, err := LoadTypeMapping("./tests/_type.mapping")
 
-		Convey("Then err should bbe nil", func() {
+		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
 		})
 
@@ -82,6 +82,30 @@ func TestTypeMapping_Mapping(t *testing.T) {
 				So(m.Type, ShouldEqual, "Object")
 				So(m.Initializer, ShouldEqual, "new Object()")
 				So(m.Import, ShouldEqual, "")
+			})
+		})
+	})
+}
+
+func TestTypeMapping_All(t *testing.T) {
+
+	Convey("Given I load a type mapping", t, func() {
+
+		tm, err := LoadTypeMapping("./tests/_type.mapping")
+
+		Convey("Then err should be nil", func() {
+			So(err, ShouldBeNil)
+		})
+
+		Convey("When I call All", func() {
+
+			m := tm.All("test")
+
+			Convey("Then the mapping be correct", func() {
+				So(len(m), ShouldEqual, 3)
+				So(m[0].Type, ShouldEqual, "[]int")
+				So(m[1].Type, ShouldEqual, "map[string]string")
+				So(m[2].Type, ShouldEqual, "Toto")
 			})
 		})
 	})

@@ -128,6 +128,16 @@ func (t TypeMapping) Mapping(mode string, externalType string) (mapping *TypeMap
 	return tm, nil
 }
 
+// All returns the all the TypeMap for the given mode.
+func (t TypeMapping) All(mode string) (mapping []*TypeMap) {
+
+	for _, v := range t {
+		mapping = append(mapping, v[mode])
+	}
+
+	return mapping
+}
+
 // Validate validates the type mappings against the schema.
 func (t TypeMapping) Validate() []error {
 
