@@ -40,7 +40,8 @@ func convertType(t spec.AttributeType) string {
 }
 
 func convertRegexp(str string, required bool) string {
-	escaped := strings.Replace(str, "\\", "\\\\", -1)
+
+	escaped := strings.Replace(strings.Replace(str, `\`, `\\`, -1), `"`, `\"`, -1)
 	if required {
 		return escaped
 	}
