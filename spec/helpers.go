@@ -45,6 +45,10 @@ func Pluralize(word string) string {
 			secondLastChar != "y" {
 			return word[:len(word)-1] + "ies"
 		}
+
+		if lastChar == "h" && secondLastChar == "c" {
+			word += "e"
+		}
 	}
 
 	return word + "s"

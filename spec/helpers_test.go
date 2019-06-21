@@ -177,6 +177,48 @@ func TestHelpers_Pluralize(t *testing.T) {
 			})
 		})
 	})
+
+	Convey("Given I have the word 'search'", t, func() {
+
+		word := "search"
+
+		Convey("When I call pluralize", func() {
+
+			p := Pluralize(word)
+
+			Convey("Then the word should be pluralized correctly", func() {
+				So(p, ShouldEqual, "searches")
+			})
+		})
+	})
+
+	Convey("Given I have the word 'h'", t, func() {
+
+		word := "h"
+
+		Convey("When I call pluralize", func() {
+
+			p := Pluralize(word)
+
+			Convey("Then the word should be pluralized correctly", func() {
+				So(p, ShouldEqual, "hs")
+			})
+		})
+	})
+
+	Convey("Given I have the word 'ch'", t, func() {
+
+		word := "ch"
+
+		Convey("When I call pluralize", func() {
+
+			p := Pluralize(word)
+
+			Convey("Then the word should be pluralized correctly", func() {
+				So(p, ShouldEqual, "ches")
+			})
+		})
+	})
 }
 
 func TestHelpers_makeSchemaValidationErrors(t *testing.T) {
