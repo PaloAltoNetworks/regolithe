@@ -162,7 +162,7 @@ func templatesSpecMdGotpl() (*asset, error) {
 	return a, nil
 }
 
-var _templatesTocMdGotpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x52\x56\x56\xa8\xae\x56\xd0\x73\x2f\xca\x2f\x2d\xf0\x4b\xcc\x4d\x55\xa8\xad\xe5\xe2\xe2\x02\x04\x00\x00\xff\xff\x27\x1a\xd2\xf0\x16\x00\x00\x00")
+var _templatesTocMdGotpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x52\x56\x56\xa8\xae\x56\xd0\x73\x2f\xca\x2f\x2d\xf0\x4b\xcc\x4d\x55\xa8\xad\xe5\x02\x04\x00\x00\xff\xff\x0a\x31\xfc\xe1\x14\x00\x00\x00")
 
 func templatesTocMdGotplBytes() ([]byte, error) {
 	return bindataRead(
@@ -177,7 +177,7 @@ func templatesTocMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 22, mode: os.FileMode(420), modTime: time.Unix(1562023192, 0)}
+	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 20, mode: os.FileMode(420), modTime: time.Unix(1562023324, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
