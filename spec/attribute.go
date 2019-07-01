@@ -41,6 +41,7 @@ type Attribute struct {
 	// The YAML will be dumped respecting this order.
 
 	Name                string                 `yaml:"name,omitempty"                   json:"name,omitempty"`
+	ExposedName         string                 `yaml:"exposed_name,omitempty"           json:"exposed_name,omitempty"`
 	Description         string                 `yaml:"description,omitempty"            json:"description,omitempty"`
 	Type                AttributeType          `yaml:"type,omitempty"                   json:"type,omitempty"`
 	Exposed             bool                   `yaml:"exposed,omitempty"                json:"exposed,omitempty"`

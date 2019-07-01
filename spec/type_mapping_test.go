@@ -114,9 +114,9 @@ func TestTypeMapping_All(t *testing.T) {
 
 			Convey("Then the mapping be correct", func() {
 				So(len(m), ShouldEqual, 3)
-				So(m[0].Type, ShouldEqual, "[]int")
-				So(m[1].Type, ShouldEqual, "map[string]string")
-				So(m[2].Type, ShouldEqual, "Toto")
+				So(m[0].Type, ShouldEqual, "Toto")
+				So(m[1].Type, ShouldEqual, "[]int")
+				So(m[2].Type, ShouldEqual, "map[string]string")
 			})
 		})
 	})

@@ -17,6 +17,7 @@ import (
 	"io"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/xeipuuv/gojsonschema"
 	"go.aporeto.io/regolithe/schema"
@@ -145,6 +146,10 @@ func (t TypeMapping) All(mode string) (mapping []*TypeMap) {
 	for _, v := range t {
 		mapping = append(mapping, v[mode])
 	}
+
+	sort.Slice(mapping, func(i int, j int) bool {
+		return strings.Compare(mapping[i].Type, mapping[j].Type) == -1
+	})
 
 	return mapping
 }
