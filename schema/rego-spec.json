@@ -281,6 +281,10 @@
                                 "type": "boolean",
                                 "default": "true"
                             },
+                             "exposed_name": {
+                                "description": "Name that will be exposed in wire format. If empty name is used",
+                                "type": "string"
+                            },
                             "extensions": {
                                 "description": "Opaque key value pairs that can be used by compilers.",
                                 "type": "object"
