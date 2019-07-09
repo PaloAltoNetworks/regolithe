@@ -142,10 +142,10 @@ func writeMarkdownDoc(set spec.SpecificationSet) error {
 		}
 	}
 
-	var fout []string
-
-	for _, l := range strings.Split(out[:len(out)-1], "\n") {
-		fout = append(fout, strings.TrimRight(l, " "))
+	sout := strings.Split(out[:len(out)-1], "\n")
+	fout := make([]string, len(sout))
+	for i, l := range sout {
+		fout[i] = strings.TrimRight(l, " ")
 	}
 
 	fmt.Print(strings.Join(fout, "\n"))
