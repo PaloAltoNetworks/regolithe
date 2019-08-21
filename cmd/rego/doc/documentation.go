@@ -111,7 +111,12 @@ func writeMarkdownDoc(set spec.SpecificationSet) error {
 
 			model := s.Model()
 
-			if model.Private || model.IsRoot {
+			if model.IsRoot {
+				continue
+			}
+
+			_, ok := model.Extensions["forceDocumentation"]
+			if model.Private && !ok {
 				continue
 			}
 

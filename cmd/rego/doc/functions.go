@@ -57,7 +57,12 @@ func toc(specs []spec.Specification) string {
 
 		model := spec.Model()
 
-		if model.Private || model.Group == "none" {
+		if model.Group == "none" {
+			continue
+		}
+
+		_, ok := model.Extensions["forceDocumentation"]
+		if model.Private && !ok {
 			continue
 		}
 
