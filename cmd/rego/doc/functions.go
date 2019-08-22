@@ -235,7 +235,12 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 		if r.params != nil {
 			buf.WriteString("\n\nParameters:\n\n")
 			for _, pd := range r.params.Entries {
-				buf.WriteString(fmt.Sprintf("- `%s` (`%s`): %s\n", pd.Name, pd.Type, strings.Replace(pd.Description, "\n", "", -1)))
+
+				var enumValues string
+				if pd.Type == "enum" {
+					enumValues = "(" + strings.Join(pd.AllowedChoices, " | ") + ")"
+				}
+				buf.WriteString(fmt.Sprintf("- `%s` (`%s%s`): %s\n", pd.Name, pd.Type, enumValues, strings.Replace(pd.Description, "\n", "", -1)))
 			}
 
 			if r.params.Required != nil {
