@@ -22,8 +22,12 @@
     "type": "object",
     "properties": {
     {{- range $idxAttr, $attr := .Spec.ExposedAttributes $latestVersion -}}
+    {{- $attrName := $attr.ConvertedName }}
+    {{- if $attr.ExposedName }}
+    {{- $attrName = $attr.ExposedName }}
+    {{- end }}
     {{- if $idxAttr -}},{{- end }}
-    "{{ $attr.ConvertedName }}": {
+    "{{ $attrName }}": {
     "anyOf": [
         {{- if not .Required }}
         { "type": "null" },
