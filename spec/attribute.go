@@ -72,6 +72,7 @@ type Attribute struct {
 	Secret              bool                   `yaml:"secret,omitempty"                 json:"secret,omitempty"`
 	Transient           bool                   `yaml:"transient,omitempty"              json:"transient,omitempty"`
 	OmitEmpty           bool                   `yaml:"omit_empty,omitempty"             json:"omit_empty,omitempty"`
+	Encrypted           bool                   `yaml:"encrypted,omitempty"              json:"encrypted,omitempty"`
 	Validations         []string               `yaml:"validations,omitempty"            json:"validations,omitempty"`
 	Extensions          map[string]interface{} `yaml:"extensions,omitempty"             json:"extensions,omitempty"`
 
