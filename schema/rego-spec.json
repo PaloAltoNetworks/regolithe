@@ -272,6 +272,10 @@
                                 "description": "The description of the attribute",
                                 "type": "string"
                             },
+                            "encrypted": {
+                                "description": "Define if the attribute value should be encrypted",
+                                "type": "boolean"
+                            },
                             "example_value": {
                                 "description": "Example value for the attribute",
                                 "type": ["array", "boolean", "integer", "null", "number", "object", "string"]
