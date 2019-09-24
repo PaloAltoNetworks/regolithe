@@ -39,10 +39,6 @@
                                 "description": "The attribute can only be set during create operation",
                                 "type": "boolean"
                             },
-                            "default_order": {
-                                "description": "The value of the attribute is used as default ordering key",
-                                "type": "boolean"
-                            },
                             "default_value": {
                                 "description": "The default value of the attribute",
                                 "type": ["array", "boolean", "integer", "null", "number", "object", "string"]

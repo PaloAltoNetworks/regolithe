@@ -83,8 +83,8 @@ type Specification interface {
 	// ExposedAttributes returns only the exposed attributes in the given version.
 	ExposedAttributes(version string) []*Attribute
 
-	// OrderingAttributes returns the list of attributes used for ordering.
-	OrderingAttributes(version string) []*Attribute
+	// DefaultOrder returns the default ordering of the spec.
+	DefaultOrder() []string
 
 	// AttributeVersions returns all the versions of attributes.
 	AttributeVersions() []string

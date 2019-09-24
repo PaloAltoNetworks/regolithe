@@ -23,6 +23,9 @@
         },
         "indexes": {
             "$ref": "#/definitions/indexes"
+        },
+        "default_order": {
+            "$ref": "#/definitions/default_order"
         }
     },
     "definitions": {
@@ -36,6 +39,13 @@
                 "items": {
                     "type": "string"
                 }
+            }
+        },
+        "default_order": {
+            "description": "Attribute that should be used to order results if not manually provided",
+            "type": "array",
+            "items": {
+                "type": "string"
             }
         },
         "model": {
@@ -254,10 +264,6 @@
                             },
                             "creation_only": {
                                 "description": "The attribute can only be set during create operation",
-                                "type": "boolean"
-                            },
-                            "default_order": {
-                                "description": "The value of the attribute is used as default ordering key",
                                 "type": "boolean"
                             },
                             "default_value": {

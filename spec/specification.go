@@ -27,10 +27,11 @@ import (
 )
 
 const (
-	rootModelKey      = "model"
-	rootIndexesKey    = "indexes"
-	rootAttributesKey = "attributes"
-	rootRelationsKey  = "relations"
+	rootModelKey        = "model"
+	rootIndexesKey      = "indexes"
+	rootDefaultOrderKey = "default_order"
+	rootAttributesKey   = "attributes"
+	rootRelationsKey    = "relations"
 )
 
 type versionedAttributes map[string][]*Attribute
@@ -38,16 +39,16 @@ type attributeMapping map[string]map[string]*Attribute
 type relationMapping map[string]*Relation
 
 type specification struct {
-	RawAttributes versionedAttributes `yaml:"attributes,omitempty"    json:"attributes,omitempty"`
-	RawRelations  []*Relation         `yaml:"relations,omitempty"     json:"relations,omitempty"`
-	RawModel      *Model              `yaml:"model,omitempty"         json:"model,omitempty"`
-	RawIndexes    [][]string          `yaml:"indexes,omitempty"       json:"indexes,omitempty"`
+	RawAttributes   versionedAttributes `yaml:"attributes,omitempty"    json:"attributes,omitempty"`
+	RawRelations    []*Relation         `yaml:"relations,omitempty"     json:"relations,omitempty"`
+	RawModel        *Model              `yaml:"model,omitempty"         json:"model,omitempty"`
+	RawIndexes      [][]string          `yaml:"indexes,omitempty"       json:"indexes,omitempty"`
+	RawDefaultOrder []string            `yaml:"default_order,omitempty" json:"default_order,omitempty"`
 
-	attributeMap       attributeMapping
-	relationsMap       relationMapping
-	orderingAttributes versionedAttributes
-	identifier         *Attribute
-	path               string
+	attributeMap attributeMapping
+	relationsMap relationMapping
+	identifier   *Attribute
+	path         string
 }
 
 // NewSpecification returns a new specification.
@@ -153,6 +154,10 @@ func (s *specification) Write(writer io.Writer) error {
 		repr = append(repr, yaml.MapItem{Key: rootModelKey, Value: toYAMLMapSlice(s.RawModel)})
 	}
 
+	if len(s.RawDefaultOrder) != 0 {
+		repr = append(repr, yaml.MapItem{Key: rootDefaultOrderKey, Value: s.RawDefaultOrder})
+	}
+
 	if len(s.RawIndexes) != 0 {
 		repr = append(repr, yaml.MapItem{Key: rootIndexesKey, Value: s.RawIndexes})
 	}
@@ -238,6 +243,7 @@ func (s *specification) Write(writer io.Writer) error {
 	prfx4 := []byte("      - name")
 	sufx1 := []byte(":")
 	yamlModelKey := []byte(rootModelKey + ":")
+	yamlDefaultOrderKey := []byte(rootDefaultOrderKey + ":")
 	yamlIndexesKey := []byte(rootIndexesKey + ":")
 	yamlAttrKey := []byte(rootAttributesKey + ":")
 	yamlAttrRelation := []byte(rootRelationsKey + ":")
@@ -249,7 +255,7 @@ func (s *specification) Write(writer io.Writer) error {
 
 	for i, line := range lines {
 
-		if bytes.Equal(line, yamlIndexesKey) {
+		if bytes.Equal(line, yamlIndexesKey) || bytes.Equal(line, yamlDefaultOrderKey) {
 			inIndexes = true
 		} else if bytes.Equal(line, yamlAttrKey) {
 			inIndexes = false
@@ -271,6 +277,12 @@ func (s *specification) Write(writer io.Writer) error {
 				buf.WriteRune('\n')
 			}
 			buf.WriteString("# Model\n")
+		}
+		if bytes.Equal(line, yamlDefaultOrderKey) {
+			if !condFirstLine {
+				buf.WriteRune('\n')
+			}
+			buf.WriteString("# Ordering\n")
 		}
 		if bytes.Equal(line, yamlIndexesKey) {
 			if !condFirstLine {
@@ -361,6 +373,7 @@ func (s *specification) Validate() []error {
 }
 
 func (s *specification) Model() *Model {
+
 	return s.RawModel
 }
 
@@ -376,7 +389,13 @@ func (s *specification) Indexes() [][]string {
 		}
 		return strings.Compare(s.RawIndexes[i][0], s.RawIndexes[j][0]) != -1
 	})
+
 	return s.RawIndexes
+}
+
+func (s *specification) DefaultOrder() []string {
+
+	return s.RawDefaultOrder
 }
 
 func (s *specification) Relations() []*Relation {
@@ -476,19 +495,6 @@ func (s *specification) Relation(restName string) *Relation {
 func (s *specification) Identifier() *Attribute {
 
 	return s.identifier
-}
-
-// OrderingAttributes returns all the ordering attribute.
-func (s *specification) OrderingAttributes(version string) []*Attribute {
-
-	var out []*Attribute // nolint
-	versions := s.versionsFrom(version)
-
-	for _, v := range versions {
-		out = append(out, s.orderingAttributes[v]...)
-	}
-
-	return out
 }
 
 // ApplyBaseSpecifications applies attributes of the given *Specifications to the receiver.
@@ -596,17 +602,12 @@ func (s *specification) ValidationProviders() []string {
 func (s *specification) buildAttributesMapping() error {
 
 	s.attributeMap = attributeMapping{}
-	s.orderingAttributes = versionedAttributes{}
 	s.identifier = nil
 
 	for version, attrs := range s.RawAttributes {
 
 		if _, ok := s.attributeMap[version]; !ok {
 			s.attributeMap[version] = map[string]*Attribute{}
-		}
-
-		if _, ok := s.orderingAttributes[version]; !ok {
-			s.orderingAttributes[version] = []*Attribute{}
 		}
 
 		for _, attr := range attrs {
@@ -622,10 +623,6 @@ func (s *specification) buildAttributesMapping() error {
 			}
 
 			s.attributeMap[version][attr.Name] = attr
-
-			if attr.DefaultOrder {
-				s.orderingAttributes[version] = append(s.orderingAttributes[version], attr)
-			}
 
 			if attr.Identifier {
 				if s.identifier != nil {

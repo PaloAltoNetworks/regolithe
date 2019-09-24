@@ -23,6 +23,9 @@
         },
         "indexes": {
             "$ref": "#/definitions/indexes"
+        },
+        "default_order": {
+            "$ref": "#/definitions/default_order"
         }
     },
     "definitions": {
@@ -36,6 +39,13 @@
                 "items": {
                     "type": "string"
                 }
+            }
+        },
+        "default_order": {
+            "description": "Attribute that should be used to order results if not manually provided",
+            "type": "array",
+            "items": {
+                "type": "string"
             }
         },
         "model": {
