@@ -8,10 +8,7 @@ PROJECT_RELEASE ?= dev
 # Until we support go.mod properly
 export GO111MODULE = on
 
-ci: init lint test codecov
-
-init:
-	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+ci: lint test codecov
 
 lint:
 	# --enable=unparam
