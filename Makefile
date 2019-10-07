@@ -11,7 +11,7 @@ export GO111MODULE = on
 ci: init lint test codecov
 
 init:
-	GO111MODULE=off go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 lint:
 	# --enable=unparam
