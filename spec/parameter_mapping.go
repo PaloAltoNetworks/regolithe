@@ -45,7 +45,7 @@ func NewParameterMapping() ParameterMapping {
 // LoadGlobalParameters loads the global parameters file.
 func LoadGlobalParameters(path string) (ParameterMapping, error) {
 
-	file, err := os.Open(path)
+	file, err := os.Open(path) // #nosec
 	if err != nil {
 		return nil, err
 	}
@@ -117,13 +117,13 @@ func (p ParameterMapping) Write(writer io.Writer) error {
 		if !condFirstLine &&
 			(len(line) > 0 && line[0] != ' ') ||
 			(bytes.HasPrefix(line, prfx1) && !bytes.HasPrefix(previousLine, prfx2)) {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 
-		buf.Write(line)
+		_, _ = buf.Write(line)
 
 		if i+1 < len(lines) {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 
 		previousLine = line

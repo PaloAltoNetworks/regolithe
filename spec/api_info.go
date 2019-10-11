@@ -36,7 +36,7 @@ func LoadAPIInfo(path string) (*APIInfo, error) {
 
 	apiinfo := NewAPIInfo()
 
-	file, err := os.Open(path)
+	file, err := os.Open(path) // #nosec
 	if err != nil {
 		return nil, err
 	}

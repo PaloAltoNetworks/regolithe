@@ -43,7 +43,7 @@ func NewTypeMapping() TypeMapping {
 // LoadTypeMapping loads a TypeMapping from the given ini file.
 func LoadTypeMapping(path string) (TypeMapping, error) {
 
-	file, err := os.Open(path)
+	file, err := os.Open(path) // #nosec
 	if err != nil {
 		return nil, err
 	}
@@ -110,13 +110,13 @@ func (t TypeMapping) Write(writer io.Writer) error {
 		condFirstLine := i == 0
 
 		if !condFirstLine && len(line) > 0 && line[0] != ' ' {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 
-		buf.Write(line)
+		_, _ = buf.Write(line)
 
 		if i+1 < len(lines) {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 	}
 

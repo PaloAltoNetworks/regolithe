@@ -40,7 +40,7 @@ func NewValidationMapping() ValidationMapping {
 // LoadValidationMapping loads a ValidationMapping from the given ini file.
 func LoadValidationMapping(path string) (ValidationMapping, error) {
 
-	file, err := os.Open(path)
+	file, err := os.Open(path) // #nosec
 	if err != nil {
 		return nil, err
 	}
@@ -107,13 +107,13 @@ func (v ValidationMapping) Write(writer io.Writer) error {
 		condFirstLine := i == 0
 
 		if !condFirstLine && len(line) > 0 && line[0] != ' ' {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 
-		buf.Write(line)
+		_, _ = buf.Write(line)
 
 		if i+1 < len(lines) {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 	}
 

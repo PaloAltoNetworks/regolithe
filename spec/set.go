@@ -66,7 +66,7 @@ func LoadSpecificationSetFromGithub(
 	if err != nil {
 		return nil, err
 	}
-	defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
+	defer func(f string) { _ = os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
 
 	var (
 		ref           plumbing.ReferenceName
@@ -108,7 +108,7 @@ func LoadSpecificationSetFromGithub(
 			if err != nil {
 				return nil, err
 			}
-			defer func(f string) { os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
+			defer func(f string) { _ = os.RemoveAll(f) }(tmpFolder) // nolint: errcheck
 
 			ref = plumbing.NewReferenceFromStrings("refs/tags/"+refName, "").Name()
 			repo, err = cloneFunc(tmpFolder, ref)
