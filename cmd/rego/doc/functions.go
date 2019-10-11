@@ -76,7 +76,7 @@ func toc(specs []spec.Specification) string {
 			),
 		) // nolint: errcheck
 	}
-	w.Flush() // nolint: errcheck
+	_ = w.Flush() // nolint: errcheck
 
 	return buf.String()
 }
@@ -227,24 +227,24 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 	buf := &bytes.Buffer{}
 	for i, r := range full {
 		if i > 0 {
-			buf.WriteString("\n")
+			_, _ = buf.WriteString("\n")
 		}
-		buf.WriteString(fmt.Sprintf("##### `%s %s`\n\n", r.method, r.url))
-		buf.WriteString(r.doc)
+		_, _ = buf.WriteString(fmt.Sprintf("##### `%s %s`\n\n", r.method, r.url))
+		_, _ = buf.WriteString(r.doc)
 
 		if r.params != nil {
-			buf.WriteString("\n\nParameters:\n\n")
+			_, _ = buf.WriteString("\n\nParameters:\n\n")
 			for _, pd := range r.params.Entries {
 
 				var enumValues string
 				if pd.Type == "enum" {
 					enumValues = "(" + strings.Join(pd.AllowedChoices, " | ") + ")"
 				}
-				buf.WriteString(fmt.Sprintf("- `%s` (`%s%s`): %s\n", pd.Name, pd.Type, enumValues, strings.Replace(pd.Description, "\n", "", -1)))
+				_, _ = buf.WriteString(fmt.Sprintf("- `%s` (`%s%s`): %s\n", pd.Name, pd.Type, enumValues, strings.Replace(pd.Description, "\n", "", -1)))
 			}
 
 			if r.params.Required != nil {
-				buf.WriteString("\n\nMandatory Parameters\n\n")
+				_, _ = buf.WriteString("\n\nMandatory Parameters\n\n")
 
 				var out string
 				for i, lvl1 := range r.params.Required {
@@ -271,12 +271,12 @@ func operations(spec spec.Specification, relationships map[string]*spec.Relation
 					}
 				}
 
-				buf.WriteString(out)
+				_, _ = buf.WriteString(out)
 			}
 		}
 
 		if i < len(full) {
-			buf.WriteString("\n")
+			_, _ = buf.WriteString("\n")
 		}
 	}
 

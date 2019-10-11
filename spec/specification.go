@@ -60,7 +60,7 @@ func NewSpecification() Specification {
 // LoadSpecification returns a new specification using the given file path.
 func LoadSpecification(specPath string, validate bool) (Specification, error) {
 
-	file, err := os.Open(specPath)
+	file, err := os.Open(specPath) // #nosec
 	if err != nil {
 		return nil, err
 	}
@@ -269,43 +269,43 @@ func (s *specification) Write(writer io.Writer) error {
 			(bytes.HasPrefix(line, prfx4) && !bytes.HasSuffix(previousLine, sufx1))
 
 		if !condFirstLine && !condFirstIn && !inIndexes && condPrefixed {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 
 		if bytes.Equal(line, yamlModelKey) {
 			if !condFirstLine {
-				buf.WriteRune('\n')
+				_, _ = buf.WriteRune('\n')
 			}
-			buf.WriteString("# Model\n")
+			_, _ = buf.WriteString("# Model\n")
 		}
 		if bytes.Equal(line, yamlDefaultOrderKey) {
 			if !condFirstLine {
-				buf.WriteRune('\n')
+				_, _ = buf.WriteRune('\n')
 			}
-			buf.WriteString("# Ordering\n")
+			_, _ = buf.WriteString("# Ordering\n")
 		}
 		if bytes.Equal(line, yamlIndexesKey) {
 			if !condFirstLine {
-				buf.WriteRune('\n')
+				_, _ = buf.WriteRune('\n')
 			}
-			buf.WriteString("# Indexes\n")
+			_, _ = buf.WriteString("# Indexes\n")
 		}
 		if bytes.Equal(line, yamlAttrKey) {
 			if !condFirstLine {
-				buf.WriteRune('\n')
+				_, _ = buf.WriteRune('\n')
 			}
-			buf.WriteString("# Attributes\n")
+			_, _ = buf.WriteString("# Attributes\n")
 		}
 		if bytes.Equal(line, yamlAttrRelation) {
 			if !condFirstLine {
-				buf.WriteRune('\n')
+				_, _ = buf.WriteRune('\n')
 			}
-			buf.WriteString("# Relations\n")
+			_, _ = buf.WriteString("# Relations\n")
 		}
 
-		buf.Write(line)
+		_, _ = buf.Write(line)
 		if i+1 < lineN {
-			buf.WriteRune('\n')
+			_, _ = buf.WriteRune('\n')
 		}
 
 		previousLine = line

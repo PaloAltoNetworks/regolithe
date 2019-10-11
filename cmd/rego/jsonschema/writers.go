@@ -32,7 +32,7 @@ var functions = template.FuncMap{
 
 func writeGlobalResources(set spec.SpecificationSet, outFolder string) error {
 
-	if err := os.MkdirAll(outFolder, 0755); err != nil && !os.IsExist(err) {
+	if err := os.MkdirAll(outFolder, 0750); err != nil && !os.IsExist(err) {
 		return err
 	}
 
@@ -70,7 +70,7 @@ func writeGlobalResources(set spec.SpecificationSet, outFolder string) error {
 
 func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string) error {
 
-	if err := os.MkdirAll(outFolder, 0755); err != nil && !os.IsExist(err) {
+	if err := os.MkdirAll(outFolder, 0750); err != nil && !os.IsExist(err) {
 		return err
 	}
 
@@ -108,7 +108,7 @@ func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string) error
 
 func writeModel(set spec.SpecificationSet, outFolder string) error {
 
-	if err := os.MkdirAll(outFolder, 0755); err != nil && !os.IsExist(err) {
+	if err := os.MkdirAll(outFolder, 0750); err != nil && !os.IsExist(err) {
 		return err
 	}
 
