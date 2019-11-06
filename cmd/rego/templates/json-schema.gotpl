@@ -70,9 +70,6 @@
         {{- if $attr.AllowedChars -}},
         "pattern": "{{ convertRegexp $attr.AllowedChars $attr.Required }}"
         {{- end -}}
-        {{- if $attr.CreationOnly -}},
-        "creation_only": true
-        {{- end -}}
         {{- if $attr.MaxLength -}},
         "maxLength": {{ $attr.MaxLength }}
         {{- end -}}
@@ -95,6 +92,9 @@
     {{- end -}}
     {{- if $attr.ReadOnly -}},
     "$readOnly": true
+    {{- end -}}
+    {{- if $attr.CreationOnly -}},
+    "$creationOnly": true
     {{- end -}}
     {{- if not (isNil $attr.DefaultValue) -}},
     "$defaultValue": {{ $attr.DefaultValue | jsonStringify }}
