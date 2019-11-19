@@ -93,6 +93,9 @@
     {{- if $attr.ReadOnly -}},
     "$readOnly": true
     {{- end -}}
+    {{- if $attr.CreationOnly -}},
+    "$creationOnly": true
+    {{- end -}}
     {{- if not (isNil $attr.DefaultValue) -}},
     "$defaultValue": {{ $attr.DefaultValue | jsonStringify }}
     {{- end -}}
