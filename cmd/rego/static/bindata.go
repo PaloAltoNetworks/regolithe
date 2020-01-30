@@ -38,7 +38,7 @@ func bindataRead(data []byte, name string) ([]byte, error) {
 	}
 
 	var buf bytes.Buffer
-	_, err = io.Copy(&buf, gz)
+	_, err = io.Copy(&buf, gz) // #nosec
 	clErr := gz.Close()
 
 	if err != nil {
@@ -97,7 +97,7 @@ func templatesJsonSchemaResourcenameGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema-resourcename.gotpl", size: 490, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "templates/json-schema-resourcename.gotpl", size: 490, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -117,7 +117,7 @@ func templatesJsonSchemaRestnameGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema-restname.gotpl", size: 412, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "templates/json-schema-restname.gotpl", size: 412, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -137,7 +137,7 @@ func templatesJsonSchemaGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4021, mode: os.FileMode(420), modTime: time.Unix(1574131760, 0)}
+	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4021, mode: os.FileMode(420), modTime: time.Unix(1574130151, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -157,7 +157,7 @@ func templatesSpecMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 665, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 665, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -177,7 +177,7 @@ func templatesTocMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 20, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 20, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -197,7 +197,7 @@ func specsetGitignore() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/.gitignore", size: 83, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/.gitignore", size: 83, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -217,7 +217,7 @@ func specsetGopkgToml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/Gopkg.toml", size: 51, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/Gopkg.toml", size: 51, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -237,7 +237,7 @@ func specsetSpecsRegolitheGenCmd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/.regolithe-gen-cmd", size: 247, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/.regolithe-gen-cmd", size: 247, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -257,7 +257,7 @@ func specsetSpecsIdentifiableAbs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/@identifiable.abs", size: 255, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/@identifiable.abs", size: 255, mode: os.FileMode(420), modTime: time.Unix(1568999137, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -277,7 +277,7 @@ func specsetSpecs_apiInfo() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_api.info", size: 34, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/_api.info", size: 34, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -297,7 +297,7 @@ func specsetSpecs_parameterMapping() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_parameter.mapping", size: 123, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/_parameter.mapping", size: 123, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -317,7 +317,7 @@ func specsetSpecs_typeMapping() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_type.mapping", size: 261, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/_type.mapping", size: 261, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -337,7 +337,7 @@ func specsetSpecsObjectSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/object.spec", size: 460, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/object.spec", size: 460, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -357,7 +357,7 @@ func specsetSpecsRegolitheIni() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/regolithe.ini", size: 170, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/regolithe.ini", size: 170, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -377,7 +377,7 @@ func specsetSpecsRootSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/root.spec", size: 335, mode: os.FileMode(420), modTime: time.Unix(1573532417, 0)}
+	info := bindataFileInfo{name: "specset/specs/root.spec", size: 335, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

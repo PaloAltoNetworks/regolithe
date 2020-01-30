@@ -35,7 +35,7 @@ func bindataRead(data []byte, name string) ([]byte, error) {
 	}
 
 	var buf bytes.Buffer
-	_, err = io.Copy(&buf, gz)
+	_, err = io.Copy(&buf, gz) // #nosec
 	clErr := gz.Close()
 
 	if err != nil {
@@ -114,7 +114,7 @@ func regoAbstractIn() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-abstract.in", size: 1224, mode: os.FileMode(420), modTime: time.Unix(1569360064, 0)}
+	info := bindataFileInfo{name: "rego-abstract.in", size: 1224, mode: os.FileMode(420), modTime: time.Unix(1570663192, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -134,7 +134,7 @@ func regoAbstractJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-abstract.json", size: 10796, mode: os.FileMode(420), modTime: time.Unix(1569364669, 0)}
+	info := bindataFileInfo{name: "rego-abstract.json", size: 10796, mode: os.FileMode(420), modTime: time.Unix(1580345817, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -154,7 +154,7 @@ func regoAttributeIn() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-attribute.in", size: 9588, mode: os.FileMode(420), modTime: time.Unix(1569357892, 0)}
+	info := bindataFileInfo{name: "rego-attribute.in", size: 9588, mode: os.FileMode(420), modTime: time.Unix(1570663192, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -234,7 +234,7 @@ func regoSharedParamsJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-shared-params.json", size: 4433, mode: os.FileMode(420), modTime: time.Unix(1569364669, 0)}
+	info := bindataFileInfo{name: "rego-shared-params.json", size: 4433, mode: os.FileMode(420), modTime: time.Unix(1580345817, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -254,7 +254,7 @@ func regoSpecIn() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-spec.in", size: 7218, mode: os.FileMode(420), modTime: time.Unix(1569359693, 0)}
+	info := bindataFileInfo{name: "rego-spec.in", size: 7218, mode: os.FileMode(420), modTime: time.Unix(1570663192, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -274,7 +274,7 @@ func regoSpecJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-spec.json", size: 20793, mode: os.FileMode(420), modTime: time.Unix(1569364669, 0)}
+	info := bindataFileInfo{name: "rego-spec.json", size: 20793, mode: os.FileMode(420), modTime: time.Unix(1580345817, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
