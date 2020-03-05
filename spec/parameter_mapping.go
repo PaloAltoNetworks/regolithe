@@ -49,6 +49,7 @@ func LoadGlobalParameters(path string) (ParameterMapping, error) {
 	if err != nil {
 		return nil, err
 	}
+	// #nosec G307
 	defer file.Close() // nolint: errcheck
 
 	pm := ParameterMapping{}

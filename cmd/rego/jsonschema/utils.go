@@ -94,6 +94,7 @@ func writeFile(path string, data []byte) error {
 		return fmt.Errorf("unable to write file: %s", f.Name())
 	}
 
+	// #nosec G307
 	defer f.Close() // nolint: errcheck
 	if _, err := f.Write(data); err != nil {
 		return fmt.Errorf("unable to write file: %s", f.Name())

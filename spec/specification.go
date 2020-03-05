@@ -64,6 +64,7 @@ func LoadSpecification(specPath string, validate bool) (Specification, error) {
 	if err != nil {
 		return nil, err
 	}
+	// #nosec G307
 	defer file.Close() // nolint: errcheck
 
 	spec := &specification{}

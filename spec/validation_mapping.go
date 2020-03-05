@@ -44,6 +44,7 @@ func LoadValidationMapping(path string) (ValidationMapping, error) {
 	if err != nil {
 		return nil, err
 	}
+	// #nosec G307
 	defer file.Close() // nolint: errcheck
 
 	vm := NewValidationMapping()
