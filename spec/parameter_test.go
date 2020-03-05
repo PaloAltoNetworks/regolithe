@@ -13,7 +13,6 @@ package spec
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 )
 
@@ -375,7 +374,12 @@ func TestParameter_Validate(t *testing.T) {
 				DefaultValue:   tt.fields.DefaultValue,
 				ExampleValue:   tt.fields.ExampleValue,
 			}
-			if got := p.Validate(tt.args.relatedReSTName); !reflect.DeepEqual(got, tt.want) {
+			got := p.Validate(tt.args.relatedReSTName)
+			switch {
+			case (len(tt.want) == 0 && len(got) != 0) || (len(tt.want) != 0 && len(got) == 0):
+				t.Errorf("Parameter.Validate() = %v, want %v", got, tt.want)
+			case len(tt.want) == 0 && len(got) == 0:
+			case got[0].Error() != tt.want[0].Error():
 				t.Errorf("Parameter.Validate() = %v, want %v", got, tt.want)
 			}
 		})
