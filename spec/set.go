@@ -243,6 +243,14 @@ func LoadSpecificationSet(
 	// Massage the specs
 	for _, spec := range set.specs {
 
+		s := spec.(*specification)
+
+		var skipInheritOrdering bool
+		if len(s.RawDefaultOrder) > 0 && s.RawDefaultOrder[0] == ":no-inherit" {
+			s.RawDefaultOrder = s.RawDefaultOrder[1:]
+			skipInheritOrdering = true
+		}
+
 		// Apply base specs.
 		var ordering []string
 		for _, ext := range spec.Model().Extends {
@@ -252,14 +260,16 @@ func LoadSpecificationSet(
 				return nil, fmt.Errorf("unable to find base spec '%s' for spec '%s'", ext, spec.Model().RestName)
 			}
 
-			ordering = append(ordering, base.DefaultOrder()...)
+			if !skipInheritOrdering {
+				ordering = append(ordering, base.DefaultOrder()...)
+			}
 
 			if err = spec.ApplyBaseSpecifications(base); err != nil {
 				return nil, err
 			}
 		}
 
-		spec.(*specification).RawDefaultOrder = append(ordering, spec.(*specification).RawDefaultOrder...)
+		s.RawDefaultOrder = append(ordering, s.RawDefaultOrder...)
 
 		// Link the APIs to corresponding specifications
 		for _, rel := range spec.Relations() {
