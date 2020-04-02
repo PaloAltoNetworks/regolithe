@@ -30,23 +30,23 @@ func TestTypeMapping_LoadTypeMapping(t *testing.T) {
 		Convey("Then the file should be loaded", func() {
 			So(tm, ShouldResemble, TypeMapping{
 				"string_map": map[string]*TypeMap{
-					"test": &TypeMap{
+					"test": {
 						Type: "map[string]string",
 					},
 				},
 				"int_array": map[string]*TypeMap{
-					"test": &TypeMap{
+					"test": {
 						Type:        "[]int",
 						Initializer: "[]int{}",
 					},
 				},
 				"toto": map[string]*TypeMap{
-					"test": &TypeMap{
+					"test": {
 						Type:        "Toto",
 						Initializer: "Toto{}",
 						Import:      "github.com/toto/toto",
 					},
-					"other": &TypeMap{
+					"other": {
 						Type:        "Object",
 						Initializer: "new Object()",
 					},

@@ -134,7 +134,7 @@ func regoAbstractJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-abstract.json", size: 10796, mode: os.FileMode(420), modTime: time.Unix(1580345817, 0)}
+	info := bindataFileInfo{name: "rego-abstract.json", size: 10796, mode: os.FileMode(420), modTime: time.Unix(1585863664, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -234,7 +234,7 @@ func regoSharedParamsJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-shared-params.json", size: 4433, mode: os.FileMode(420), modTime: time.Unix(1580345817, 0)}
+	info := bindataFileInfo{name: "rego-shared-params.json", size: 4433, mode: os.FileMode(420), modTime: time.Unix(1585863664, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -274,7 +274,7 @@ func regoSpecJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "rego-spec.json", size: 20793, mode: os.FileMode(420), modTime: time.Unix(1580345817, 0)}
+	info := bindataFileInfo{name: "rego-spec.json", size: 20793, mode: os.FileMode(420), modTime: time.Unix(1585863664, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -371,17 +371,17 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"gen.sh": genSh,
-	"rego-abstract.in": regoAbstractIn,
-	"rego-abstract.json": regoAbstractJson,
-	"rego-attribute.in": regoAttributeIn,
-	"rego-info.json": regoInfoJson,
-	"rego-param.in": regoParamIn,
-	"rego-shared-params.in": regoSharedParamsIn,
-	"rego-shared-params.json": regoSharedParamsJson,
-	"rego-spec.in": regoSpecIn,
-	"rego-spec.json": regoSpecJson,
-	"rego-type-mapping.json": regoTypeMappingJson,
+	"gen.sh":                       genSh,
+	"rego-abstract.in":             regoAbstractIn,
+	"rego-abstract.json":           regoAbstractJson,
+	"rego-attribute.in":            regoAttributeIn,
+	"rego-info.json":               regoInfoJson,
+	"rego-param.in":                regoParamIn,
+	"rego-shared-params.in":        regoSharedParamsIn,
+	"rego-shared-params.json":      regoSharedParamsJson,
+	"rego-spec.in":                 regoSpecIn,
+	"rego-spec.json":               regoSpecJson,
+	"rego-type-mapping.json":       regoTypeMappingJson,
 	"rego-validation-mapping.json": regoValidationMappingJson,
 }
 
@@ -424,19 +424,20 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
-	"gen.sh": &bintree{genSh, map[string]*bintree{}},
-	"rego-abstract.in": &bintree{regoAbstractIn, map[string]*bintree{}},
-	"rego-abstract.json": &bintree{regoAbstractJson, map[string]*bintree{}},
-	"rego-attribute.in": &bintree{regoAttributeIn, map[string]*bintree{}},
-	"rego-info.json": &bintree{regoInfoJson, map[string]*bintree{}},
-	"rego-param.in": &bintree{regoParamIn, map[string]*bintree{}},
-	"rego-shared-params.in": &bintree{regoSharedParamsIn, map[string]*bintree{}},
-	"rego-shared-params.json": &bintree{regoSharedParamsJson, map[string]*bintree{}},
-	"rego-spec.in": &bintree{regoSpecIn, map[string]*bintree{}},
-	"rego-spec.json": &bintree{regoSpecJson, map[string]*bintree{}},
-	"rego-type-mapping.json": &bintree{regoTypeMappingJson, map[string]*bintree{}},
-	"rego-validation-mapping.json": &bintree{regoValidationMappingJson, map[string]*bintree{}},
+	"gen.sh":                       {genSh, map[string]*bintree{}},
+	"rego-abstract.in":             {regoAbstractIn, map[string]*bintree{}},
+	"rego-abstract.json":           {regoAbstractJson, map[string]*bintree{}},
+	"rego-attribute.in":            {regoAttributeIn, map[string]*bintree{}},
+	"rego-info.json":               {regoInfoJson, map[string]*bintree{}},
+	"rego-param.in":                {regoParamIn, map[string]*bintree{}},
+	"rego-shared-params.in":        {regoSharedParamsIn, map[string]*bintree{}},
+	"rego-shared-params.json":      {regoSharedParamsJson, map[string]*bintree{}},
+	"rego-spec.in":                 {regoSpecIn, map[string]*bintree{}},
+	"rego-spec.json":               {regoSpecJson, map[string]*bintree{}},
+	"rego-type-mapping.json":       {regoTypeMappingJson, map[string]*bintree{}},
+	"rego-validation-mapping.json": {regoValidationMappingJson, map[string]*bintree{}},
 }}
 
 // RestoreAsset restores an asset under the given directory
@@ -481,4 +482,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-

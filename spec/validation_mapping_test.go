@@ -30,21 +30,21 @@ func TestValidationMapping_LoadValidationMapping(t *testing.T) {
 		Convey("Then the file should be loaded", func() {
 			So(tm, ShouldResemble, ValidationMapping{
 				"$username": map[string]*ValidationMap{
-					"test": &ValidationMap{
+					"test": {
 						Name: "validate.CheckUserName",
 					},
 				},
 				"$nospace": map[string]*ValidationMap{
-					"test": &ValidationMap{
+					"test": {
 						Name: "validate.NoSpace",
 					},
 				},
 				"$nocap": map[string]*ValidationMap{
-					"test": &ValidationMap{
+					"test": {
 						Name:   "nocapper.NoCap",
 						Import: "github.com/aporeto/nocapper",
 					},
-					"other": &ValidationMap{
+					"other": {
 						Name: "noCap",
 					},
 				},

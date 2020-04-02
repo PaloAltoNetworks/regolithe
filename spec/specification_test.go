@@ -44,8 +44,8 @@ func TestSpecification_Validate(t *testing.T) {
 				Group:        "core",
 			},
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:        "attr1",
 						Description: "desc.",
 						Type:        "string",
@@ -75,12 +75,12 @@ func TestSpecification_Validate(t *testing.T) {
 				Group:        "core",
 			},
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Identifier: false,
 						Name:       "not-id",
 					},
-					&Attribute{
+					{
 						Name:        "id",
 						Type:        "coucou",
 						Description: "wala",
@@ -107,8 +107,8 @@ thing.spec: schema error: model: package is required`)
 
 		s := &specification{
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:        "attr1",
 						Description: "desc.",
 						Type:        "string",
@@ -131,8 +131,8 @@ thing.spec: schema error: model: package is required`)
 
 		s := &specification{
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:        "attr1",
 						Description: "desc.",
 						Type:        "string",
@@ -140,7 +140,7 @@ thing.spec: schema error: model: package is required`)
 				},
 			},
 			RawRelations: []*Relation{
-				&Relation{
+				{
 					RestName: "a",
 				},
 			},
@@ -172,12 +172,12 @@ func TestSpecification_Getters(t *testing.T) {
 				Update:       &RelationAction{},
 			},
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Identifier: false,
 						Name:       "not-id",
 					},
-					&Attribute{
+					{
 						Identifier: true,
 						Name:       "id",
 					},
@@ -199,21 +199,21 @@ func TestSpecification_TypeProviders(t *testing.T) {
 
 		s := &specification{
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:          "not-id",
 						ConvertedName: "not-id",
 						TypeProvider:  "toto",
 					},
-					&Attribute{
+					{
 						ConvertedName: "id",
 						TypeProvider:  "titi",
 					},
-					&Attribute{
+					{
 						ConvertedName: "id2",
 						TypeProvider:  "titi",
 					},
-					&Attribute{},
+					{},
 				},
 			},
 		}
@@ -235,38 +235,38 @@ func TestSpecification_AttributesProviders(t *testing.T) {
 
 		s := &specification{
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						ValidationProviders: map[string]*ValidationMap{
-							"a": &ValidationMap{
+							"a": {
 								Import: "a",
 							},
-							"b": &ValidationMap{
+							"b": {
 								Import: "b",
 							},
 						},
 					},
-					&Attribute{
+					{
 						ValidationProviders: map[string]*ValidationMap{
-							"c": &ValidationMap{
+							"c": {
 								Import: "c",
 							},
-							"b": &ValidationMap{
+							"b": {
 								Import: "b",
 							},
 						},
 					},
-					&Attribute{
+					{
 						ValidationProviders: map[string]*ValidationMap{
-							"d": &ValidationMap{
+							"d": {
 								Import: "d",
 							},
-							"b": &ValidationMap{
+							"b": {
 								Import: "b",
 							},
 						},
 					},
-					&Attribute{},
+					{},
 				},
 			},
 		}
@@ -307,11 +307,11 @@ func TestSpecification_buildAttributesMapping(t *testing.T) {
 
 		spec := &specification{
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name: "a",
 					},
-					&Attribute{
+					{
 						Name: "a",
 					},
 				},
@@ -353,10 +353,10 @@ func TestSpecification_buildRelationsMapping(t *testing.T) {
 
 		spec := &specification{
 			RawRelations: []*Relation{
-				&Relation{
+				{
 					RestName: "a",
 				},
-				&Relation{
+				{
 					RestName: "a",
 				},
 			},
@@ -608,8 +608,8 @@ func TestSpecification_ApplyBaseSpecifications(t *testing.T) {
 				Package:      "package",
 			},
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:        "attr1",
 						Description: "desc.",
 						Type:        "string",
@@ -620,13 +620,13 @@ func TestSpecification_ApplyBaseSpecifications(t *testing.T) {
 
 		abs := &specification{
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:        "attr1",
 						Description: "desc from abs.",
 						Type:        "string",
 					},
-					&Attribute{
+					{
 						Name:        "attr2",
 						Description: "desc2",
 						Type:        "string",
@@ -665,8 +665,8 @@ func TestSpecification_ApplyBaseSpecifications(t *testing.T) {
 
 		abs := &specification{
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:        "attr2",
 						Description: "desc2",
 						Type:        "string",
@@ -704,37 +704,37 @@ func TestSpecifications_Versionning(t *testing.T) {
 				Package:      "package",
 			},
 			RawAttributes: map[string][]*Attribute{
-				"v1": []*Attribute{
-					&Attribute{
+				"v1": {
+					{
 						Name:        "1.1",
 						Description: "desc.",
 						Type:        "string",
 					},
-					&Attribute{
+					{
 						Name:        "1.2",
 						Description: "desc.",
 						Type:        "string",
 					},
 				},
-				"v2": []*Attribute{
-					&Attribute{
+				"v2": {
+					{
 						Name:        "2.1",
 						Description: "desc.",
 						Type:        "string",
 					},
 				},
-				"v3": []*Attribute{
-					&Attribute{
+				"v3": {
+					{
 						Name:        "3.1",
 						Description: "desc.",
 						Type:        "string",
 					},
-					&Attribute{
+					{
 						Name:        "3.2",
 						Description: "desc.",
 						Type:        "string",
 					},
-					&Attribute{
+					{
 						Name:        "1.1",
 						Description: "desc.",
 						Type:        "string",

@@ -310,13 +310,13 @@ func TestHelpers_sortAttributes(t *testing.T) {
 	Convey("Given I have a some attributes", t, func() {
 
 		v := []*Attribute{
-			&Attribute{
+			{
 				Name: "c",
 			},
-			&Attribute{
+			{
 				Name: "a",
 			},
-			&Attribute{
+			{
 				Name: "b",
 			},
 		}
@@ -340,13 +340,13 @@ func TestHelpers_sortParameters(t *testing.T) {
 	Convey("Given I have a some parameters", t, func() {
 
 		p := []*Parameter{
-			&Parameter{
+			{
 				Name: "c",
 			},
-			&Parameter{
+			{
 				Name: "a",
 			},
-			&Parameter{
+			{
 				Name: "b",
 			},
 		}
