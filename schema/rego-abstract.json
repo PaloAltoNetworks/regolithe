@@ -176,6 +176,10 @@
                                 "description": "The attribute will have a generated setter",
                                 "type": "boolean"
                             },
+                            "signed": {
+                                "description": "The value of the attribute is used to generate a signature of the object",
+                                "type": "boolean"
+                            },
                             "stored": {
                                 "description": "The attribute is stored",
                                 "type": "boolean",

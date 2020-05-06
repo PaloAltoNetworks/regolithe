@@ -137,7 +137,7 @@ func templatesJsonSchemaGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4021, mode: os.FileMode(420), modTime: time.Unix(1574130151, 0)}
+	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4021, mode: os.FileMode(420), modTime: time.Unix(1586279308, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
