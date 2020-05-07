@@ -32,7 +32,7 @@ func typeOf(attr *spec.Attribute) string {
 	case spec.AttributeTypeList:
 		return "`[]" + attr.SubType + "`"
 	case spec.AttributeTypeEnum:
-		return "`emum(" + strings.Join(attr.AllowedChoices, " | ") + ")`"
+		return "`enum(" + strings.Join(attr.AllowedChoices, " | ") + ")`"
 	case spec.AttributeTypeRef:
 		return fmt.Sprintf("[`%s`](#%s)", attr.SubType, attr.SubType)
 	case spec.AttributeTypeRefList:
