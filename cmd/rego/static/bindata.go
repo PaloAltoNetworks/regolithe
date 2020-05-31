@@ -97,7 +97,7 @@ func templatesJsonSchemaResourcenameGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema-resourcename.gotpl", size: 490, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "templates/json-schema-resourcename.gotpl", size: 490, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -117,7 +117,7 @@ func templatesJsonSchemaRestnameGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema-restname.gotpl", size: 412, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "templates/json-schema-restname.gotpl", size: 412, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -137,7 +137,7 @@ func templatesJsonSchemaGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4021, mode: os.FileMode(420), modTime: time.Unix(1586279308, 0)}
+	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4021, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -157,7 +157,7 @@ func templatesSpecMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 665, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 665, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -177,7 +177,7 @@ func templatesTocMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 20, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 20, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -197,7 +197,7 @@ func specsetGitignore() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/.gitignore", size: 83, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/.gitignore", size: 83, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -217,7 +217,7 @@ func specsetGopkgToml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/Gopkg.toml", size: 51, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/Gopkg.toml", size: 51, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -237,7 +237,7 @@ func specsetSpecsRegolitheGenCmd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/.regolithe-gen-cmd", size: 247, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/specs/.regolithe-gen-cmd", size: 247, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -257,7 +257,7 @@ func specsetSpecsIdentifiableAbs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/@identifiable.abs", size: 255, mode: os.FileMode(420), modTime: time.Unix(1568999137, 0)}
+	info := bindataFileInfo{name: "specset/specs/@identifiable.abs", size: 255, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -277,7 +277,7 @@ func specsetSpecs_apiInfo() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_api.info", size: 34, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/specs/_api.info", size: 34, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -297,7 +297,7 @@ func specsetSpecs_parameterMapping() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_parameter.mapping", size: 123, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/specs/_parameter.mapping", size: 123, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -317,7 +317,7 @@ func specsetSpecs_typeMapping() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_type.mapping", size: 261, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/specs/_type.mapping", size: 261, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -337,7 +337,7 @@ func specsetSpecsObjectSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/object.spec", size: 460, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/specs/object.spec", size: 460, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -357,7 +357,7 @@ func specsetSpecsRegolitheIni() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/regolithe.ini", size: 170, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/specs/regolithe.ini", size: 170, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -377,7 +377,7 @@ func specsetSpecsRootSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/root.spec", size: 335, mode: os.FileMode(420), modTime: time.Unix(1563338935, 0)}
+	info := bindataFileInfo{name: "specset/specs/root.spec", size: 335, mode: os.FileMode(420), modTime: time.Unix(1580766898, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -491,26 +491,26 @@ type bintree struct {
 	Children map[string]*bintree
 }
 var _bintree = &bintree{nil, map[string]*bintree{
-	"specset": {nil, map[string]*bintree{
-		".gitignore": {specsetGitignore, map[string]*bintree{}},
-		"Gopkg.toml": {specsetGopkgToml, map[string]*bintree{}},
-		"specs": {nil, map[string]*bintree{
-			".regolithe-gen-cmd": {specsetSpecsRegolitheGenCmd, map[string]*bintree{}},
-			"@identifiable.abs": {specsetSpecsIdentifiableAbs, map[string]*bintree{}},
-			"_api.info": {specsetSpecs_apiInfo, map[string]*bintree{}},
-			"_parameter.mapping": {specsetSpecs_parameterMapping, map[string]*bintree{}},
-			"_type.mapping": {specsetSpecs_typeMapping, map[string]*bintree{}},
-			"object.spec": {specsetSpecsObjectSpec, map[string]*bintree{}},
-			"regolithe.ini": {specsetSpecsRegolitheIni, map[string]*bintree{}},
-			"root.spec": {specsetSpecsRootSpec, map[string]*bintree{}},
+	"specset": &bintree{nil, map[string]*bintree{
+		".gitignore": &bintree{specsetGitignore, map[string]*bintree{}},
+		"Gopkg.toml": &bintree{specsetGopkgToml, map[string]*bintree{}},
+		"specs": &bintree{nil, map[string]*bintree{
+			".regolithe-gen-cmd": &bintree{specsetSpecsRegolitheGenCmd, map[string]*bintree{}},
+			"@identifiable.abs": &bintree{specsetSpecsIdentifiableAbs, map[string]*bintree{}},
+			"_api.info": &bintree{specsetSpecs_apiInfo, map[string]*bintree{}},
+			"_parameter.mapping": &bintree{specsetSpecs_parameterMapping, map[string]*bintree{}},
+			"_type.mapping": &bintree{specsetSpecs_typeMapping, map[string]*bintree{}},
+			"object.spec": &bintree{specsetSpecsObjectSpec, map[string]*bintree{}},
+			"regolithe.ini": &bintree{specsetSpecsRegolitheIni, map[string]*bintree{}},
+			"root.spec": &bintree{specsetSpecsRootSpec, map[string]*bintree{}},
 		}},
 	}},
-	"templates": {nil, map[string]*bintree{
-		"json-schema-resourcename.gotpl": {templatesJsonSchemaResourcenameGotpl, map[string]*bintree{}},
-		"json-schema-restname.gotpl": {templatesJsonSchemaRestnameGotpl, map[string]*bintree{}},
-		"json-schema.gotpl": {templatesJsonSchemaGotpl, map[string]*bintree{}},
-		"spec-md.gotpl": {templatesSpecMdGotpl, map[string]*bintree{}},
-		"toc-md.gotpl": {templatesTocMdGotpl, map[string]*bintree{}},
+	"templates": &bintree{nil, map[string]*bintree{
+		"json-schema-resourcename.gotpl": &bintree{templatesJsonSchemaResourcenameGotpl, map[string]*bintree{}},
+		"json-schema-restname.gotpl": &bintree{templatesJsonSchemaRestnameGotpl, map[string]*bintree{}},
+		"json-schema.gotpl": &bintree{templatesJsonSchemaGotpl, map[string]*bintree{}},
+		"spec-md.gotpl": &bintree{templatesSpecMdGotpl, map[string]*bintree{}},
+		"toc-md.gotpl": &bintree{templatesTocMdGotpl, map[string]*bintree{}},
 	}},
 }}
 
