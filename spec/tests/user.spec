@@ -29,6 +29,15 @@ model:
 # Attributes
 attributes:
   v1:
+  - name: archived
+    description: the object is archived and not deleted.
+    type: boolean
+    exposed: true
+    stored: true
+    example_value: false
+    getter: true
+    setter: true
+
   - name: firstName
     description: The first name.
     type: string
