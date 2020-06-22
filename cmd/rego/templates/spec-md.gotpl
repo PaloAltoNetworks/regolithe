@@ -23,10 +23,13 @@
 
 #### Attributes
 {{ range $attributes }}
-##### `{{ .Name }}` {{ typeOf . }}{{ characteristics . }}
+##### `{{ .Name }}`{{ characteristics . }}
 {{ if .Deprecated }}
 _This attribute is deprecated_.
 {{ end }}
+
+Type: {{ typeOf . }}
+
 {{ trimspace .Description }}
 {{ makeDefaultValue . }}
 {{ end }}
