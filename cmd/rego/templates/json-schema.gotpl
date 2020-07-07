@@ -103,7 +103,7 @@
     }
     {{- end }}
     },
-    "additionalProperties": false,
+    "additionalProperties": true,
     "required": [
         {{- with .Spec.ExposedAttributes $latestVersion -}}
         {{- $first := true -}}
@@ -123,6 +123,12 @@
     "$modelRestName": "{{ .Spec.Model.RestName }}",
     "$modelResourceName": "{{ .Spec.Model.ResourceName }}",
     "$modelPackage": "{{ .Spec.Model.Package }}",
+    "$modelAliases": [
+        {{- range $idxAlias, $alias := .Spec.Model.Aliases -}}
+        {{- if $idxAlias -}}, {{ end -}}
+        "{{ $alias }}"
+        {{- end -}}
+    ],
     "$extends": [
         {{- range $idxExtend, $extend := .Spec.Model.Extends -}}
         {{- if $idxExtend -}}, {{ end -}}
