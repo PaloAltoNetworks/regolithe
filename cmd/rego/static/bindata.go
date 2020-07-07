@@ -491,26 +491,26 @@ type bintree struct {
 	Children map[string]*bintree
 }
 var _bintree = &bintree{nil, map[string]*bintree{
-	"specset": &bintree{nil, map[string]*bintree{
-		".gitignore": &bintree{specsetGitignore, map[string]*bintree{}},
-		"Gopkg.toml": &bintree{specsetGopkgToml, map[string]*bintree{}},
-		"specs": &bintree{nil, map[string]*bintree{
-			".regolithe-gen-cmd": &bintree{specsetSpecsRegolitheGenCmd, map[string]*bintree{}},
-			"@identifiable.abs": &bintree{specsetSpecsIdentifiableAbs, map[string]*bintree{}},
-			"_api.info": &bintree{specsetSpecs_apiInfo, map[string]*bintree{}},
-			"_parameter.mapping": &bintree{specsetSpecs_parameterMapping, map[string]*bintree{}},
-			"_type.mapping": &bintree{specsetSpecs_typeMapping, map[string]*bintree{}},
-			"object.spec": &bintree{specsetSpecsObjectSpec, map[string]*bintree{}},
-			"regolithe.ini": &bintree{specsetSpecsRegolitheIni, map[string]*bintree{}},
-			"root.spec": &bintree{specsetSpecsRootSpec, map[string]*bintree{}},
+	"specset": {nil, map[string]*bintree{
+		".gitignore": {specsetGitignore, map[string]*bintree{}},
+		"Gopkg.toml": {specsetGopkgToml, map[string]*bintree{}},
+		"specs": {nil, map[string]*bintree{
+			".regolithe-gen-cmd": {specsetSpecsRegolitheGenCmd, map[string]*bintree{}},
+			"@identifiable.abs": {specsetSpecsIdentifiableAbs, map[string]*bintree{}},
+			"_api.info": {specsetSpecs_apiInfo, map[string]*bintree{}},
+			"_parameter.mapping": {specsetSpecs_parameterMapping, map[string]*bintree{}},
+			"_type.mapping": {specsetSpecs_typeMapping, map[string]*bintree{}},
+			"object.spec": {specsetSpecsObjectSpec, map[string]*bintree{}},
+			"regolithe.ini": {specsetSpecsRegolitheIni, map[string]*bintree{}},
+			"root.spec": {specsetSpecsRootSpec, map[string]*bintree{}},
 		}},
 	}},
-	"templates": &bintree{nil, map[string]*bintree{
-		"json-schema-resourcename.gotpl": &bintree{templatesJsonSchemaResourcenameGotpl, map[string]*bintree{}},
-		"json-schema-restname.gotpl": &bintree{templatesJsonSchemaRestnameGotpl, map[string]*bintree{}},
-		"json-schema.gotpl": &bintree{templatesJsonSchemaGotpl, map[string]*bintree{}},
-		"spec-md.gotpl": &bintree{templatesSpecMdGotpl, map[string]*bintree{}},
-		"toc-md.gotpl": &bintree{templatesTocMdGotpl, map[string]*bintree{}},
+	"templates": {nil, map[string]*bintree{
+		"json-schema-resourcename.gotpl": {templatesJsonSchemaResourcenameGotpl, map[string]*bintree{}},
+		"json-schema-restname.gotpl": {templatesJsonSchemaRestnameGotpl, map[string]*bintree{}},
+		"json-schema.gotpl": {templatesJsonSchemaGotpl, map[string]*bintree{}},
+		"spec-md.gotpl": {templatesSpecMdGotpl, map[string]*bintree{}},
+		"toc-md.gotpl": {templatesTocMdGotpl, map[string]*bintree{}},
 	}},
 }}
 
