@@ -103,7 +103,7 @@
     }
     {{- end }}
     },
-    "additionalProperties": false,
+    "additionalProperties": true,
     "required": [
         {{- with .Spec.ExposedAttributes $latestVersion -}}
         {{- $first := true -}}
