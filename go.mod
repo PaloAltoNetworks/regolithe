@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/araddon/dateparse v0.0.0-20200409225146-d820a6159ab1
 	github.com/fatih/structs v1.1.0
+	github.com/mitchellh/copystructure v1.0.0
 	github.com/mitchellh/go-wordwrap v1.0.0
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/cobra v1.0.0
