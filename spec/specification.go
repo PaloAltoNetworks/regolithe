@@ -20,6 +20,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/mitchellh/copystructure"
 	wordwrap "github.com/mitchellh/go-wordwrap"
 	"github.com/xeipuuv/gojsonschema"
 	"go.aporeto.io/regolithe/schema"
@@ -538,7 +539,13 @@ func (s *specification) ApplyBaseSpecifications(specs ...Specification) error {
 
 			for _, attr := range spec.RawAttributes[version] {
 				if _, ok := s.attributeMap[version][attr.Name]; !ok {
-					s.RawAttributes[version] = append(s.RawAttributes[version], attr)
+
+					attrCopy, err := copystructure.Copy(attr)
+					if err != nil {
+						return fmt.Errorf("unable to copy attribute '%s' from extension: %w", attr.Name, err)
+					}
+
+					s.RawAttributes[version] = append(s.RawAttributes[version], attrCopy.(*Attribute))
 				}
 			}
 		}
