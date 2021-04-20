@@ -10,6 +10,7 @@ cmd/rego/rego
 
 *.cov
 artifacts
+/scripts/codecov
 
 for p in *.spec ; do
     data=$(cat $p)
