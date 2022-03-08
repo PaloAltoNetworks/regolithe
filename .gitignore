@@ -5,6 +5,7 @@ dist
 */debug
 vendor
 *.cover
+coverage.xml
 Gopkg.lock
 cmd/rego/rego
 
