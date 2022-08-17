@@ -3,7 +3,7 @@ SHELL := /bin/bash -o pipefail
 
 export GO111MODULE = on
 
-default: lint test sec
+default: lint test
 
 lint:
 	golangci-lint run \

@@ -20,6 +20,8 @@ import (
 
 	"go.aporeto.io/regolithe/cmd/rego/static"
 	"go.aporeto.io/regolithe/spec"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func shortString(s string, max int) string {
@@ -32,7 +34,7 @@ func shortString(s string, max int) string {
 
 var functions = template.FuncMap{
 	"join":             strings.Join,
-	"title":            strings.Title,
+	"title":            cases.Title(language.Und, cases.NoLower).String,
 	"trimspace":        strings.TrimSpace,
 	"toc":              toc,
 	"operations":       operations,
@@ -73,7 +75,7 @@ func writeMarkdownDoc(set spec.SpecificationSet) error {
 
 > Version: %d
 
-`, strings.Title(set.Configuration().ProductName), set.APIInfo().Version)
+`, cases.Title(language.Und, cases.NoLower).String(set.Configuration().ProductName), set.APIInfo().Version)
 
 	r := regexp.MustCompile(`\n\n\n+`)
 
