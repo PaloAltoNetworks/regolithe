@@ -1,5 +1,5 @@
 {
-    "title": "{{ .Name }} esource lists",
+    "title": "{{ .Name }} resource lists",
     "type": "object",
     "properties": {
         {{- range $idxSpec, $specification := .Set.Specifications -}}
