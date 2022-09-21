@@ -157,11 +157,12 @@ func main() {
 				return err
 			}
 
-			return jsonschema.Generate(s, viper.GetString("out"))
+			return jsonschema.Generate(s, viper.GetString("out"), viper.GetBool(("public")))
 		},
 	}
 	jsonSchemaCmd.Flags().StringP("dir", "d", "", "Path of the specifications folder.")
 	jsonSchemaCmd.Flags().StringP("out", "o", "./codegen", "Path where to write the json files.")
+	jsonSchemaCmd.Flags().BoolP("public", "p", false, "If set to true, only exposed attributes and public objects will be generated.")
 
 	var initCmd = &cobra.Command{
 		Use:           "init <dest>",

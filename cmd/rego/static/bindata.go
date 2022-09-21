@@ -82,7 +82,7 @@ func (fi bindataFileInfo) Sys() interface{} {
 	return nil
 }
 
-var _templatesJsonSchemaResourcenameGotpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x74\x90\xc1\x6a\xc3\x30\x10\x44\xef\xfe\x8a\x45\xf8\xe8\xe8\x03\x0c\x3d\xf4\xde\xf6\x50\x43\xef\x8a\xbc\x2e\x1b\x1c\x4b\xec\x6e\xa0\x41\xe8\xdf\x8b\x5d\x25\xb5\x5a\xe2\xe3\xcc\xec\x8c\xf5\x52\x03\x00\x60\x94\x74\x46\xd3\x83\x49\x09\xec\x9b\x3b\x23\xe4\x0c\x28\xe1\xc2\x1e\x61\x26\x51\x31\x5d\x49\x5e\xe3\x16\x0c\xc7\x13\x7a\xbd\xa9\x91\x43\x44\x56\x42\x31\x3d\xfc\x74\xae\x5f\x4a\x07\x60\xb7\x7c\x22\xb4\x34\x7e\x0d\x11\x7d\x07\xad\x44\xf4\x34\x91\x77\x4a\x61\x81\xfe\x09\xec\x80\x6a\x87\xbd\x2a\x70\xc8\xb9\x6a\xa1\xe9\x5e\xb1\x7a\xdd\xaa\xe1\x32\x42\x15\x83\x76\x76\x8a\xa2\x1f\xc8\x52\xba\xeb\x35\xfb\xb2\xf9\xcf\xaa\x4c\xc7\x8b\xa2\xdc\x92\xfb\xb9\x95\xc1\x9f\xb3\xd7\x30\xe2\x6c\xdf\x0b\x90\xc2\xa7\x7a\x69\xc5\xc6\x31\xbb\x6b\x41\x73\x37\x49\xf1\x2c\xff\x6e\x36\xab\x65\x9c\x0a\xfc\x47\xc3\x5a\x46\xed\x49\xc2\x62\xaa\x8a\xdf\x3f\xaf\x91\xed\xf0\xe4\x26\x37\xdf\x01\x00\x00\xff\xff\x0c\x51\x73\xb6\xea\x01\x00\x00")
+var _templatesJsonSchemaResourcenameGotpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x74\x52\xc1\x6e\xab\x40\x0c\xbc\xe7\x2b\x2c\xc4\xe1\x3d\x29\xe1\x03\x22\xe5\xd0\x7b\x5b\x45\x8d\xd4\xfb\x66\x71\x2a\x47\x84\x5d\xd9\xa6\x4a\x84\xf6\xdf\x2b\xe8\x92\xb0\x59\xca\x0d\xcf\x78\xc6\x0c\xd3\xaf\x00\x00\x0a\x25\x6d\xb0\xd8\x42\xd1\xf7\x50\xbd\x9b\x0b\x42\x08\xc0\x28\xae\x63\x8b\xd0\x90\xa8\x14\xeb\x48\xbd\xf9\x91\xe9\x8e\x67\xb4\x3a\x4d\x3d\x3b\x8f\xac\x84\x52\x6c\xe1\x57\x74\x78\xfa\x7e\x03\xa5\xef\x8e\x0d\xd9\x37\x57\x23\x6c\x77\x50\xed\x1f\xaf\x9b\x10\x12\x2a\x9b\xf6\x0b\xa1\xa4\xfa\x7a\xf0\x68\xd7\x50\x8a\x47\x4b\x27\xb2\x46\xc9\xb5\xe3\xf6\x01\xb5\x3a\xcc\xa7\x92\xa9\x94\x9e\xe9\xdb\xe8\xe8\x96\x2a\x54\x83\x6b\x53\xed\x23\x9e\x2d\xe2\xd5\x3b\xc1\x7a\x58\x54\xee\x72\x02\x9d\x92\xaf\x99\xc3\x4f\x0a\x3b\xf8\xd7\x3a\xbd\x9f\xf2\x3f\x93\xc2\xb6\x5e\x94\x9f\x04\x96\xb0\x98\xcb\x80\xad\x27\x8d\x84\x06\x65\x63\x14\x45\x3f\x91\x25\x06\xf6\x14\xc0\xeb\x88\xbf\xa8\x32\x1d\x3b\x45\x99\x98\x73\xbb\xa1\x04\x8b\xb9\x7d\xc4\x42\xc4\x82\x24\x7f\x3a\xe9\x86\x61\x36\xb7\x58\x8d\x3b\x48\x8a\x17\xc9\x76\x46\xa8\x64\x3c\xc5\xf6\xfd\x65\xac\xd1\xb4\x3a\x8b\x6b\x8b\x44\xe2\x71\x79\x1e\xf1\x42\xea\x71\x14\x56\x61\xf5\x13\x00\x00\xff\xff\x9d\x8a\xac\x1a\xfe\x02\x00\x00")
 
 func templatesJsonSchemaResourcenameGotplBytes() ([]byte, error) {
 	return bindataRead(
@@ -97,12 +97,12 @@ func templatesJsonSchemaResourcenameGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema-resourcename.gotpl", size: 490, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "templates/json-schema-resourcename.gotpl", size: 766, mode: os.FileMode(420), modTime: time.Unix(1663946324, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesJsonSchemaRestnameGotpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x84\x90\xb1\x6a\xc4\x30\x10\x44\x7b\x7f\xc5\x20\x5c\xfa\xf4\x01\x86\x14\xe9\x93\x14\x31\xa4\xf7\xd9\xe3\xa0\xc3\xb1\x84\x76\x0f\x12\x84\xfe\x3d\xd8\xf1\x1d\x56\x9a\xdb\x72\x76\x66\x96\xb7\xa9\x02\x00\xa3\x4e\x67\x9a\x16\x26\x25\xd8\xb7\xfe\x8b\xc8\x19\x91\xe2\xaf\x71\xa0\x98\x66\x77\xfd\x84\xcd\xe4\xcf\x17\x0e\x7a\x53\x43\xf4\x81\x51\x1d\xc5\xb4\xf8\xeb\x5b\x27\xa5\x13\x62\xbf\x7c\x12\xb5\x1b\xbf\xbb\xc0\xa1\x41\x2d\x81\x83\x9b\xdc\xd0\xab\xf3\x0b\xda\x27\xd8\x8e\x6a\xbb\xa3\x2a\x38\xe5\x5c\xb4\xb8\xe9\x5e\xb1\xee\x9a\x55\xe3\x32\xa2\xb0\xa1\x9e\x7b\xa5\xe8\x07\xa3\xec\xdd\xe5\x35\xfb\xb2\xed\x9f\x55\xa3\x3b\x5f\x95\x72\x73\x1e\xcf\xad\xfc\xff\x62\xaf\x7e\xe4\x6c\xdf\x29\xba\xff\xa5\xa0\xdc\x42\x75\xe4\xb4\x3f\xef\x51\xd8\x5e\xc4\x2f\xe6\x1e\x2f\x41\x0f\x50\xb9\xca\xd5\x6f\x00\x00\x00\xff\xff\x3e\x41\x49\xb4\x9c\x01\x00\x00")
+var _templatesJsonSchemaRestnameGotpl = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x84\x92\x41\x6b\x84\x30\x10\x85\xef\xfb\x2b\x86\x90\x43\x0b\x6e\x7e\x80\xb0\x87\xde\xdb\xb2\x54\xe8\x5d\xe3\x58\xb2\x58\x13\x66\xc6\xb2\x45\xf2\xdf\x8b\x36\x6e\x75\x15\xea\xcd\x79\xef\x7d\xa3\x2f\x19\x0e\x00\x00\x4a\x9c\xb4\xa8\x72\x50\xc3\x00\xe6\xb5\xfc\x44\x88\x11\x08\xd9\xf7\x64\x91\x55\x96\x5c\xdf\x61\x32\xf9\xea\x82\x56\xe6\x69\x20\x1f\x90\xc4\x21\xab\x1c\x7e\x79\xe3\x33\x0c\x47\xd0\xa1\xaf\x5a\x67\x5f\x7c\x8d\x90\x9f\xc0\x9c\xff\x5e\x8f\x31\xae\xac\x54\x76\x1f\x08\xda\xd5\xd7\x22\xa0\xcd\x40\x73\x40\xeb\x1a\x67\x4b\x71\xbe\x9b\xd2\x05\x8a\x29\x96\x53\xde\x50\x74\x20\xf7\x55\xca\xb4\x6d\x4d\x30\xe3\xd6\xd6\x9c\x93\xbe\x09\xe2\x35\x78\xc6\x7a\x0c\x0a\xf5\x5b\x83\x6b\x56\x7f\xb3\x94\xef\x08\x27\x78\xe8\xbc\xdc\x3e\xe5\x71\x83\xc2\xae\xde\xc5\xcf\x80\x3d\x2d\xf5\x32\x6a\xd9\xcc\x58\xd9\x40\xb7\xa5\x20\xcb\x3b\x12\xa7\xc2\xee\x0a\x78\x9e\xf4\x27\x11\x72\x55\x2f\xc8\xb3\x73\xb9\x6e\x3c\xff\xdd\xde\xde\x90\x25\xdd\x8b\xd5\x29\x4f\x21\x4d\xd8\xa4\xcb\xf3\x5f\xd8\x5c\xd8\x77\xea\x16\xdf\x16\xb3\xd3\x55\x1a\xc5\x43\x3c\xfc\x04\x00\x00\xff\xff\x45\xa3\x25\xed\xaf\x02\x00\x00")
 
 func templatesJsonSchemaRestnameGotplBytes() ([]byte, error) {
 	return bindataRead(
@@ -117,7 +117,7 @@ func templatesJsonSchemaRestnameGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema-restname.gotpl", size: 412, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "templates/json-schema-restname.gotpl", size: 687, mode: os.FileMode(420), modTime: time.Unix(1663949371, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -137,7 +137,7 @@ func templatesJsonSchemaGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4020, mode: os.FileMode(420), modTime: time.Unix(1594157082, 0)}
+	info := bindataFileInfo{name: "templates/json-schema.gotpl", size: 4020, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -157,7 +157,7 @@ func templatesSpecMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 673, mode: os.FileMode(420), modTime: time.Unix(1594156995, 0)}
+	info := bindataFileInfo{name: "templates/spec-md.gotpl", size: 673, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -177,7 +177,7 @@ func templatesTocMdGotpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 20, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "templates/toc-md.gotpl", size: 20, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -197,7 +197,7 @@ func specsetGitignore() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/.gitignore", size: 83, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/.gitignore", size: 83, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -217,7 +217,7 @@ func specsetGopkgToml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/Gopkg.toml", size: 51, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/Gopkg.toml", size: 51, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -237,7 +237,7 @@ func specsetSpecsRegolitheGenCmd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/.regolithe-gen-cmd", size: 247, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/.regolithe-gen-cmd", size: 247, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -257,7 +257,7 @@ func specsetSpecsIdentifiableAbs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/@identifiable.abs", size: 255, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/@identifiable.abs", size: 255, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -277,7 +277,7 @@ func specsetSpecs_apiInfo() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_api.info", size: 34, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/_api.info", size: 34, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -297,7 +297,7 @@ func specsetSpecs_parameterMapping() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_parameter.mapping", size: 123, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/_parameter.mapping", size: 123, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -317,7 +317,7 @@ func specsetSpecs_typeMapping() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/_type.mapping", size: 261, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/_type.mapping", size: 261, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -337,7 +337,7 @@ func specsetSpecsObjectSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/object.spec", size: 460, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/object.spec", size: 460, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -357,7 +357,7 @@ func specsetSpecsRegolitheIni() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/regolithe.ini", size: 170, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/regolithe.ini", size: 170, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -377,7 +377,7 @@ func specsetSpecsRootSpec() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "specset/specs/root.spec", size: 335, mode: os.FileMode(420), modTime: time.Unix(1580322791, 0)}
+	info := bindataFileInfo{name: "specset/specs/root.spec", size: 335, mode: os.FileMode(420), modTime: time.Unix(1663624034, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

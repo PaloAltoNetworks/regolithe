@@ -30,7 +30,7 @@ var functions = template.FuncMap{
 	"stripFirstLevelBrackets": stripFirstLevelBrackets,
 }
 
-func writeGlobalResources(set spec.SpecificationSet, outFolder string) error {
+func writeGlobalResources(set spec.SpecificationSet, outFolder string, publicMode bool) error {
 
 	if err := os.MkdirAll(outFolder, 0750); err != nil && !os.IsExist(err) {
 		return err
@@ -46,11 +46,13 @@ func writeGlobalResources(set spec.SpecificationSet, outFolder string) error {
 	if err = tmpl.Execute(
 		&buf,
 		struct {
-			Name string
-			Set  spec.SpecificationSet
+			PublicMode bool
+			Name       string
+			Set        spec.SpecificationSet
 		}{
-			Name: set.Configuration().Name,
-			Set:  set,
+			PublicMode: publicMode,
+			Name:       set.Configuration().Name,
+			Set:        set,
 		}); err != nil {
 		return fmt.Errorf("unable to generate global resource code: %s", err)
 	}
@@ -68,7 +70,7 @@ func writeGlobalResources(set spec.SpecificationSet, outFolder string) error {
 	return writeFile(path.Join(outFolder, "_models.json"), out)
 }
 
-func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string) error {
+func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string, publicMode bool) error {
 
 	if err := os.MkdirAll(outFolder, 0750); err != nil && !os.IsExist(err) {
 		return err
@@ -84,11 +86,13 @@ func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string) error
 	if err = tmpl.Execute(
 		&buf,
 		struct {
-			Name string
-			Set  spec.SpecificationSet
+			PublicMode bool
+			Name       string
+			Set        spec.SpecificationSet
 		}{
-			Name: set.Configuration().Name,
-			Set:  set,
+			PublicMode: publicMode,
+			Name:       set.Configuration().Name,
+			Set:        set,
 		}); err != nil {
 		return fmt.Errorf("unable to generate global resource lists code: %s", err)
 	}
@@ -106,7 +110,7 @@ func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string) error
 	return writeFile(path.Join(outFolder, "_lists.json"), out)
 }
 
-func writeModel(set spec.SpecificationSet, outFolder string) error {
+func writeModel(set spec.SpecificationSet, outFolder string, publicMode bool) error {
 
 	if err := os.MkdirAll(outFolder, 0750); err != nil && !os.IsExist(err) {
 		return err
@@ -120,14 +124,20 @@ func writeModel(set spec.SpecificationSet, outFolder string) error {
 	for _, s := range set.Specifications() {
 		var buf bytes.Buffer
 
+		if publicMode && s.Model().Private {
+			continue
+		}
+
 		if err = tmpl.Execute(
 			&buf,
 			struct {
-				Name string
-				Spec spec.Specification
+				PublicMode bool
+				Name       string
+				Spec       spec.Specification
 			}{
-				Name: set.Configuration().Name,
-				Spec: s,
+				PublicMode: publicMode,
+				Name:       set.Configuration().Name,
+				Spec:       s,
 			}); err != nil {
 			return fmt.Errorf("unable to generate model code: %s", err)
 		}

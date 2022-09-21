@@ -2,12 +2,20 @@
     "title": "{{ .Name }} resources",
     "type": "object",
     "properties": {
+        {{- $publicMode := .PublicMode -}}
         {{- range $idxSpec, $specification := .Set.Specifications -}}
+        {{- $private := $specification.Model.Private -}}
+        {{- $exposed := true -}}
+        {{- if $publicMode -}}
+          {{- $exposed = (not $private) -}}
+        {{- end -}}
+        {{- if $exposed -}}
         {{- if $idxSpec -}},{{- end }}
         {{ $latestVersion := $specification.LatestAttributesVersion -}}
         "{{ $specification.Model.RestName }}": {
             "$ref": "{{ $specification.Model.RestName }}.json"
         }
+        {{- end }}
         {{- end }}
     }
 }
