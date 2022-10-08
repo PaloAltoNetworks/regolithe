@@ -16,19 +16,15 @@ import (
 )
 
 // Generate generates the json schema
-func Generate(set spec.SpecificationSet, outFolder string) error {
+func Generate(set spec.SpecificationSet, outFolder string, publicMode bool) error {
 
-	if err := writeModel(set, outFolder); err != nil {
+	if err := writeModel(set, outFolder, publicMode); err != nil {
 		return err
 	}
 
-	if err := writeGlobalResources(set, outFolder); err != nil {
+	if err := writeGlobalResources(set, outFolder, publicMode); err != nil {
 		return err
 	}
 
-	if err := writeGlobalResourceLists(set, outFolder); err != nil {
-		return err
-	}
-
-	return nil
+	return writeGlobalResourceLists(set, outFolder, publicMode)
 }
