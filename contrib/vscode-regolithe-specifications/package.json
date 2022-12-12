@@ -90,6 +90,6 @@
         "@types/mocha": "^2.2.42"
     },
     "dependencies": {
-        "npm": "^5.8.0"
+        "npm": "^9.2.0"
     }
 }
