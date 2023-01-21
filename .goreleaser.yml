@@ -1,10 +1,31 @@
-build:
-  skip: true
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  name_template: "v{{ .Tag }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
     - '^docs:'
     - '^test:'
+    - '^examples:'
+builds:
+  - id: rego
+    main: cmd/rego/main.go
+    binary: rego
+    goos:
+    - linux
+    - freebsd
+    - darwin
+    goarch:
+    - amd64
+    env:
+    - CGO_ENABLED=0
+
+archives:
+  - id: rego
+    format: binary
+    builds:
+    - rego
+
+signs:
+  - artifacts: checksum
+    args: ["-u", "0C3214A61024881F5CA1F5F056EDB08A11DCE325", "--output", "${signature}", "--detach-sign", "${artifact}"]
