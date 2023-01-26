@@ -18,7 +18,7 @@ import (
 	"strings"
 	"text/template"
 
-	"go.aporeto.io/regolithe/cmd/rego/static"
+	"go.aporeto.io/regolithe/cmd/rego/templates"
 	"go.aporeto.io/regolithe/spec"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -57,12 +57,12 @@ func Write(set spec.SpecificationSet, format string) error {
 
 func writeMarkdownDoc(set spec.SpecificationSet) error {
 
-	tocData, err := static.Asset("templates/toc-md.gotpl")
+	tocData, err := templates.Get("toc-md.gotpl")
 	if err != nil {
 		return fmt.Errorf("cannot open toc template: %s", err)
 	}
 
-	specData, err := static.Asset("templates/spec-md.gotpl")
+	specData, err := templates.Get("spec-md.gotpl")
 	if err != nil {
 		return fmt.Errorf("cannot open spec template: %s", err)
 	}

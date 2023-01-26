@@ -13,7 +13,6 @@ package spec
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -62,7 +61,7 @@ func LoadSpecificationSetFromGithub(
 		}
 	}
 
-	tmpFolder, err := ioutil.TempDir("", "regolithe-refs-head")
+	tmpFolder, err := os.MkdirTemp("", "regolithe-refs-head")
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +103,7 @@ func LoadSpecificationSetFromGithub(
 
 			// Need to recreate a folder, get error repository already created otherwise
 			// Happened even if old tmp folder is deleted...
-			tmpFolder, err = ioutil.TempDir("", "regolithe-refs-tags")
+			tmpFolder, err = os.MkdirTemp("", "regolithe-refs-tags")
 			if err != nil {
 				return nil, err
 			}
@@ -162,7 +161,7 @@ func LoadSpecificationSet(
 		specs: map[string]Specification{},
 	}
 
-	filesInfo, err := ioutil.ReadDir(dirname)
+	filesInfo, err := os.ReadDir(dirname)
 	if err != nil {
 		return nil, err
 	}

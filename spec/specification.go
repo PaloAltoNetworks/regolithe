@@ -23,7 +23,6 @@ import (
 	"github.com/mitchellh/copystructure"
 	wordwrap "github.com/mitchellh/go-wordwrap"
 	"github.com/xeipuuv/gojsonschema"
-	"go.aporeto.io/regolithe/schema"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -78,21 +77,21 @@ func LoadSpecification(specPath string, validate bool) (Specification, error) {
 	return spec, nil
 }
 
-func massageYAML(in interface{}) interface{} {
+func massageYAML(in any) any {
 
-	var out interface{}
+	var out any
 
 	switch m := in.(type) {
 
-	case map[interface{}]interface{}:
-		c := map[string]interface{}{}
+	case map[any]any:
+		c := map[string]any{}
 		for k, v := range m {
 			c[k.(string)] = massageYAML(v)
 		}
 		out = c
 
-	case []interface{}:
-		c := make([]interface{}, len(m))
+	case []any:
+		c := make([]any, len(m))
 		for i, v := range m {
 			c[i] = massageYAML(v)
 		}
@@ -324,9 +323,9 @@ func (s *specification) Validate() []error {
 	var err error
 
 	if s.RawModel == nil {
-		schemaData, err = schema.Asset("rego-abstract.json")
+		schemaData, err = fs.ReadFile("schema/rego-abstract.json")
 	} else {
-		schemaData, err = schema.Asset("rego-spec.json")
+		schemaData, err = fs.ReadFile("schema/rego-spec.json")
 	}
 
 	if err != nil {

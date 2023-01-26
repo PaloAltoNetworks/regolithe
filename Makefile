@@ -30,5 +30,5 @@ sec:
 	gosec -quiet ./...
 
 rego:
-	cd schema; ./gen.sh
-	cd cmd/rego; go generate && go build .
+	cd spec/schema; ./gen.sh
+	cd cmd/rego && go build .

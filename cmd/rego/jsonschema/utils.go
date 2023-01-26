@@ -19,7 +19,7 @@ import (
 	"strings"
 	"text/template"
 
-	"go.aporeto.io/regolithe/cmd/rego/static"
+	"go.aporeto.io/regolithe/cmd/rego/templates"
 	"go.aporeto.io/regolithe/spec"
 )
 
@@ -59,11 +59,11 @@ func convertRegexp(str string, required bool) string {
 	return fmt.Sprintf("(%s)?", escaped)
 }
 
-func isNil(target interface{}) bool {
+func isNil(target any) bool {
 	return target == nil
 }
 
-func jsonStringify(target interface{}) string {
+func jsonStringify(target any) string {
 	data, err := json.Marshal(target)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -79,7 +79,7 @@ func stripFirstLevelBrackets(str string) string {
 
 func makeTemplate(p string) (*template.Template, error) {
 
-	data, err := static.Asset(p)
+	data, err := templates.Get(p)
 	if err != nil {
 		return nil, err
 	}

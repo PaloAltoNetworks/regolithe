@@ -12,12 +12,15 @@
 package spec
 
 import (
+	"embed"
 	"os"
 
 	"github.com/xeipuuv/gojsonschema"
-	"go.aporeto.io/regolithe/schema"
 	yaml "gopkg.in/yaml.v2"
 )
+
+//go:embed schema
+var fs embed.FS
 
 // An APIInfo holds general information about the API.
 type APIInfo struct {
@@ -60,7 +63,7 @@ func LoadAPIInfo(path string) (*APIInfo, error) {
 // Validate validates the api info against the schema.
 func (a *APIInfo) Validate() []error {
 
-	schemaData, err := schema.Asset("rego-info.json")
+	schemaData, err := fs.ReadFile("schema/rego-info.json")
 	if err != nil {
 		return []error{err}
 	}
