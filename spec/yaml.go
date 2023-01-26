@@ -19,7 +19,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func toYAMLMapSlice(s interface{}) yaml.MapSlice {
+func toYAMLMapSlice(s any) yaml.MapSlice {
 
 	var out yaml.MapSlice
 
@@ -38,7 +38,7 @@ func toYAMLMapSlice(s interface{}) yaml.MapSlice {
 			continue
 		}
 
-		var v interface{}
+		var v any
 		if yamlName == "description" {
 			v = wordwrap.WrapString(field.Value().(string), 80)
 		} else {

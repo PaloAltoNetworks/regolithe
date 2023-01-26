@@ -30,8 +30,8 @@ func (r *mockResultError) SetDescription(string)                {}
 func (r *mockResultError) Description() string                  { return "description" }
 func (r *mockResultError) SetDescriptionFormat(string)          {}
 func (r *mockResultError) DescriptionFormat() string            { return "format" }
-func (r *mockResultError) SetValue(interface{})                 {}
-func (r *mockResultError) Value() interface{}                   { return nil }
+func (r *mockResultError) SetValue(any)                         {}
+func (r *mockResultError) Value() any                           { return nil }
 func (r *mockResultError) SetDetails(gojsonschema.ErrorDetails) {}
 func (r *mockResultError) Details() gojsonschema.ErrorDetails   { return gojsonschema.ErrorDetails{} }
 func (r *mockResultError) String() string                       { return "woops" }

@@ -11,20 +11,15 @@
 
 package main
 
-//go:generate go-bindata -pkg static -o static/bindata.go templates specset/...
-
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.aporeto.io/regolithe/cmd/rego/doc"
 	"go.aporeto.io/regolithe/cmd/rego/jsonschema"
-	"go.aporeto.io/regolithe/cmd/rego/static"
 	"go.aporeto.io/regolithe/spec"
 )
 
@@ -164,42 +159,9 @@ func main() {
 	jsonSchemaCmd.Flags().StringP("out", "o", "./codegen", "Path where to write the json files.")
 	jsonSchemaCmd.Flags().BoolP("public", "p", false, "If set to true, only exposed attributes and public objects will be generated.")
 
-	var initCmd = &cobra.Command{
-		Use:           "init <dest>",
-		Short:         "Generate a new set of specification",
-		SilenceErrors: true,
-		SilenceUsage:  true,
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return viper.BindPFlags(cmd.Flags())
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-
-			if len(args) != 1 {
-				return fmt.Errorf("usage: init <dest>")
-			}
-
-			dir := args[0]
-			// if err := os.MkdirAll(path.Base(dir), 0744); err != nil {
-			// 	return err
-			// }
-
-			tmp, err := ioutil.TempDir(os.TempDir(), "rego")
-			if err != nil {
-				return err
-			}
-
-			if err := static.RestoreAssets(tmp, "specset"); err != nil {
-				return err
-			}
-
-			return os.Rename(path.Join(tmp, "specset"), dir)
-		},
-	}
-
 	rootCmd.AddCommand(
 		formatCmd,
 		docCmd,
-		initCmd,
 		jsonSchemaCmd,
 	)
 

@@ -19,7 +19,6 @@ import (
 	"sort"
 
 	"github.com/xeipuuv/gojsonschema"
-	"go.aporeto.io/regolithe/schema"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -136,7 +135,7 @@ func (v ValidationMapping) Mapping(mode string, functionName string) (mapping *V
 // Validate validates the type mappings against the schema.
 func (v ValidationMapping) Validate() []error {
 
-	schemaData, err := schema.Asset("rego-validation-mapping.json")
+	schemaData, err := fs.ReadFile("schema/rego-validation-mapping.json")
 	if err != nil {
 		return []error{err}
 	}

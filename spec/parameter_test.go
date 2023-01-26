@@ -23,8 +23,8 @@ func TestParameter_Validate(t *testing.T) {
 		Type           ParameterType
 		Multiple       bool
 		AllowedChoices []string
-		DefaultValue   interface{}
-		ExampleValue   interface{}
+		DefaultValue   any
+		ExampleValue   any
 	}
 	type args struct {
 		relatedReSTName string

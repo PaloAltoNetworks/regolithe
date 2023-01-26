@@ -20,7 +20,6 @@ import (
 	"strings"
 
 	"github.com/xeipuuv/gojsonschema"
-	"go.aporeto.io/regolithe/schema"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -158,7 +157,7 @@ func (t TypeMapping) All(mode string) (mapping []*TypeMap) {
 // Validate validates the type mappings against the schema.
 func (t TypeMapping) Validate() []error {
 
-	schemaData, err := schema.Asset("rego-type-mapping.json")
+	schemaData, err := fs.ReadFile("schema/rego-type-mapping.json")
 	if err != nil {
 		return []error{err}
 	}

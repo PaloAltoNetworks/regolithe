@@ -350,7 +350,7 @@ func makeDefaultValue(attr *spec.Attribute) string {
 
 func makeExample(s spec.Specification, version string) string {
 
-	data := map[string]interface{}{}
+	data := map[string]any{}
 
 	for _, attr := range s.Attributes(version) {
 

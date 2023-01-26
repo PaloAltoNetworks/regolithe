@@ -36,7 +36,7 @@ func writeGlobalResources(set spec.SpecificationSet, outFolder string, publicMod
 		return err
 	}
 
-	tmpl, err := makeTemplate("templates/json-schema-restname.gotpl")
+	tmpl, err := makeTemplate("json-schema-restname.gotpl")
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func writeGlobalResources(set spec.SpecificationSet, outFolder string, publicMod
 		return fmt.Errorf("unable to generate global resource code: %s", err)
 	}
 
-	data := map[string]interface{}{}
+	data := map[string]any{}
 	if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
 		return fmt.Errorf("unable to unmarshal model code: %s", err)
 	}
@@ -76,7 +76,7 @@ func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string, publi
 		return err
 	}
 
-	tmpl, err := makeTemplate("templates/json-schema-resourcename.gotpl")
+	tmpl, err := makeTemplate("json-schema-resourcename.gotpl")
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func writeGlobalResourceLists(set spec.SpecificationSet, outFolder string, publi
 		return fmt.Errorf("unable to generate global resource lists code: %s", err)
 	}
 
-	data := map[string]interface{}{}
+	data := map[string]any{}
 	if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
 		return fmt.Errorf("unable to unmarshal model code: %s", err)
 	}
@@ -116,7 +116,7 @@ func writeModel(set spec.SpecificationSet, outFolder string, publicMode bool) er
 		return err
 	}
 
-	tmpl, err := makeTemplate("templates/json-schema.gotpl")
+	tmpl, err := makeTemplate("json-schema.gotpl")
 	if err != nil {
 		return err
 	}
@@ -142,7 +142,7 @@ func writeModel(set spec.SpecificationSet, outFolder string, publicMode bool) er
 			return fmt.Errorf("unable to generate model code: %s", err)
 		}
 
-		data := map[string]interface{}{}
+		data := map[string]any{}
 		if err := json.Unmarshal(buf.Bytes(), &data); err != nil {
 			return fmt.Errorf("unable to unmarshal model code: %s", err)
 		}

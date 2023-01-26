@@ -19,23 +19,23 @@ type Model struct {
 	// NOTE: Order of attributes matters!
 	// The YAML will be dumped respecting this order.
 
-	RestName      string                 `yaml:"rest_name,omitempty"       json:"rest_name,omitempty"`
-	ResourceName  string                 `yaml:"resource_name,omitempty"   json:"resource_name,omitempty"`
-	EntityName    string                 `yaml:"entity_name,omitempty"     json:"entity_name,omitempty"`
-	Package       string                 `yaml:"package,omitempty"         json:"package,omitempty"`
-	Group         string                 `yaml:"group,omitempty"           json:"group,omitempty"`
-	Description   string                 `yaml:"description,omitempty"     json:"description,omitempty"`
-	Documentation string                 `yaml:"documentation,omitempty"   json:"documentation,omitempty"`
-	Aliases       []string               `yaml:"aliases,omitempty"         json:"aliases,omitempty"`
-	Private       bool                   `yaml:"private,omitempty"         json:"private,omitempty"`
-	Get           *RelationAction        `yaml:"get,omitempty"             json:"get,omitempty"`
-	Update        *RelationAction        `yaml:"update,omitempty"          json:"update,omitempty"`
-	Delete        *RelationAction        `yaml:"delete,omitempty"          json:"delete,omitempty"`
-	Extends       []string               `yaml:"extends,omitempty"         json:"extends,omitempty"`
-	IsRoot        bool                   `yaml:"root,omitempty"            json:"root,omitempty"`
-	Detached      bool                   `yaml:"detached,omitempty"        json:"detached,omitempty"`
-	Validations   []string               `yaml:"validations,omitempty"     json:"validations,omitempty"`
-	Extensions    map[string]interface{} `yaml:"extensions,omitempty"      json:"extensions,omitempty"`
+	RestName      string          `yaml:"rest_name,omitempty"       json:"rest_name,omitempty"`
+	ResourceName  string          `yaml:"resource_name,omitempty"   json:"resource_name,omitempty"`
+	EntityName    string          `yaml:"entity_name,omitempty"     json:"entity_name,omitempty"`
+	Package       string          `yaml:"package,omitempty"         json:"package,omitempty"`
+	Group         string          `yaml:"group,omitempty"           json:"group,omitempty"`
+	Description   string          `yaml:"description,omitempty"     json:"description,omitempty"`
+	Documentation string          `yaml:"documentation,omitempty"   json:"documentation,omitempty"`
+	Aliases       []string        `yaml:"aliases,omitempty"         json:"aliases,omitempty"`
+	Private       bool            `yaml:"private,omitempty"         json:"private,omitempty"`
+	Get           *RelationAction `yaml:"get,omitempty"             json:"get,omitempty"`
+	Update        *RelationAction `yaml:"update,omitempty"          json:"update,omitempty"`
+	Delete        *RelationAction `yaml:"delete,omitempty"          json:"delete,omitempty"`
+	Extends       []string        `yaml:"extends,omitempty"         json:"extends,omitempty"`
+	IsRoot        bool            `yaml:"root,omitempty"            json:"root,omitempty"`
+	Detached      bool            `yaml:"detached,omitempty"        json:"detached,omitempty"`
+	Validations   []string        `yaml:"validations,omitempty"     json:"validations,omitempty"`
+	Extensions    map[string]any  `yaml:"extensions,omitempty"      json:"extensions,omitempty"`
 
 	EntityNamePlural string `yaml:"-" json:"-"`
 }

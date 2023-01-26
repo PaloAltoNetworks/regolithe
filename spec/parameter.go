@@ -61,8 +61,8 @@ type Parameter struct {
 	Type           ParameterType `yaml:"type,omitempty"              json:"type,omitempty"`
 	Multiple       bool          `yaml:"multiple,omitempty"          json:"multiple,omitempty"`
 	AllowedChoices []string      `yaml:"allowed_choices,omitempty"   json:"allowed_choices,omitempty"`
-	DefaultValue   interface{}   `yaml:"default_value,omitempty"     json:"default_value,omitempty"`
-	ExampleValue   interface{}   `yaml:"example_value,omitempty"     json:"example_value,omitempty"`
+	DefaultValue   any           `yaml:"default_value,omitempty"     json:"default_value,omitempty"`
+	ExampleValue   any           `yaml:"example_value,omitempty"     json:"example_value,omitempty"`
 }
 
 // Validate validates the parameter definition.
