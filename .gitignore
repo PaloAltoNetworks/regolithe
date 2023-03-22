@@ -10,6 +10,7 @@ Gopkg.lock
 cmd/rego/rego
 
 unit_coverage.out
+cov.report
 artifacts
 
 for p in *.spec ; do
