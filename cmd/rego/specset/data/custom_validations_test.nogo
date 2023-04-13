@@ -1,0 +1,91 @@
+package api
+
+import (
+	"testing"
+)
+
+func TestValidateURL(t *testing.T) {
+	type args struct {
+		attribute string
+		u         string
+	}
+	tests := []struct {
+		name string
+		args func(t *testing.T) args
+
+		wantErr    bool
+		inspectErr func(err error, t *testing.T) //use for more precise error evaluation after test
+	}{
+		{
+			"valid url",
+			func(t *testing.T) args {
+				return args{
+					"attr",
+					"https://toto.com",
+				}
+			},
+			false,
+			nil,
+		},
+		{
+			"invalid url",
+			func(t *testing.T) args {
+				return args{
+					"attr",
+					"wesh",
+				}
+			},
+			true,
+			nil,
+		},
+		{
+			"invalid url 2",
+			func(t *testing.T) args {
+				return args{
+					"attr",
+					"",
+				}
+			},
+			true,
+			nil,
+		},
+		{
+			"invalid url 3",
+			func(t *testing.T) args {
+				return args{
+					"attr",
+					"http##dd%",
+				}
+			},
+			true,
+			nil,
+		},
+		{
+			"invalid scheme",
+			func(t *testing.T) args {
+				return args{
+					"attr",
+					"ftp://what.com",
+				}
+			},
+			true,
+			nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tArgs := tt.args(t)
+
+			err := ValidateURL(tArgs.attribute, tArgs.u)
+
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateURL error = %v, wantErr: %t", err, tt.wantErr)
+			}
+
+			if tt.inspectErr != nil {
+				tt.inspectErr(err, t)
+			}
+		})
+	}
+}

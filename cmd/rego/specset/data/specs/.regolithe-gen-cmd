@@ -1,0 +1,3 @@
+#!/bin/bash
+cd .. || exit 0
+make codegen

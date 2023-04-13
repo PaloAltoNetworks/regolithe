@@ -20,6 +20,7 @@ import (
 	"github.com/spf13/viper"
 	"go.aporeto.io/regolithe/cmd/rego/doc"
 	"go.aporeto.io/regolithe/cmd/rego/jsonschema"
+	"go.aporeto.io/regolithe/cmd/rego/specset"
 	"go.aporeto.io/regolithe/spec"
 )
 
@@ -159,9 +160,30 @@ func main() {
 	jsonSchemaCmd.Flags().StringP("out", "o", "./codegen", "Path where to write the json files.")
 	jsonSchemaCmd.Flags().BoolP("public", "p", false, "If set to true, only exposed attributes and public objects will be generated.")
 
+	var initCmd = &cobra.Command{
+		Use:           "init <dest>",
+		Short:         "Generate a new set of specification",
+		SilenceErrors: true,
+		SilenceUsage:  true,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return viper.BindPFlags(cmd.Flags())
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+
+			if len(args) != 1 {
+				return fmt.Errorf("usage: init <dest>")
+			}
+
+			dir := args[0]
+
+			return specset.Dump(dir)
+		},
+	}
+
 	rootCmd.AddCommand(
 		formatCmd,
 		docCmd,
+		initCmd,
 		jsonSchemaCmd,
 	)
 
