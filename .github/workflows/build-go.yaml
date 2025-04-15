@@ -40,6 +40,6 @@ jobs:
       - uses: PaloAltoNetworks/cov@d48812e1c0a3f4f056c104411b410b2957c51f91 # 3.2.1
         with:
           main_branch: master
-          cov_file: unit_coverage.out
+          cov_file: unit_coverage_${{ matrix.go }}.out
           cov_threshold: "69"
           cov_mode: coverage
